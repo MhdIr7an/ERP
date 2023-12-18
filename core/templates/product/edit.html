@@ -1,0 +1,150 @@
+{% extends 'main-template.html' %}
+{% load static %}
+
+{% block content %}
+<form method="POST" class="form__form" enctype="multipart/form-data">
+{% csrf_token %}
+<div class="form__content">
+  <h1>Product</h1>
+  <div class="form__grp">
+    <div class="floating-input-group">
+      {{ form.product_code }}
+      <label class="floating-label">Product Code</label>
+    </div>
+    <div class="floating-input-group">
+      {{ form.main_unit }}
+      <label class="floating-label">Main Unit</label>
+    </div>
+    <div class="grp-sub_unit">
+      <label for="sub_unit">Sub-unit</label>
+      <input type="checkbox" id="sub_unit" name="sub-unit" {% if units %} value="1" checked {% else %} value="0" {% endif %} />
+    </div>
+  </div>
+  <table class="form__tbl" id="form__tbl" style="width: 41.5rem;">
+    <thead class="table-head bg-amber-500 h-10">
+      <tr class="bg-gray-400">
+        <th class="w-1/25">#</th>
+        <th class="w-1/7">Unit</th>
+        <th class="w-1/7">Multiple</th>
+        <th class="w-1/7">Multiple Value</th>
+      </tr>
+    </thead>
+    <tbody id="tbl__body">
+      {% for unit in units %}
+      <tr class="form__details-contents" id="row{{forloop.counter}}">
+        <td class="py-2 tbl_sl" id="tbl_sl_{{forloop.counter}}">{{forloop.counter}}</td>
+        <td class="py-2 tbl_unit">
+          <select id="tbl_unit_{{forloop.counter}}">
+            <option value="box" {% if unit.unit == 'box' %}selected{% endif %}>Box</option>
+            <option value="num" {% if unit.unit == 'num' %}selected{% endif %}>Num</option>
+            <option value="ctn" {% if unit.unit == 'ctn' %}selected{% endif %}>Ctn</option>
+          </select>
+        </td>
+        <td class="py-2 tbl_multiple">
+          <select id="tbl_multiple_{{forloop.counter}}">
+            <option value="*" {% if unit.multiple == '*' %}selected{% endif %}>*</option>
+            <option value="/" {% if unit.multiple == '/' %}selected{% endif %}>/</option>
+          </select>
+        </td>
+        <td class="py-2 tbl_multiple_value num-only" contenteditable="true" id="tbl_multiple_value_{{forloop.counter}}">{{unit.multiple_value}}</td>
+      {% endfor %}
+    </tbody>
+  </table>
+  <div class="floating-input-group">
+    {{ form.product_name }}
+    <label class="floating-label">Product Name</label>
+  </div>
+  <div class="floating-input-group">
+    {{ form.description }}
+    <label class="floating-label">Description</label>
+  </div>
+  <div class="form__grp">
+    <div class="floating-input-group">
+      {{ form.stock }}
+      <label class="floating-label">Stock</label>
+    </div>
+    <div class="floating-input-group">
+      {{ form.cost_price }}
+      <label class="floating-label">Cost Price</label>
+    </div>
+    <div class="floating-input-group">
+      {{ form.selling_price }}  
+      <label class="floating-label">Selling Price</label>
+    </div>
+  </div>
+
+  <div class="floating-input-group">
+    {{ form.vendor }}
+    <input id="product_vendor" class="form__size-l floating-input" placeholder=" " oninput='this.value = this.value.toUpperCase()' autocomplete="off" value="{{vendor.vendor_name}}"></input>
+    <label class="floating-label">Vendor</label>
+  </div>
+  <div class="floating-input-group">
+    {{ form.category }}
+    <input id="product_category" class="form__size-l floating-input" placeholder=" " oninput='this.value = this.value.toUpperCase()' value="{{category.category_name}}" autocomplete="off"></input>
+    <label class="floating-label">Category</label>
+  </div>
+  <div class="form__btn-sub-cancel">
+    <input id="form__btn-submit" type="submit" value="Save" class="form__btn-submit" onclick="saveProduct(event, {{id}})">
+    <button id="form__btn-cancel" type="button" class="form__btn-cancel" onclick="location.href='{% url 'product' %}'">Cancel</button>
+  </div><br>
+  {% for message in messages %}
+    <p class="form__error">{{ message }}</p>
+  {% endfor %}
+</div>
+  </form>
+  
+  
+  <script type="text/javascript" src="{% static 'js/product.js' %}"></script>
+  
+  <style>
+    .tbl_unit,
+    .tbl_multiple {
+      padding: 0;
+    }
+    
+    .tbl_unit select,
+    .tbl_multiple select {
+      height: 3vh;
+      width: 100%;
+      margin-top: -1rem;
+      font-weight: 800; 
+  
+      outline: none;
+      border: none; 
+    }
+
+    .grp-sub_unit {
+      margin-right: 1.5rem;
+    }
+
+    .grp-sub_unit label {
+      margin-top: 1rem;
+    }
+
+    .grp-sub_unit input[type="checkbox"] {
+      appearance: none;
+      background-color: #fff;
+      border: 1px solid #ccc;
+      border-radius: 3px;
+      cursor: pointer;
+      height: 20px;
+      width: 20px;
+      transition: background-color 0.3s;
+    }
+    
+    .grp-sub_unit input[type="checkbox"]:checked {
+      background-color: #007bff;
+    }
+    
+    .grp-sub_unit input[type="checkbox"]:checked::after {
+      content: "";
+      display: block;
+      width: 6px;
+      height: 12px;
+      border: solid #fff;
+      border-width: 0 2px 2px 0;
+      transform: rotate(45deg) translateY(50%);
+    }
+  </style>
+  
+  {% endblock content %}

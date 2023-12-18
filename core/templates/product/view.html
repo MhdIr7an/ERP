@@ -1,0 +1,160 @@
+{% extends 'main-template.html' %}
+{% load static %}
+{% load custom_filters %}
+
+{% block content %}
+<form method="POST" class="form__form" enctype="multipart/form-data">
+  {% csrf_token %}
+  <div class="form__content">
+  <h1>Product</h1>
+  <div class="form__btn-add-edit">
+      <button type="button" class="btn-add-edit" onclick="location.href='{% url 'product_add' %}'">Add</button>
+      <button type="button" class="btn-add-edit" onclick="location.href='{% url 'product_edit' values.id  %}'">Edit</button>
+      <button type="button" class="btn-add-edit" onclick="location.href='{% url 'product_delete' values.id %}'">Delete</button>
+      <button type="button" class="btn-add-edit" onclick="location.href='{% url 'product_print' values.id %}'">Print</button>
+  </div>
+  <div class="form__grp">
+    <div class="floating-input-group">
+      {{ form.product_code|add_class:form.disabled_class }}
+      <label class="floating-label">Product Code</label>
+    </div>
+    <div class="floating-input-group">
+      {{ form.main_unit|add_class:form.disabled_class }}
+      <label class="floating-label">Main Unit</label>
+    </div>
+    <div class="grp-sub_unit">
+      <label class="disabled-input" for="sub_unit">Sub-unit</label>
+      <input class="disabled-input" type="checkbox" id="sub_unit" name="sub-unit" value="1" {% if units %} checked {% endif %} />
+    </div>
+  </div>
+  <table class="form__tbl" id="form__tbl" style="width: 41.5rem;">
+    <thead class="table-head bg-amber-500 h-10">
+      <tr class="bg-gray-400">
+        <th class="w-1/25">#</th>
+        <th class="w-1/7">Unit</th>
+        <th class="w-1/7">Multiple</th>
+        <th class="w-1/7">Multiple Value</th>
+      </tr>
+    </thead>
+    <tbody id="tbl__body">
+      {% for unit in units %}
+      <tr class="form__details-contents" id="row{{forloop.counter}}">
+        <td class="py-2 tbl_sl" id="tbl_sl_{{forloop.counter}}">{{forloop.counter}}</td>
+        <td class="py-2 tbl_unit" id="tbl_unit_{{forloop.counter}}">{{unit.unit}}</td>
+        <td class="py-2 tbl_multiple" id="tbl_multiple_{{forloop.counter}}">{{unit.multiple}}</td>
+        <td class="py-2 tbl_multiple_value" id="tbl_multiple_value_{{forloop.counter}}">{{unit.multiple_value}}</td>
+      {% endfor %}
+    </tbody>
+  </table>
+  <div class="floating-input-group">
+    {{ form.product_name|add_class:form.disabled_class }}
+    <label class="floating-label">Product Name</label>
+  </div>
+  <div class="floating-input-group">
+    {{ form.description|add_class:form.disabled_class }}
+    <label class="floating-label">Description</label>
+  </div>
+  <div class="form__grp">
+    <div class="floating-input-group">
+      {{ form.stock|add_class:form.disabled_class }}
+      <label class="floating-label">Stock</label>
+    </div>
+    <div class="floating-input-group">
+      {{ form.cost_price|add_class:form.disabled_class }}
+      <label class="floating-label">Cost Price</label>
+    </div>
+    <div class="floating-input-group">
+      {{ form.selling_price|add_class:form.disabled_class }}  
+      <label class="floating-label">Selling Price</label>
+    </div>
+  </div>
+
+  <div class="floating-input-group">
+    {{ form.vendor }}
+    <input id="product_vendor_name" class="form__size-l floating-input disabled-input" placeholder=" " oninput='this.value = this.value.toUpperCase()' autocomplete="off" value="{{ vendor.vendor_name }}"></input>
+    <label class="floating-label">Vendor</label>
+  </div>
+  <div class="floating-input-group">
+    {{ form.category }}
+    <input id="product_category_name" class="form__size-l floating-input disabled-input" placeholder=" " oninput='this.value = this.value.toUpperCase()' autocomplete="off" value="{{category.category_name}}"></input>
+    <label class="floating-label">Category</label>
+  </div>
+
+  <div class="form__btn-move">
+    <button type="button" class="btn-move" onclick="location.href='{% url 'product_move_first' %}'" {% if not values.prev %}disabled{% endif %}>First</button>
+    <button type="button" class="btn-move" onclick="location.href='{% url 'product_move_previous' values.id %}'" {% if not values.prev %}disabled{% endif %}>Previous</button>
+    <button type="button" class="btn-move" onclick="location.href='{% url 'product_find' %}'" {% if not values.find %}disabled{% endif %}>Find</button>
+    <button type="button" class="btn-move" onclick="location.href='{% url 'product_move_next' values.id %}'" {% if not values.next %}disabled{% endif %}>Next</button>
+    <button type="button" class="btn-move" onclick="location.href='{% url 'product_move_last' %}'" {% if not values.next %}disabled{% endif %}>Last</button>
+  </div>
+      </div>
+      </form>
+
+      {% comment %} <script>
+        const formElements = document.querySelectorAll("input, select, textarea");
+        document.addEventListener('keydown', function (e) {
+          if (e.key === 'Tab') {
+            const focusedElement = document.activeElement;
+        
+        if (!Array.from(formElements).includes(focusedElement)) {
+            // The currently focused element is not in the formElements set
+            e.preventDefault();
+            
+            // Find and set focus to the first element in the formElements set
+            formElements[0].focus();
+        }
+          }
+        });
+      </script> {% endcomment %}
+
+      <style>
+        {% comment %} .tbl_unit,
+        .tbl_multiple {
+          padding: 0;
+        }
+        
+        .tbl_unit select,
+        .tbl_multiple select {
+          height: 3vh;
+          width: 100%;
+          margin-top: -1rem;
+          font-weight: 800; 
+      
+          outline: none;
+          border: none; 
+        } {% endcomment %}
+    
+        .grp-sub_unit {
+          margin-right: 1.5rem;
+        }
+    
+        .grp-sub_unit label {
+          margin-top: 1rem;
+        }
+    
+        .grp-sub_unit input[type="checkbox"] {
+          appearance: none;
+          background-color: #fff;
+          border: 1px solid #ccc;
+          border-radius: 3px;
+          cursor: pointer;
+          height: 20px;
+          width: 20px;
+          transition: background-color 0.3s;
+        }
+        
+        .grp-sub_unit input[type="checkbox"]:checked {
+          background-color: #007bff;
+        }
+        
+        .grp-sub_unit input[type="checkbox"]:checked::after {
+          content: "";
+          display: block;
+          width: 6px;
+          height: 12px;
+          border: solid #fff;
+          border-width: 0 2px 2px 0;
+          transform: rotate(45deg) translateY(50%);
+        }
+      </style>
+{% endblock content %}

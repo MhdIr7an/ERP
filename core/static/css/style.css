@@ -1,0 +1,127 @@
+.tmp1__wrapper {
+  background-color: #ffffff;
+  height: auto;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  flex-basis: auto;
+}
+
+.tmp1__content {
+  flex: 1;
+  padding: 1.5rem;
+  margin-left: 5rem;
+  margin-top: 4.5rem;
+}
+
+/* .navbar__main {
+  
+} */
+
+.sidebar__main {
+  width: 80px;
+  position: fixed;
+  margin-top: 5rem;
+  padding: 1rem;
+  background-color: #ffffff;
+  height: auto;
+  z-index: 1;
+}
+
+.sidebar__title {
+  display: none;
+}
+
+.sidebar__group {
+  margin-bottom: 1rem;
+}
+
+.sidebar__item {
+  margin-left: -0.7rem;
+  background: #dad6d65f;
+  width: 50px;
+  height: 25px;
+  margin-bottom: 0.3rem;
+  border-radius: 5px;
+}
+
+.sidebar__link {
+  cursor: pointer;
+  /* padding: 0.2rem; */
+  margin-left: 1rem;
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
+}
+
+.sidebar__link:hover {
+  color: #430fed5f;
+}
+
+/* Apply styles when .sidebar__main is hovered */
+.sidebar__main:hover {
+  width: 220px;
+  transition: 0.2s;
+}
+
+/* Apply styles when .sidebar__link is focused */
+.sidebar__link:focus {
+  outline: none; /* Remove the default focus outline if needed */
+  /* Add your styles for .sidebar__main when .sidebar__link is focused */
+  width: 220px;
+  transition: 0.2s;
+}
+
+/* Additional styles when .sidebar__main is hovered or .sidebar__link is focused */
+.sidebar__main:hover,
+.sidebar__link:focus {
+  .sidebar__item {
+    transition: 0.4s;
+    width: 200px;
+  }
+
+  .sidebar__title {
+    display: block;
+  }
+}
+
+
+/* home */
+.home__body {
+    width: 60%; /* Move the div to the right by 30% */
+    /* padding: 20px; */
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: row;
+    /* margin: 6rem 0 0 6rem; */
+    margin: auto;
+    
+    justify-content: center;
+    align-items: center;
+}
+
+.home__content {
+  height: auto;
+  display: flex;
+  flex-direction: column;
+
+}
+
+.home__content_title {
+  font-weight: bold;
+  border-bottom: 1px solid #1c1b1b;
+  /* width: 4.5rem; */
+  margin: 1rem auto;
+}
+
+.home__content a {
+  font-weight: 600;
+  margin: auto;
+}
+
+.home__content a:hover {
+  font-weight: bolder;
+  text-shadow: 0px 0px 2px rgba(0, 0, 0, 0.2);
+}

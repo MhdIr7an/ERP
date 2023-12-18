@@ -1,0 +1,27 @@
+{% extends 'login-template.html' %}
+
+{% load static %}
+
+{% block style %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/login.css' %}">
+{% endblock style %}
+
+{% block content %}
+
+<div class="login__content">
+    <form class="login__form" method="POST" action="">
+        {% csrf_token %}
+        {% comment %} <div class="login__content"> {% endcomment %}
+            <h1>LOGIN</h1>
+            <input autofocus required type="text" name="username" placeholder=" username" autocomplete="off" value={{username}}> 
+            <input required type="password" name="password" placeholder=" Password" autocomplete="off">
+            <input type="submit" name="" id="" value="Login">
+            {% for message in messages %}
+                <p class="mb-2 text-xs text-red-500">{{message}}</p>
+            {% endfor %}
+            {% comment %} <p class="text-black opacity-70">Don't have an Account ?<span><a class="text-gray-500 ml-2 hover:text-gray-600 font-semibold" href="{% url 'register' %}">Create Account</a></span> </p> {% endcomment %}
+        {% comment %} </div> {% endcomment %}
+    </form>
+</div>
+
+{% endblock content %}

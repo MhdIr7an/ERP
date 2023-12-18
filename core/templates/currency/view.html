@@ -1,0 +1,84 @@
+{% extends 'main-template.html' %}
+{% load static %}
+{% load custom_filters %}
+
+{% block content %}
+<form method="POST" class="form__form" enctype="multipart/form-data">
+  {% csrf_token %}
+  <div class="form__content">
+    <h1>Customer Information</h1>
+    <div class="form__btn-add-edit">
+      <button type="button" class="btn-add-edit" onclick="location.href='{% url 'customer_add' %}'">Add</button>
+      <button type="button" class="btn-add-edit" onclick="location.href='{% url 'customer_edit' values.id  %}'">Edit</button>
+      <button type="button" class="btn-add-edit" onclick="location.href='{% url 'customer_delete' values.id %}'">Delete</button>
+      <button type="button" class="btn-add-edit" onclick="location.href='{% url 'customer_print' values.id %}'">Print</button>
+    </div>
+    <div class="floating-input-group">
+      {{ form.customer_code|add_class:form.disabled_class }}
+      <label class="floating-label">Customer Code</label>
+    </div>
+    <div class="floating-input-group">
+      {{ form.customer_name|add_class:form.disabled_class }}
+      <label class="floating-label">Customer Name</label>
+    </div>
+    <div class="floating-input-group">
+      {{ form.address|add_class:form.disabled_class }}
+      <label class="floating-label">Address</label>
+    </div>
+    <div class="form__grp">
+      <div class="floating-input-group">
+        {{ form.city|add_class:form.disabled_class }}  
+        <label class="floating-label">City</label>
+      </div>
+      <div class="floating-input-group">
+        {{ form.state|add_class:form.disabled_class }}
+        <label class="floating-label">State</label>
+      </div>
+      <div class="floating-input-group">
+        {{ form.country|add_class:form.disabled_class }}
+        <label class="floating-label">Country</label>
+      </div>
+    </div>
+    <div class="form__grp">
+      <div class="floating-input-group">
+        {{ form.contact_person|add_class:form.disabled_class }}  
+        <label class="floating-label">Contact Person</label>
+      </div>
+      <div class="floating-input-group">
+        {{ form.mobile|add_class:form.disabled_class }}
+        <label class="floating-label">Mobile</label>
+      </div>
+      <div class="floating-input-group">
+        {{ form.phone|add_class:form.disabled_class }}  
+        <label class="floating-label">Telephone</label>
+      </div>
+    </div>
+    <div class="floating-input-group">
+      {{ form.email|add_class:form.disabled_class }}
+      <label class="floating-label">Email</label>
+    </div>
+    <div class="form__grp">
+      <div class="floating-input-group">
+        {{ form.credit_limit|add_class:form.disabled_class }}  
+        <label class="floating-label">Credit Limit</label>
+      </div>
+      <div class="floating-input-group">
+        {{ form.credit_alert|add_class:form.disabled_class }}
+        <label class="floating-label">Credit Alert</label>
+      </div>
+      <div class="floating-input-group">
+        {{ form.credit_days|add_class:form.disabled_class }}
+        <label class="floating-label">Credit Days</label>
+      </div>
+    </div>
+
+    <div class="form__btn-move">
+      <button type="button" class="btn-move" onclick="location.href='{% url 'customer_move_first' %}'"  {% if not values.prev %}disabled{% endif %}>First</button>
+      <button type="button" class="btn-move" onclick="location.href='{% url 'customer_move_previous' values.id %}'"  {% if not values.prev %}disabled{% endif %}>Previous</button>
+      <button type="button" class="btn-move" onclick="location.href='{% url 'customer_find' %}'"  {% if not values.find %}disabled{% endif %}>Find</button>
+      <button type="button" class="btn-move" onclick="location.href='{% url 'customer_move_next' values.id %}'"  {% if not values.next %}disabled{% endif %}>Next</button>
+      <button type="button" class="btn-move" onclick="location.href='{% url 'customer_move_last' %}'"  {% if not values.next %}disabled{% endif %}>Last</button>
+    </div>
+  </div>
+</form>
+{% endblock content %}

@@ -1,0 +1,230 @@
+.product__form {
+    width: 98%; /* Move the div to the right by 30% */
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+}
+
+.product__form h1 {
+    width: 100%;
+    margin-left: 1rem;
+    font-weight: 700;
+    font-size: 1.5rem;
+    opacity: 0.7;
+}
+
+.product__content {
+    height: auto;
+    display: flex;
+    flex-direction: column;
+}
+
+.product__form input {
+    border: 1px solid #e2e8f0;
+    border-radius: 0.5rem;
+    height: 2rem;
+    padding: 0 0.5rem;
+    margin-top: 1rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+    outline: none;
+}
+
+.product__product-code,
+.product__product-price,
+.product__product-stock {
+    width: 200px;
+}
+
+.product__form select {
+    margin-top: 1rem;
+    border: 1px solid #e2e8f0;
+    opacity: 0.5;
+    padding: 0 1rem;
+    width: 200px;
+    height: 2rem;
+    outline: none;
+    background-color: #f5f5f5;
+    border-radius: 0.5rem;
+}
+
+.product__product-name,
+.product__product-vendor,
+.product__product-category {
+    width: 662px;
+}
+
+.product__form textarea {
+    border: 1px solid #e2e8f0;
+    border-radius: 0.5rem;
+    height: 4rem;
+    width: 662px;
+    padding: 0 0.5rem;
+    margin-top: 1rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+    outline: none;
+}
+
+.product__error {
+    color: #ed0f0f5f;
+    margin-left: 15rem;
+    font-weight: 800;
+}
+
+.product__name-unit,
+.product__price-stock{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 680px;
+}
+
+.floating-input-group {
+    position: relative;
+    margin-right: 20px; /* Adjust this margin as needed */
+}
+
+.floating-label {
+    position: absolute;
+    pointer-events: none;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    transition: 0.2s ease all;
+    font-size: 13px;
+    color: #888;
+}
+
+.floating-label-select {
+    position: absolute;
+    pointer-events: none;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    transition: 0.2s ease all;
+    font-size: 13px;
+    color: #888;
+}
+
+.floating-input:focus + .floating-label ,
+.floating-input:valid + .floating-label {
+    top: 7px;
+}
+
+.floating-input:focus + .floating-label-select ,
+.floating-input:valid + .floating-label-select {
+    top: 5px;
+}
+
+/* Buttons */
+
+/* .product__btn {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: baseline;
+    margin: 1rem 0;
+
+    width: 660px;
+} */
+
+.btn-add-edit,
+.btn-move,
+.product__btn-submit,
+.product__btn-cancel,
+.product-list__btn-submit {
+    padding: 0.2rem;
+    /* margin: 1rem; */
+    border-radius: 5px;
+    width: 70px;
+    background: #dad6d65f;
+    outline: none;
+}
+
+.btn-add-edit,
+.btn-move {
+    margin-top: 1rem;
+    margin-bottom: 0.5rem;
+}
+
+.product__btn-move {
+    margin-left: 9rem;
+}
+
+.product__btn-submit,
+.product__btn-cancel,
+.product-list__btn-submit {
+    width: 150px;
+    cursor: pointer;
+}
+
+.product__btn-submit {
+    margin-left: 10rem;
+}
+
+.product__btn-cancel {
+    margin-left: 1rem;
+    margin-top: 1rem;
+}
+
+.btn-add-edit:hover,
+.btn-move:hover,
+.product__btn-submit:hover, 
+.product__btn-cancel:hover,
+.product-list__btn-submit:hover,
+.btn-add-edit:focus,
+.btn-move:focus,
+.product__btn-submit:focus, 
+.product__btn-cancel:focus,
+.product-list__btn-submit:focus {
+    color: #fff;
+    background: #430fed5f;
+}
+
+.disabled-input {
+    pointer-events: none;
+    background-color: #f5f5f5; /* Change this to the desired disabled look */
+}
+
+.product__btn-sub-cancel {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.btn-move:disabled {
+    background: #8582825f;
+    color: #000;
+    cursor: auto;
+}
+
+.product-list__table {
+    width: 100%;
+    margin-top: 2rem;
+}
+
+#productSearch {
+    border-radius: 5px;
+    border: 1px solid #dbcbcb;
+    width: 85%;
+    height: 2rem;
+}
+
+.autocomplete-suggestions {
+    position: absolute;
+    border: 1px solid #ccc;
+    max-height: 150px;
+    overflow-y: auto;
+    width: 73%;
+    background: #fff;
+}
+
+.autocomplete-suggestions div {
+    padding: 8px;
+    cursor: pointer;
+}
+
+.autocomplete-suggestions div:hover {
+    background-color: #f2f2f2;
+}

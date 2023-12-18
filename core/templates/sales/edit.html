@@ -1,0 +1,176 @@
+{% extends 'main-template.html' %}
+{% load static %}
+{% load custom_filters %}
+
+{% block content %}
+<form method="POST" class="form__form" enctype="multipart/form-data">
+{% csrf_token %}
+<div class="form__content">
+  <h1>Sales</h1>
+  <div class="form__grp">
+    <div class="floating-input-group">
+      {{ form.invoice_no|add_class:form.disabled_class }}
+      <label class="floating-label">Invoice No</label>
+    </div>
+    <div class="floating-input-group">
+      {{ form.invoice_date }}
+      <label class="floating-label">Invoice Date</label>
+    </div>
+  </div>
+  <div class="form__grp">
+    <div class="floating-input-group">
+        {{ form.total }}
+        <label class="floating-label">Total</label>
+    </div>
+    <div class="floating-input-group">
+        {{ form.vat }}
+        <label class="floating-label">VAT</label>
+    </div>
+    <div class="floating-input-group">
+      {{ form.discount }}
+      <label class="floating-label">Discount</label>
+    </div>
+  </div>
+  
+  <div class="form__grp">
+      <div class="floating-input-group">
+        {{ form.roundoff }}
+        <label class="floating-label">RoundOff</label>
+      </div>
+    <div class="floating-input-group">
+        {{ form.net_amount }}
+        <label class="floating-label">Net Amount</label>
+    </div>
+    <div class="floating-input-group">
+        {{ form.amount_received }}
+        <label class="floating-label">Amount Received</label>
+    </div>
+    </div>
+    <div class="form__grp">
+  <div class="floating-input-group">
+    {{ form.balance }}
+    <label class="floating-label">Balance</label>
+  </div>
+  <div class="floating-input-group">
+    {{ form.payment_method }}
+    <label class="floating-label">Payment Method</label>
+  </div>
+  </div>
+  <div class="floating-input-group">
+    {{ form.customer }}
+    <input id="master_customer" class="form__size-l floating-input uppercase-only" placeholder=" " autocomplete="off" value="{{customer.customer_name}}"></input>
+    <label class="floating-label">Customer</label>
+  </div>
+  <div class="floating-input-group">
+    {{ form.salesman }}
+    <input id="master_salesman" class="form__size-l floating-input  uppercase-only" placeholder=" " autocomplete="off" value="{{salesman.employee_name}}"></input>
+    <label class="floating-label">Salesman</label>
+  </div>
+  <div class="form__btn-sub-cancel">
+    <input id="form__btn-submit" type="submit" value="Save" class="form__btn-submit" onclick="save_sales(event, false, {{ id }})">
+    <button id="form__btn-cancel" type="button" class="form__btn-cancel" onclick="location.href='{% url 'sales_with_id' id %}'">Cancel</button>
+  </div><br>
+  {% for message in messages %}
+    <p class="form__error">{{ message }}</p>
+  {% endfor %}
+</div>
+
+
+<div class="form__content  mt-9">
+  <table class="form__tbl" id="form__tbl">
+    <thead class="table-head bg-amber-500 h-10">
+      <tr class="bg-gray-400">
+        <th class="w-1/25">#</th>
+        <th class="w-1/3">Product</th>
+        <th class="w-1/6">Unit</th>
+        <th class="w-1/8">Stock</th>
+        <th class="w-1/8">Qty</th>
+        <th class="w-1/8">Price</th>
+        <th class="w-1/8">VAT%</th>
+        <th class="w-1/8">VAT</th>
+        <th class="w-1/8">Discount</th>
+        <th class="w-1/7">Total</th>
+      </tr>
+    </thead>
+    <tbody id="tbl__body">
+      {% for detail in details %}
+      <tr class="form__details-contents" id="row{{ forloop.counter }}">
+        <td class="py-2 tbl_sl" id="tbl_sl_{{ forloop.counter }}">{{ forloop.counter }}</td>
+        <td class="py-2 tbl_product" contenteditable="true" id="tbl_product_{{ forloop.counter }}">{{ detail.product.product_name }}</td>
+        <td class="py-2 tbl_product_id" id="tbl_product_id_{{ forloop.counter }}" hidden>{{ detail.product.id }}</td>
+        <td class="py-2 tbl_unit">
+          <select id="tbl_unit_{{forloop.counter}}"  onchange="unit_stock_change({{forloop.counter}})">
+              <option value="{{detail.product.main_unit}}" {% if detail.unit == detail.product.main_unit %}selected{% endif %}>{{detail.product.main_unit}}</option>
+              <option value="#" hidden>#</option>
+              <option value="{{detail.stock}}" hidden>{{detail.stock}}</option>
+              {% for unit in detail.get_units  %}
+              <option value="{{unit.unit}}" {% if unit.unit == detail.unit %}selected{% endif %}>{{unit.unit}}</option>
+              <option value="{{unit.multiple}}" hidden>{{unit.multiple}}</option>
+              <option value="{{unit.multiple_value}}" hidden>{{unit.multiple_value}}</option>
+              {% endfor %}
+          </select>
+        </td>
+        <td class="py-2 tbl_stock" id="tbl_stock_{{ forloop.counter }}">{{ detail.stock }}</td>
+        <td class="py-2 tbl_qty" contenteditable="true" oninput="qtyChange({{forloop.counter}})" id="tbl_qty_{{ forloop.counter }}">{{ detail.qty }}</td>
+        <td class="py-2 tbl_price" contenteditable="true" id="tbl_price_{{ forloop.counter }}">{{ detail.price }}</td>
+        <td class="py-2 tbl_vat_perc" id="tbl_vat_perc_{{ forloop.counter }}">{{ detail.product.category.vat_rate }}</td>
+        <td class="py-2 tbl_vat" id="tbl_vat_{{ forloop.counter }}">{{ detail.vat_amount }}</td>
+        <td class="py-2 tbl_discount" contenteditable="true" id="tbl_discount_{{ forloop.counter }}">{{ detail.item_discount }}</td>
+        <td class="py-2 tbl_total" id="tbl_total_{{ forloop.counter }}">{{ detail.total_amount }}</td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div>
+</form>
+
+
+<script type="text/javascript" src="{% static 'js/sales.js' %}"></script>
+<script>
+  function qtyChange(rowCounter) {
+    var stock = decimal_2($(`#tbl_stock_${rowCounter}`).text());
+    var qty = decimal_2($(`#tbl_qty_${rowCounter}`).text());
+    if (qty > stock) {
+      $(`#tbl_qty_${rowCounter}`).text(stock)
+    }
+    tblTotal(rowCounter);
+  }
+</script>
+
+<style>
+  .tbl_unit {
+    padding: 0;
+  }
+
+  .tbl_unit select{
+    height: 3vh;
+    width: 100%;
+    margin-top: -1rem;
+
+    outline: none;
+    border: none; 
+  }
+</style>
+{% endblock content %}
+
+{% comment %} <style>
+  .grid-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-gap: 10px;
+  }
+  .grid-item {
+    background-color: #eee;
+    padding: 20px;
+    font-size: 24px;
+  }
+</style>
+
+<div class="grid-container">
+  <div class="grid-item">Item 1</div>
+  <div class="grid-item">Item 2</div>
+  <div class="grid-item">Item 3</div>
+  <div class="grid-item">Item 4</div>
+  <div class="grid-item">Item 5</div>
+  <div class="grid-item">Item 6</div>
+</div> {% endcomment %}

@@ -1,0 +1,84 @@
+{% extends 'main-template.html' %}
+{% load static %}
+
+{% block content %}
+<form method="POST" class="form__form" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="form__content">
+      <h1>Add Customer</h1>
+      <div class="form__grp">
+        <div class="floating-input-group">
+          {{ form.customer_code }}
+          <label class="floating-label">Customer Code</label>
+        </div>
+        <div class="floating-input-group">
+          {{ form.credit_balance }}
+          <label class="floating-label">Credit Balance</label>
+        </div>
+      </div>
+      <div class="floating-input-group">
+        {{ form.customer_name }}
+        <label class="floating-label">Customer Name</label>
+      </div>
+      <div class="floating-input-group">
+        {{ form.address }}
+        <label class="floating-label">Address</label>
+      </div>
+      <div class="form__grp">
+        <div class="floating-input-group">
+          {{ form.city}}  
+          <label class="floating-label">City</label>
+        </div>
+        <div class="floating-input-group">
+          {{ form.state }}
+          <label class="floating-label">State</label>
+        </div>
+        <div class="floating-input-group">
+          {{ form.country }}
+          <label class="floating-label">Country</label>
+        </div>
+      </div>
+      <div class="form__grp">
+        <div class="floating-input-group">
+          {{ form.contact_person}}  
+          <label class="floating-label">Contact Person</label>
+        </div>
+        <div class="floating-input-group">
+          {{ form.mobile }}
+          <label class="floating-label">Mobile</label>
+        </div>
+        <div class="floating-input-group">
+            {{ form.phone}}  
+            <label class="floating-label">Telephone</label>
+          </div>
+        </div>
+        <div class="floating-input-group">
+          {{ form.email }}
+          <label class="floating-label">Email</label>
+        </div>
+      <div class="form__grp">
+        <div class="floating-input-group">
+          {{ form.credit_alert }}
+          <label class="floating-label">Credit Alert</label>
+        </div>
+        <div class="floating-input-group">
+          {{ form.credit_limit}}  
+          <label class="floating-label">Credit Limit</label>
+        </div>
+        <div class="floating-input-group">
+          {{ form.credit_days }}
+          <label class="floating-label">Credit Days</label>
+        </div>
+      </div>
+      <div class="form__btn-sub-cancel">
+        <input id="form__btn-submit" type="submit" value="Save" class="form__btn-submit">
+        <button id="form__btn-cancel" type="button" class="form__btn-cancel" onclick="location.href='{% url 'customer' %}'">Cancel</button>
+      </div><br>
+      {% for message in messages %}
+        <p class="form__error">{{ message }}</p>
+      {% endfor %}
+    </div>
+</form>
+
+
+{% endblock content %}

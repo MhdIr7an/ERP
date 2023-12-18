@@ -1,0 +1,44 @@
+{% extends 'main-template.html' %}
+{% load static %}
+
+{% block content %}
+<div class="form-list__main">
+  <input type="text" name="formSearch" oninput="formSearch()" id="formSearch" placeholder="Search" autocomplete="off"/>
+  <select class="form__size-s cmbFormSearch" id="cmbFormSearch">
+    <option value=""></option>
+    <option value="product_code">Product Code</option>
+    <option value="product_name">Product Name</option>
+    <option value="vendor_name">Vendor Name</option>
+    <option value="category_name">Category Name</option>
+  </select>
+  <table class="form-list__table">
+    <thead class="table-head bg-amber-500 h-10">
+      <tr class="bg-gray-400">
+        <th class="w-1/25">#</th>
+        <th class="w-1/4">Product Name</th>
+        <th class="w-1/7">Main Unit</th>
+        <th class="w-1/7">Cost Price</th>
+        <th class="w-1/7">Stock</th>
+        <th class="w-1/4">Vendor Name</th>
+        <th class="w-1/4">Category Name</th>
+      </tr>
+    </thead>
+    <tbody id="tbl__body">
+      {% for value in values %}
+      <tr class="form-list__contents">
+        <td class="py-2"><p class="text-black font-semibold text-base">{{ forloop.counter }}</p></td>
+        <td class="py-2"><a href="{% url 'product_with_id' value.id %}"><p class="text-black font-semibold text-base">{{ value.product_name }}</p></a></td>
+        <td class="py-2"><p class="text-black font-semibold text-base">{{ value.main_unit }}</p></td>
+        <td class="py-2"><a href="{% url 'product_with_id' value.id %}"><p class="text-black font-semibold text-base">{{ value.cost_price }}</p></a></td>
+        <td class="py-2"><p class="text-black font-semibold text-base">{{ value.stock }}</p></td>
+        <td class="py-2"><p class="text-black font-semibold text-base">{{ value.vendor.vendor_name }}</p></td>
+        <td class="py-2"><p class="text-black font-semibold text-base">{{ value.category.category_name }}</p></td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+      
+
+<script type="text/javascript" src="{% static 'js/product.js' %}"></script>
+{% endblock content %}

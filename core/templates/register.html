@@ -1,0 +1,22 @@
+{% extends 'login-template.html' %}
+
+{% block content %}
+<div class="w-[600px] min-h-[600px] bg-white mx-auto mt-12">
+  <form class="w-full flex flex-wrap gap-3 justify-center mt-6 " method="POST" action="">
+      {% csrf_token %}
+      <div class="w-full h-[auto] flex flex-col items-center justify-center">
+        <h1 class="text-lg font-bold opacity-70 mb-4 mt-20 tracking-widest">SIGN UP</h1>
+        <input autofocus required type="text" name="username" placeholder=" username" class="border w-[400px] mb-12 h-12 rounded outline-none px-3 drop-shadow " autocomplete="off" value={{username}}>
+        <input required type="email" name="email" placeholder=" Email" class="border w-[400px] mb-12 h-12 rounded outline-none px-3 drop-shadow " autocomplete="off" value={{email}}> 
+        <input required type="password" name="password" placeholder=" Password" class="border w-[400px] mb-12 h-12 rounded outline-none px-3 drop-shadow " autocomplete="off">
+        <input type="submit" name="" id="" value="Sign Up" class="text-white bg-gray-600 rounded font-bold w-[400px] cursor-pointer hover:bg-gray-600/80 p-2 mb-6">
+        {% for message in messages %}
+            <p class="mb-2 text-xs text-red-500">{{message}}</p>
+        {% endfor %}
+    </div>
+    </form><br>
+  <center>
+  <p class="text-black opacity-70 mt-3">Already have an Account ?<span><a class="text-gray-500 ml-2 hover:text-gray-600 font-semibold" href="{% url 'login' %}">Login</a></span> </p>
+  </center>
+</div>
+{% endblock content %}

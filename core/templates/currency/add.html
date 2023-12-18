@@ -1,0 +1,38 @@
+{% extends 'main-template.html' %}
+{% load static %}
+
+{% block content %}
+<form method="POST" class="form__form" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="form__content">
+      <h1>Category</h1>
+      <div class="form__grp">
+      <div class="floating-input-group">
+        {{ form.category_code }}
+        <label class="floating-label">Category Code</label>
+      </div>
+        <div class="floating-input-group">
+          {{ form.type }}
+          <label class="floating-label">Type</label>
+        </div>
+      </div>
+      <div class="floating-input-group">
+        {{ form.category_name }}
+        <label class="floating-label">Category Name</label>
+      </div>
+        <div class="floating-input-group">
+          {{ form.vat_rate }}
+          <label class="floating-label">Vat Rate</label>
+        </div>
+      <div class="form__btn-sub-cancel">
+        <input id="form__btn-submit" type="submit" value="Save" class="form__btn-submit">
+        <button id="form__btn-cancel" type="button" class="form__btn-cancel" onclick="location.href='{% url 'category' %}'">Cancel</button>
+      </div><br>
+      {% for message in messages %}
+        <p class="form__error">{{ message }}</p>
+      {% endfor %}
+    </div>
+</form>
+
+
+{% endblock content %}

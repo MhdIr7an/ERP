@@ -1,0 +1,175 @@
+{% extends 'main-template.html' %}
+{% load static %}
+
+{% block content %}
+<form method="POST" class="form__form" enctype="multipart/form-data">
+{% csrf_token %}
+<div class="form__content">
+  <h1>Purchase</h1>
+  <div class="form__grp">
+    <div class="floating-input-group">
+      {{ form.invoice_no }}
+      <label class="floating-label">Invoice No</label>
+    </div>
+    <div class="floating-input-group">
+      {{ form.purchase_no }}
+      <label class="floating-label">Purchase No</label>
+    </div>
+    <div class="floating-input-group">
+      {{ form.invoice_date }}
+      <label class="floating-label">Invoice Date</label>
+    </div>
+  </div>
+  <div class="form__grp">
+    <div class="floating-input-group">
+        {{ form.total }}
+        <label class="floating-label">Total</label>
+    </div>
+    <div class="floating-input-group">
+        {{ form.vat }}
+        <label class="floating-label">VAT</label>
+    </div>
+    <div class="floating-input-group">
+      {{ form.discount }}
+      <label class="floating-label">Discount</label>
+    </div>
+  </div>
+  {% comment %} <div class="floating-input-group">
+    {{ form.discount_description }}
+    <label class="floating-label">Discount Description</label>
+  </div> {% endcomment %}
+  
+  <div class="form__grp">
+      <div class="floating-input-group">
+        {{ form.roundoff }}
+        <label class="floating-label">RoundOff</label>
+      </div>
+    <div class="floating-input-group">
+        {{ form.net_amount }}
+        <label class="floating-label">Net Amount</label>
+    </div>
+    <div class="floating-input-group">
+        {{ form.amount_payed }}
+        <label class="floating-label">Amount Payed</label>
+    </div>
+    </div>
+    <div class="form__grp">
+  <div class="floating-input-group">
+    {{ form.balance }}
+    <label class="floating-label">Balance</label>
+  </div>
+  <div class="floating-input-group">
+    {{ form.payment_method }}
+    <label class="floating-label">Payment Method</label>
+  </div>
+  </div>
+  <div class="form__grp joined-input">
+    <div class="floating-input-group">
+      {{ form.vendor }}
+      <input id="master_vendor_code" class="form__size-s floating-input uppercase-only" placeholder=" " autocomplete="off"></input>
+      <label class="floating-label">Vendor Code</label>
+    </div>
+    <input id="master_vendor_name" readonly class="disabled-input auto-label"></input>
+  </div>
+  <div class="form__grp joined-input">
+    <div class="floating-input-group">
+      {{ form.salesman }}
+      <input id="master_salesman_code" class="form__size-s floating-input  uppercase-only" placeholder=" " autocomplete="off"></input>
+      <label class="floating-label">Salesman Code</label>
+    </div>
+    <input id="master_salesman_name" readonly class="disabled-input auto-label"></input>
+  </div>
+  <div class="form__btn-sub-cancel">
+    <input id="form__btn-submit" type="submit" value="Save" class="form__btn-submit" onclick="save_purchase(event)">
+    <button id="form__btn-cancel" type="button" class="form__btn-cancel" onclick="location.href='{% url 'purchase' %}'">Cancel</button>
+  </div><br>
+  {% for message in messages %}
+    <p class="form__error">{{ message }}</p>
+  {% endfor %}
+</div>
+
+
+<div class="form__content  mt-9">
+  
+<table class="form__tbl" id="form__tbl">
+  <thead class="table-head bg-amber-500 h-10">
+    <tr class="bg-gray-400">
+      <th class="w-1/25">#</th>
+      <th class="w-1/6">Product Code</th>
+      <th class="w-1/3">Product Name</th>
+      <th class="w-1/6">Unit</th>
+      <th class="w-1/8">Qty</th>
+      <th class="w-1/8">Price</th>
+      <th class="w-1/8">VAT%</th>
+      <th class="w-1/8">VAT</th>
+      <th class="w-1/8">Discount</th>
+      <th class="w-1/7">Total</th>
+    </tr>
+  </thead>
+  <tbody id="tbl__body">
+    <tr class="form__details-contents" id="row1">
+      <td class="py-2 tbl_sl" id="tbl_sl_1">1</td>
+      <td class="py-2 tbl_product_code" contenteditable="true" id="tbl_product_code_1"></td>
+      <td class="py-2 tbl_product_name" id="tbl_product_name_1"></td>
+      <td class="py-2 tbl_product_id" id="tbl_product_id_1" hidden></td>
+      <td class="py-2 tbl_unit">
+        <select id="tbl_unit_1">
+            <option value="option"></option>
+        </select>
+      </td>
+      <td class="py-2 tbl_qty" contenteditable="true" id="tbl_qty_1"></td>
+      <td class="py-2 tbl_price" contenteditable="true" id="tbl_price_1"></td>
+      <td class="py-2 tbl_vat_perc" id="tbl_vat_perc_1"></td>
+      <td class="py-2 tbl_vat" id="tbl_vat_1"></td>
+      <td class="py-2 tbl_discount" contenteditable="true" id="tbl_discount_1"></td>
+      <td class="py-2 tbl_total" id="tbl_total_1"></td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</form>
+
+
+<script type="text/javascript" src="{% static 'js/purchase.js' %}"></script>
+{% comment %} <script type="text/javascript" src="{% static 'js/purchase-add.js' %}"></script> {% endcomment %}
+
+<style>
+  .tbl_unit {
+    padding: 0;
+  }
+
+  .tbl_unit select{
+    height: 3vh;
+    width: 100%;
+    margin-top: -1rem;
+
+    outline: none;
+    border: none; 
+  }
+</style>
+
+{% endblock content %}
+
+
+
+{% comment %} <style>
+  .grid-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-gap: 10px;
+  }
+  .grid-item {
+    background-color: #eee;
+    padding: 20px;
+    font-size: 24px;
+  }
+</>
+
+<div class="grid-container">
+  <div class="grid-item">Item 1</div>
+  <div class="grid-item">Item 2</div>
+  <div class="grid-item">Item 3</div>
+  <div class="grid-item">Item 4</div>
+  <div class="grid-item">Item 5</div>
+  <div class="grid-item">Item 6</div>
+</div> {% endcomment %}
