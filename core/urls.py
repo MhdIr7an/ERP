@@ -10,13 +10,7 @@ urlpatterns = [
     path('login', views.loginPage, name='login'),
     path('register', views.registerPage, name='register'),
     path('logout', views.logoutUser, name='logout'),
-
-
     path('home', views.homePage, name='home'),
-    path('company', views.companyPage, name='company'),
-    path('employees', views.employeesPage, name='employees'),
-    path('banking', views.bankingPage, name='banking'),
-    path('reports', views.reportsPage, name='reports'),
 
 
 
@@ -74,17 +68,17 @@ urlpatterns = [
     path('category_find',  views.category_find, name='category_find'),
 
 
-    path('currency',  views.currency_view, name='currency'),
-    path('currency/<int:frm_id>?',  views.currency_view, name='currency_with_id'),
-    path('currency_add',  views.currency_add, name='currency_add'),
-    path('currency_edit/<int:frm_id>',  views.currency_edit, name='currency_edit'),
-    path('currency_delete/<int:frm_id>',  views.currency_delete, name='currency_delete'),
-    path('currency_print/<int:frm_id>',  views.currency_print, name='currency_print'),
-    path('currency_move_first',  views.currency_move_first, name='currency_move_first'),
-    path('currency_move_previous/<int:frm_id>',  views.currency_move_previous, name='currency_move_previous'),
-    path('currency_move_next/<int:frm_id>',  views.currency_move_next, name='currency_move_next'),
-    path('currency_move_last',  views.currency_move_last, name='currency_move_last'),
-    path('currency_find',  views.currency_find, name='currency_find'),
+    path('salesman',  views.salesman_view, name='salesman'),
+    path('salesman/<int:frm_id>',  views.salesman_view, name='salesman_with_id'),
+    path('salesman_add',  views.salesman_add, name='salesman_add'),
+    path('salesman_edit/<int:frm_id>',  views.salesman_edit, name='salesman_edit'),
+    path('salesman_delete/<int:frm_id>',  views.salesman_delete, name='salesman_delete'),
+    path('salesman_print/<int:frm_id>',  views.salesman_print, name='salesman_print'),
+    path('salesman_move_first',  views.salesman_move_first, name='salesman_move_first'),
+    path('salesman_move_previous/<int:frm_id>',  views.salesman_move_previous, name='salesman_move_previous'),
+    path('salesman_move_next/<int:frm_id>',  views.salesman_move_next, name='salesman_move_next'),
+    path('salesman_move_last',  views.salesman_move_last, name='salesman_move_last'),
+    path('salesman_find',  views.salesman_find, name='salesman_find'),
 
 
     path('sales',  views.sales_view, name='sales'),
@@ -112,36 +106,6 @@ urlpatterns = [
     path('purchase_move_next/<int:frm_id>',  views.purchase_move_next, name='purchase_move_next'),
     path('purchase_move_last',  views.purchase_move_last, name='purchase_move_last'),
     path('purchase_find',  views.purchase_find, name='purchase_find'),
-
-
-
-
-
-    path('salesOrder',  views.salesOrder_view, name='salesOrder'),
-    path('salesOrder/<int:frm_id>',  views.salesOrder_view, name='salesOrder_with_id'),
-    path('salesOrder_add',  views.salesOrder_add, name='salesOrder_add'),
-    path('salesOrder_edit/<int:frm_id>',  views.salesOrder_edit, name='salesOrder_edit'),
-    path('salesOrder_delete/<int:frm_id>',  views.salesOrder_delete, name='salesOrder_delete'),
-    path('salesOrder_print/<int:frm_id>',  views.salesOrder_print, name='salesOrder_print'),
-    path('salesOrder_move_first',  views.salesOrder_move_first, name='salesOrder_move_first'),
-    path('salesOrder_move_previous/<int:frm_id>',  views.salesOrder_move_previous, name='salesOrder_move_previous'),
-    path('salesOrder_move_next/<int:frm_id>',  views.salesOrder_move_next, name='salesOrder_move_next'),
-    path('salesOrder_move_last',  views.salesOrder_move_last, name='salesOrder_move_last'),
-    path('salesOrder_find',  views.salesOrder_find, name='salesOrder_find'),
-
-
-
-    path('purchaseOrder',  views.purchaseOrder_view, name='purchaseOrder'),
-    path('purchaseOrder/<int:frm_id>',  views.purchaseOrder_view, name='purchaseOrder_with_id'),
-    path('purchaseOrder_add',  views.purchaseOrder_add, name='purchaseOrder_add'),
-    path('purchaseOrder_edit/<int:frm_id>',  views.purchaseOrder_edit, name='purchaseOrder_edit'),
-    path('purchaseOrder_delete/<int:frm_id>',  views.purchaseOrder_delete, name='purchaseOrder_delete'),
-    path('purchaseOrder_print/<int:frm_id>',  views.purchaseOrder_print, name='purchaseOrder_print'),
-    path('purchaseOrder_move_first',  views.purchaseOrder_move_first, name='purchaseOrder_move_first'),
-    path('purchaseOrder_move_previous/<int:frm_id>',  views.purchaseOrder_move_previous, name='purchaseOrder_move_previous'),
-    path('purchaseOrder_move_next/<int:frm_id>',  views.purchaseOrder_move_next, name='purchaseOrder_move_next'),
-    path('purchaseOrder_move_last',  views.purchaseOrder_move_last, name='purchaseOrder_move_last'),
-    path('purchaseOrder_find',  views.purchaseOrder_find, name='purchaseOrder_find'),
 
 
 
@@ -190,14 +154,6 @@ urlpatterns = [
     path('save_sales/<int:sales_id>', views.save_sales, name='save_sales'),
     path('save_purchase', views.save_purchase, name='save_purchase'),
     path('save_purchase/<int:purchase_id>', views.save_purchase, name='save_purchase'),
-    path('save_salesOrder', views.save_salesOrder, name='save_salesOrder'),
-    path('save_salesOrder/<int:order_id>', views.save_salesOrder, name='save_salesOrder'),
-    path('save_purchaseOrder', views.save_purchaseOrder, name='save_purchaseOrder'),
-    path('save_purchaseOrder/<int:order_id>', views.save_purchaseOrder, name='save_purchaseOrder'),
     path('save_product', views.save_product, name='save_product'),
     path('save_product/<int:product_id>', views.save_product, name='save_product'),
-
-
-    # path('autocomplete', frm.autocomplete_suggestions, name='autocomplete'),
-    # path('product_json', frm.product_json, name='product_json'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -6,7 +6,7 @@
 <form method="POST" class="form__form" enctype="multipart/form-data">
   {% csrf_token %}
   <div class="form__content">
-    <h1>Vendor Information</h1>
+    <h1>Vendor</h1>
     <div class="form__btn-add-edit">
       <button type="button" class="btn-add-edit" onclick="location.href='{% url 'vendor_add' %}'">Add</button>
       <button type="button" class="btn-add-edit" onclick="location.href='{% url 'vendor_edit' values.id  %}'">Edit</button>

@@ -1,11 +1,19 @@
-{% include 'main-template.html' %}
+{% include 'login-template.html' %}
+{% include 'navbar.html' %}
 
 <div class="home__body">
     <div class="home__content">
         <h1 class="home__content_title">Home</h1>
-        <a href="{% url 'company' %}">Company</a>
-        <a href="{% url 'employees' %}">Employees</a>
-        <a href="{% url 'banking' %}">Banking</a>
-        <a href="{% url 'reports' %}">Reports</a>
+        <a href="{% url 'category' %}">Category</a>
+        <a href="{% url 'salesman' %}">Salesman</a>
+        <br>
+        <a href="{% url 'product' %}">Product</a>
+        <a href="{% url 'customer' %}">Customer</a>
+        <a href="{% url 'vendor' %}">Vendor</a>
+        <br>
+        <a href="{% url 'sales' %}">Sales</a>
+        <a href="{% url 'purchase' %}">Purchase</a>
+        <a href="{% url 'salesReturn' %}">Sales Return</a>
+        <a href="{% url 'purchaseReturn' %}">Purchase Return</a>
     </div>
 </div>

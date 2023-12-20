@@ -65,11 +65,11 @@ function balanceAmount() {
 function save_purchase(event, returnPurchase, purchase_id) {
     event.preventDefault();
     
-    if (is_field_empty('#master_vendor_code', 'Invalid vendor')) {
+    if (is_field_empty('#master_vendor', 'Invalid vendor')) {
         return;
-    } else if ($('#tbl_product_code_1').text() === null || $('#tbl_product_code_1').text() === '') {
+    } else if ($('#tbl_product_1').text() === null || $('#tbl_product_1').text() === '') {
         toast_message('no products added in this invoice')
-        $('#tbl_product_code_1').focus();
+        $('#tbl_product_1').focus();
         return;
     } else {
         vendor_id = $('#master_vendor_id').val() || 0;
@@ -126,7 +126,7 @@ function purchase_details(url_link, master_data) {
         var values = row.find('td').map(function() {
         return $(this).text();
         }).get();
-        values[4] = row.find('.tbl_unit select').val();
+        values[3] = row.find('.tbl_unit select').val();
         details_data.push(values);
     });
 
@@ -210,7 +210,7 @@ function findRow(url_link, row, returnPurchase) {
 //rearrange_row()
 
 $(document).ready(function() {
-    $('#master_vendor_code').on('input', function() {
+    $('#master_vendor').on('blur', function() {
         let vendorCode = $(this).val().trim() || 0;
         axios(`/get_field_details/tblVendor/vendor_code/${vendorCode}`)
         .then(response => {
@@ -229,14 +229,14 @@ $(document).ready(function() {
         })      
     })
 
-    $('#master_salesman_code').on('input', function() {
+    $('#master_salesman_code').on('blur', function() {
         let salesmanCode = $(this).val().trim() || 0;
-        axios(`/get_field_details/tblEmployee/employee_code/${salesmanCode}`)
+        axios(`/get_field_details/tblSalesman/salesman_code/${salesmanCode}`)
         .then(response => {
             value = response.data.results[0]
             if (value.id) {
                 $(`#master_salesman_id`).val(value.id);
-                $(`#master_salesman_name`).val(value.employee_name);
+                $(`#master_salesman_name`).val(value.salesman_name);
             } else {
                 $(`#master_salesman_id`).val('');
                 $(`#master_salesman_name`).val('');
@@ -256,14 +256,56 @@ $(document).ready(function() {
         // Check which column is being edited
         switch (columnName) {
             case 'product_code':
-                let productCode = $(this).text().trim().toUpperCase() || '0';
+                break;
+            case 'qty':
+                tblTotal(rowCounter);
+                break;
+            case 'price':
+                tblTotal(rowCounter);
+                break;
+            case 'discount':
+                tblTotal(rowCounter);
+                break;
+        }
+    });
+
+    $('#tbl__body').on('blur', '.tbl_product', function() {
+        const row = $(this).closest('tr');
+        const rowCounter = parseInt(row.attr('id').replace('row', ''), 10);
+        const totalRows = $('#tbl__body tr').length;
+        if ($(this).text() === '') {
+            if(totalRows > 1 && !row.is(':last-child')) {
+                row.remove();
+                rearrange(row.attr('id'))
+                updateTotal();
+                // setTimeout(() => {
+                    // $('#tbl_discount_' + (rowCounter-1)).focus();
+                    // }, 0.5);
+                $('#tbl_product_' + (rowCounter+1)).focus();
+                }
+                else if (totalRows == 1) {
+                    $('#form__btn-cancel').focus();
+                }
+        }
+        else {
+            productId = $('#tbl_product_id_' + rowCounter).text() || 0;
+            does_field_exist('tblProduct', 'id', productId)
+            .then(result => {
+                if (!result) {
+                    toast_message('Invalid product');
+                    setTimeout(() => {
+                                $("#tbl_product_" + rowCounter).focus();
+                                }, 0.5);
+                }
+                else {
+                    let productCode = $(this).text().trim().toUpperCase() || '0';
 
                 axios.get(`/get_field_details/tblProduct/product_code/${productCode}`)
                 .then(response => {
                     value = response.data.results[0]
                         if (value.id) {
                             $(`#tbl_product_id_${rowCounter}`).text(value.id);
-                            $(`#tbl_product_name_${rowCounter}`).text(value.product_name);
+                            $(`#tbl_product_${rowCounter}`).text(value.product_name);
                             $(`#tbl_unit_${rowCounter}`).append((`<option value="${value.main_unit}">${value.main_unit}</option>`));
                             axios.get(`/get_field_details/tblCategory/id/${value.category_id}`)
                             .then(result => {
@@ -283,57 +325,17 @@ $(document).ready(function() {
                             })
                         } else {
                             $(`#tbl_product_id_${rowCounter}`).text('');
-                            $(`#tbl_product_name_${rowCounter}`).text('');
+                            $(`#tbl_product_${rowCounter}`).text('');
                             $(`#tbl_vat_perc_${rowCounter}`).text('');
                             $(`#tbl_unit_${rowCounter}`).empty();
                         }
                     })
                     .catch(error => {
                         $(`#tbl_product_id_${rowCounter}`).text('');
-                        $(`#tbl_product_name_${rowCounter}`).text('');
+                        $(`#tbl_product_${rowCounter}`).text('');
                         $(`#tbl_vat_perc_${rowCounter}`).text('');
                         $(`#tbl_unit_${rowCounter}`).empty();
                     })
-                break;
-            case 'qty':
-                tblTotal(rowCounter);
-                break;
-            case 'price':
-                tblTotal(rowCounter);
-                break;
-            case 'discount':
-                tblTotal(rowCounter);
-                break;
-        }
-    });
-
-    $('#tbl__body').on('blur', '.tbl_product_code', function() {
-        const row = $(this).closest('tr');
-        const rowCounter = parseInt(row.attr('id').replace('row', ''), 10);
-        const totalRows = $('#tbl__body tr').length;
-        if ($(this).text() === '') {
-            if(totalRows > 1 && !row.is(':last-child')) {
-                row.remove();
-                rearrange(row.attr('id'))
-                updateTotal();
-                // setTimeout(() => {
-                    // $('#tbl_discount_' + (rowCounter-1)).focus();
-                    // }, 0.5);
-                $('#tbl_product_code_' + (rowCounter+1)).focus();
-                }
-                else if (totalRows == 1) {
-                    $('#form__btn-cancel').focus();
-                }
-        }
-        else {
-            productId = $('#tbl_product_id_' + rowCounter).text() || 0;
-            does_field_exist('tblProduct', 'id', productId)
-            .then(result => {
-                if (!result) {
-                    toast_message('Invalid product');
-                    setTimeout(() => {
-                                $("#tbl_product_code_" + rowCounter).focus();
-                                }, 0.5);
                 }
             })
             .catch(error => {
@@ -383,7 +385,7 @@ $(document).ready(function() {
                 if (event.key === 'Enter') {
                     event.preventDefault();
                     if (event.shiftKey) {
-                        $('#tbl_product_code_' + rowCounter).focus();
+                        $('#tbl_product_' + rowCounter).focus();
                     } else {
                         $('#tbl_price_' + rowCounter).focus();
                     }
@@ -419,8 +421,7 @@ $(document).ready(function() {
 
                     const newRow = `<tr class="form__details-contents" id="row${rowNo}">
                         <td class="py-2 tbl_sl" id="tbl_sl_${rowNo}">${rowNo}</td>
-                        <td class="py-2 tbl_product_code" contenteditable="true" id="tbl_product_code_${rowNo}"></td>
-                        <td class="py-2 tbl_product_name" id="tbl_product_name_${rowNo}"></td>
+                        <td class="py-2 tbl_product" contenteditable="true" id="tbl_product_${rowNo}"></td>
                         <td class="py-2 tbl_product_id" id="tbl_product_id_${rowNo}" hidden></td>
                         <td class="py-2 tbl_unit">
                             <select id="tbl_unit_${rowNo}">
@@ -436,7 +437,7 @@ $(document).ready(function() {
                     </tr>`;
 
                     $("#form__tbl tbody").append(newRow);
-                    $('#tbl_product_code_' + rowNo).focus();
+                    $('#tbl_product_' + rowNo).focus();
                 // } else if (event.key === 'Enter' || event.which === 13 || event.code === 'NumpadEnter') {
                 } else if (event.key === 'Enter') {
                     event.preventDefault();
@@ -446,7 +447,7 @@ $(document).ready(function() {
                         $('#tbl_price_' + rowCounter).focus();
                     } else {
                         // console.log('Enter pressed');
-                        $('#tbl_product_code_' + (rowCounter + 1)).focus();
+                        $('#tbl_product_' + (rowCounter + 1)).focus();
                     }
                 }
                 break;

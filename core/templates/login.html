@@ -7,8 +7,6 @@
 {% endblock style %}
 
 {% block content %}
-
-<div class="login__content">
     <form class="login__form" method="POST" action="">
         {% csrf_token %}
         {% comment %} <div class="login__content"> {% endcomment %}
@@ -19,9 +17,8 @@
             {% for message in messages %}
                 <p class="mb-2 text-xs text-red-500">{{message}}</p>
             {% endfor %}
-            {% comment %} <p class="text-black opacity-70">Don't have an Account ?<span><a class="text-gray-500 ml-2 hover:text-gray-600 font-semibold" href="{% url 'register' %}">Create Account</a></span> </p> {% endcomment %}
+            <p class="text-black opacity-70">Don't have an Account ?<span><a class="text-gray-500 ml-2 hover:text-gray-600 font-semibold" href="{% url 'register' %}">Create Account</a></span> </p>
         {% comment %} </div> {% endcomment %}
     </form>
-</div>
 
 {% endblock content %}

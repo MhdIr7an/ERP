@@ -6,8 +6,8 @@ from django.db import transaction
 from core.convertions import to_decimal
 
 
-from .models import tblProduct, tblCustomer, tblProduct_unit, tblSales_Details, tblVendor, tblCategory, tblSales_Master, tblPurchase_Master, tblPurchase_Details
-from .forms import ProductForm, CustomerForm, VendorForm, CategoryForm, SalesForm, PurchaseForm
+from .models import tblProduct, tblCustomer, tblProduct_unit, tblSales_Details, tblVendor, tblCategory, tblSales_Master, tblPurchase_Master, tblPurchase_Details, tblSalesman
+from .forms import ProductForm, CustomerForm, VendorForm, CategoryForm, SalesForm, PurchaseForm, SalesmanForm
 
 
 class idExists:
@@ -79,6 +79,7 @@ class model_mapping:
             "customer": (tblCustomer, CustomerForm, 'customer/view.html', 'customer/add.html', 'customer/edit.html', 'customer/list.html'),
             "vendor": (tblVendor, VendorForm, 'vendor/view.html', 'vendor/add.html', 'vendor/edit.html', 'vendor/list.html'),
             "category": (tblCategory, CategoryForm, 'category/view.html', 'category/add.html', 'category/edit.html', 'category/list.html'),
+            "salesman": (tblSalesman, SalesmanForm, 'salesman/view.html', 'salesman/add.html', 'salesman/edit.html', 'salesman/list.html'),
             "sales": (tblSales_Master, SalesForm, 'sales/view.html', 'sales/add.html', 'sales/edit.html', 'sales/list.html'),
             "purchase": (tblPurchase_Master, PurchaseForm, 'purchase/view.html', 'purchase/add.html', 'purchase/edit.html', 'purchase/list.html'),
             "salesReturn": (tblSales_Master, SalesForm, 'salesReturn/view.html', 'salesReturn/add.html', 'salesReturn/edit.html', 'salesReturn/list.html'),
@@ -321,17 +322,3 @@ class model_mapping:
         else:
             values = self.model.objects.all()
         return render(self.request, self.list_template, {'values': values})
-
-# def autocomplete_suggestions(request):
-#     query = request.GET.get('query', '')
-#     suggestions = tblCustomer.objects.filter(Q(customer_name__icontains=query) | Q(price__icontains=query))[:10]  # Adjust the filter conditions as needed
-#     suggestions = [s.customer_name for s in suggestions]
-#     return JsonResponse(suggestions, safe=False)
-
-# def customer_json(request):
-#     search_query = request.GET.get('search_query')
-#     customers = tblCustomer.objects.filter(customer_name__icontains=search_query)
-#     customers_list = list(customers.values())
-#     for customer in customers_list:
-#         customer['price'] = customer['price'].to_eng_string()
-#     return JsonResponse(json.dumps(customers_list), safe=False)

@@ -7,8 +7,8 @@
     <!-- logo -->
     <div class="flex-none w-56 flex flex-row items-center">
       <a href="{% url 'home' %}" style="text-decoration: none; color: inherit; display: inline-flex; align-items: center;">
-        <img src="{% static 'img/logo.png' %}" class="w-10 flex-none">
-        <strong class="capitalize ml-1 flex-1">ERP</strong>
+        <img src="{% static 'img/logo.svg' %}" class="w-10 flex-none">
+        {% comment %} <strong class="capitalize ml-1 flex-1">ERP</strong> {% endcomment %}
     </a>
 
     </div>
@@ -16,10 +16,8 @@
 
     <!-- navbar content toggle -->
 
-    {% comment %} {% if request.user.is_authenticated %} {% endcomment %}
-    <div id="navbarToggle" class="hidden md:flex justify-between  md:fixed right-0 mr-6">
+    <div id="navbarToggle" class="hidden md:flex justify-between md:fixed right-0 mr-6">
 
-      {% comment %} <a href="#" class="mr-12 font-bold opacity-9 text-red-500 hover:text-red-700 " style="margin-top:6px;cursor:pointer;text-decoration:none;">Raised Issues</a> {% endcomment %}
         
       <a href="#"><button class="menu-btn focus:outline-none focus:shadow-outline flex flex-wrap items-center">
         <div class="w-8 h-8 overflow-hidden rounded-full">
@@ -27,7 +25,7 @@
         </div> 
 
         <div class="ml-2 capitalize flex flex-col text-start ">
-          <h1 class="text-sm text-gray-800 font-semibold m-0 p-0 leading-none">username</h1></a>
+          <h1 class="text-sm text-gray-800 font-semibold m-0 p-0 leading-none">{{request.user.username}}</h1></a>
           
         </div>                        
       </button>

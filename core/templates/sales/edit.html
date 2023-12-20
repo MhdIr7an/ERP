@@ -63,7 +63,7 @@
   </div>
   <div class="floating-input-group">
     {{ form.salesman }}
-    <input id="master_salesman" class="form__size-l floating-input  uppercase-only" placeholder=" " autocomplete="off" value="{{salesman.employee_name}}"></input>
+    <input id="master_salesman" class="form__size-l floating-input  uppercase-only" placeholder=" " autocomplete="off" value="{{salesman.salesman_name}}"></input>
     <label class="floating-label">Salesman</label>
   </div>
   <div class="form__btn-sub-cancel">
@@ -152,25 +152,3 @@
   }
 </style>
 {% endblock content %}
-
-{% comment %} <style>
-  .grid-container {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    grid-gap: 10px;
-  }
-  .grid-item {
-    background-color: #eee;
-    padding: 20px;
-    font-size: 24px;
-  }
-</style>
-
-<div class="grid-container">
-  <div class="grid-item">Item 1</div>
-  <div class="grid-item">Item 2</div>
-  <div class="grid-item">Item 3</div>
-  <div class="grid-item">Item 4</div>
-  <div class="grid-item">Item 5</div>
-  <div class="grid-item">Item 6</div>
-</div> {% endcomment %}

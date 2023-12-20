@@ -2,10 +2,35 @@
 <aside class="sidebar__main">
   <!-- Sidebar navigation-->
     <ul class="sidebar__group">
+
+      <li class="sidebar__item">
+        <a class="sidebar__link" href="{% url 'category' %}" aria-expanded="false">
+          <span style="margin-top: 1.5px">
+            <img src="{% static 'img/category.svg'%}" alt="Icon description" width="20" height="20">
+          </span>
+          <span class="sidebar__title">Category</span>
+        </a>
+      </li>
+
+      <li class="sidebar__item">
+        <a class="sidebar__link" href="{% url 'salesman' %}" aria-expanded="false">
+          <span style="margin-top: 1.5px">
+            <img src="{% static 'img/salesman.svg'%}" alt="Icon description" width="16" height="16">
+          </span>
+          <span class="sidebar__title">Salesman</span>
+        </a>
+      </li>
+
+    </ul>
+
+
+
+    <ul class="sidebar__group">
+
       <li class="sidebar__item">
         <a class="sidebar__link" href="{% url 'product' %}" aria-expanded="false">
           <span style="margin-top: 1.5px">
-            <ion-icon name="cube-outline"></ion-icon>
+            <img src="{% static 'img/product.svg'%}" alt="Icon description" width="20" height="20">
           </span>
           <span class="sidebar__title">Product</span>
         </a>
@@ -23,22 +48,22 @@
       <li class="sidebar__item">
         <a class="sidebar__link" href="{% url 'vendor' %}" aria-expanded="false">
           <span style="margin-top: 1.5px">
-            <ion-icon name="pricetag-outline"></ion-icon>
+            <img src="{% static 'img/vendor.svg'%}" alt="Icon description" width="16" height="16">
           </span>
           <span class="sidebar__title">Vendor</span>
         </a>
       </li>
-
       
     </ul>
 
 
 
     <ul class="sidebar__group">
+
       <li class="sidebar__item">
         <a class="sidebar__link" href="{% url 'sales' %}" aria-expanded="false">
           <span style="margin-top: 1.5px">
-            <ion-icon name="trending-up-outline"></ion-icon>
+            <img src="{% static 'img/sales.svg'%}" alt="Icon description" width="16" height="16">
           </span>
           <span class="sidebar__title">Sales</span>
         </a>
@@ -47,7 +72,7 @@
       <li class="sidebar__item">
         <a class="sidebar__link" href="{% url 'purchase' %}" aria-expanded="false">
           <span style="margin-top: 1.5px">
-            <ion-icon name="bag-add-outline"></ion-icon>
+            <img src="{% static 'img/purchase.svg'%}" alt="Icon description" width="16" height="16">
           </span>
           <span class="sidebar__title">Purchase</span>
         </a>
@@ -56,113 +81,21 @@
       <li class="sidebar__item">
         <a class="sidebar__link" href="{% url 'salesReturn' %}" aria-expanded="false">
           <span style="margin-top: 1.5px">
-            <ion-icon name="trending-down-outline"></ion-icon>
+            <img src="{% static 'img/sales-return.svg'%}" alt="Icon description" width="16" height="16">
           </span>
           <span class="sidebar__title">Sales Return</span>
         </a>
       </li>
+
       <li class="sidebar__item">
         <a class="sidebar__link" href="{% url 'purchaseReturn' %}" aria-expanded="false">
           <span style="margin-top: 1.5px">
-            <ion-icon name="bag-remove-outline"></ion-icon>
+            <img src="{% static 'img/purchase-return.svg'%}" alt="Icon description" width="16" height="16">
           </span>
           <span class="sidebar__title">Purch Return</span>
         </a>
       </li>
 
-      
     </ul>
   <!-- End Sidebar navigation -->
 </aside>
-
-<!-- <aside class="sidebar__main">
-      {% comment %} Sidebar navigation {% endcomment %}
-        <ul class="sidebar__group">
-          {% comment %} <li class="nav-small-cap">
-            <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
-            <span class="sidebar__title">Home</span>
-          </li> {% endcomment %}
-  
-          {% comment %} {% block sidebar %}
-          
-          {% endblock sidebar %} {% endcomment %}
-          <li class="sidebar__item">
-            <a class="sidebar__link" href="{% url 'product' %}" aria-expanded="false">
-              <span>
-                <i class="fas fa-hands-helping"></i>
-              </span>
-              <span class="sidebar__title">Product</span>
-            </a>
-          </li>
-  
-          <li class="sidebar__item">
-            <a class="sidebar__link" href="{% url 'customer' %}" aria-expanded="false">
-              <span>
-                <i class="fas fa-hands-helping"></i>
-              </span>
-              <span class="sidebar__title">Customer</span>
-            </a>
-          </li>
-  
-          <li class="sidebar__item">
-            <a class="sidebar__link" href="{% url 'vendor' %}" aria-expanded="false">
-              <span>
-                <i class="fas fa-hands-helping"></i>
-              </span>
-              <span class="sidebar__title">Vendor</span>
-            </a>
-          </li>
-  
-          
-        </ul>
-
-
-
-        <ul class="sidebar__group">
-          {% comment %} <li class="nav-small-cap">
-            <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
-            <span class="sidebar__title">Home</span>
-          </li> {% endcomment %}
-  
-          {% comment %} {% block sidebar %}
-          
-          {% endblock sidebar %} {% endcomment %}
-          <li class="sidebar__item">
-            <a class="sidebar__link" href="{% url 'sales' %}" aria-expanded="false">
-              <span>
-                <i class="fas fa-hands-helping"></i>
-              </span>
-              <span class="sidebar__title">Sales</span>
-            </a>
-          </li>
-  
-          <li class="sidebar__item">
-            <a class="sidebar__link" href="{% url 'purchase' %}" aria-expanded="false">
-              <span>
-                <i class="fas fa-hands-helping"></i>
-              </span>
-              <span class="sidebar__title">Purchase</span>
-            </a>
-          </li>
-  
-          <li class="sidebar__item">
-            <a class="sidebar__link" href="{% url 'vendor' %}" aria-expanded="false">
-              <span>
-                <i class="fas fa-hands-helping"></i>
-              </span>
-              <span class="sidebar__title">Sales Return</span>
-            </a>
-          </li>
-          <li class="sidebar__item">
-            <a class="sidebar__link" href="{% url 'vendor' %}" aria-expanded="false">
-              <span>
-                <i class="fas fa-hands-helping"></i>
-              </span>
-              <span class="sidebar__title">Purch Return</span>
-            </a>
-          </li>
-  
-          
-        </ul>
-      {% comment %} End Sidebar navigation {% endcomment %}
-  </aside> -->

@@ -46,29 +46,18 @@ class tblCategory(models.Model):
     type = models.CharField(max_length=30, default='stock')
     vat_rate = models.DecimalField(max_digits=12, decimal_places=2, default=0)
 
-class tblCurrency(models.Model):
+class tblSalesman(models.Model):
     id = models.BigAutoField(primary_key=True)
-    currency_code = models.CharField(max_length=5, default='', unique=True)
-    currency_name = models.CharField(max_length=25, default='', unique=True)
-    rate_of_change = models.DecimalField(max_digits=5, decimal_places=2, default=1)
-
-class tblEmployee(models.Model):
-    id = models.BigAutoField(primary_key=True)
-    employee_code = models.CharField(max_length=10, unique=True, default='')
-    employee_name = models.CharField(max_length=100, default='')
-    employee_role = models.CharField(max_length=100, default='')
+    salesman_code = models.CharField(max_length=10, unique=True, default='')
+    salesman_name = models.CharField(max_length=100, default='')
     passport_no = models.CharField(max_length=25, default='')
     passport_expiry = models.DateField(default=now())
-    emirates_id = models.CharField(max_length=25, default='')
-    labour_card = models.CharField(max_length=25, default='')
     visa_no = models.CharField(max_length=25, default='')
     visa_expiry = models.DateField(default=now())
     health_insurance = models.CharField(max_length=25, default='')
     health_insurance_expiry = models.DateField(default=now())
-    basic_pay = models.DecimalField(max_digits=10, decimal_places=2, default=0)
-    hra = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    salary = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     address = models.CharField(max_length=255, default='')
-    phone_no = models.CharField(max_length=25, default='')
     mobile = models.CharField(max_length=25, default='')
     email = models.EmailField(max_length=200, default='')
 
@@ -141,7 +130,7 @@ class tblSales_Master(models.Model):
     balance = models.DecimalField(max_digits=12, decimal_places=2, default=0)
     payment_method = models.CharField(max_length=15, default='cash')
     customer = models.ForeignKey(tblCustomer, on_delete=models.DO_NOTHING)
-    salesman = models.ForeignKey(tblEmployee, on_delete=models.DO_NOTHING)
+    salesman = models.ForeignKey(tblSalesman, on_delete=models.DO_NOTHING)
     transaction_type = models.CharField(max_length=10, default='', blank=True, null=True)
 
 class tblSales_Details(models.Model):
@@ -175,7 +164,7 @@ class tblPurchase_Master(models.Model):
     balance = models.DecimalField(max_digits=12, decimal_places=2, default=0)
     payment_method = models.CharField(max_length=15, default='cash')
     vendor = models.ForeignKey(tblVendor, on_delete=models.DO_NOTHING)
-    salesman = models.ForeignKey(tblEmployee, on_delete=models.DO_NOTHING)
+    salesman = models.ForeignKey(tblSalesman, on_delete=models.DO_NOTHING)
     transaction_type = models.CharField(max_length=10, default='', blank=True, null=True)
 
 class tblPurchase_Details(models.Model):
@@ -193,84 +182,3 @@ class tblPurchase_Details(models.Model):
 
     def get_units(self):
         return tblProduct_unit.objects.filter(product=self.product)
-
-class tblSalesOrder_Master(models.Model):
-    id = models.BigAutoField(primary_key=True)
-    order_no = models.CharField(max_length=15, default='', blank=True, null=True)
-    order_date = models.DateField(default=now())
-    total = models.DecimalField(max_digits=12, decimal_places=2, default=0)
-    vat = models.DecimalField(max_digits=12, decimal_places=2, default=0)
-    discount = models.DecimalField(max_digits=12, decimal_places=2, default=0)
-    roundoff = models.DecimalField(max_digits=5, decimal_places=2, default=0, blank=True, null=True)
-    net_amount = models.DecimalField(max_digits=12, decimal_places=2, default=0)
-    customer = models.ForeignKey(tblCustomer, on_delete=models.DO_NOTHING)
-    salesman = models.ForeignKey(tblEmployee, on_delete=models.DO_NOTHING)
-
-class tblSalesOrder_Details(models.Model):
-    id = models.BigAutoField(primary_key=True)
-    sales_order = models.ForeignKey(tblSales_Master, on_delete=models.CASCADE, blank=True, null=True)
-    product = models.ForeignKey(tblProduct, on_delete=models.DO_NOTHING, blank=True, null=True)
-    unit = models.CharField(max_length=10, default='pcs')
-    stock = models.DecimalField(max_digits=12, decimal_places=2,default=0, blank=True, null=True)
-    qty = models.DecimalField(max_digits=12, decimal_places=2,default=0, blank=True, null=True)
-    price = models.DecimalField(max_digits=12, decimal_places=2, default=0, blank=True, null=True)
-    vat_perc = models.DecimalField(max_digits=12, decimal_places=2, default=0, blank=True, null=True)
-    vat_amount = models.DecimalField(max_digits=12, decimal_places=2, default=0, blank=True, null=True)
-    item_discount = models.DecimalField(max_digits=12, decimal_places=2, default=0, blank=True, null=True)
-    total_amount = models.DecimalField(max_digits=12, decimal_places=2, default=0, blank=True, null=True)
-    
-    def get_units(self):
-        return tblProduct_unit.objects.filter(product=self.product)
-
-class tblPurchaseOrder_Master(models.Model):
-    id = models.BigAutoField(primary_key=True)
-    order_no = models.CharField(max_length=15, default='', blank=True, null=True)
-    order_date = models.DateField(default=now())
-    total = models.DecimalField(max_digits=12, decimal_places=2, default=0)
-    vat = models.DecimalField(max_digits=12, decimal_places=2, default=0)
-    discount = models.DecimalField(max_digits=12, decimal_places=2, default=0)
-    roundoff = models.DecimalField(max_digits=5, decimal_places=2, default=0, blank=True, null=True)
-    net_amount = models.DecimalField(max_digits=12, decimal_places=2, default=0)
-    vendor = models.ForeignKey(tblVendor, on_delete=models.DO_NOTHING)
-    salesman = models.ForeignKey(tblEmployee, on_delete=models.DO_NOTHING)
-    
-class tblPurchaseOrder_Details(models.Model):
-    id = models.BigAutoField(primary_key=True)
-    purchase_order = models.ForeignKey(tblPurchase_Master, on_delete=models.CASCADE, blank=True, null=True)
-    product = models.ForeignKey(tblProduct, on_delete=models.DO_NOTHING, blank=True, null=True)
-    unit = models.CharField(max_length=10, default='pcs')
-    qty = models.DecimalField(max_digits=12, decimal_places=2,default=0, blank=True, null=True)
-    price = models.DecimalField(max_digits=12, decimal_places=2, default=0, blank=True, null=True)
-    vat_perc = models.DecimalField(max_digits=12, decimal_places=2, default=0, blank=True, null=True)
-    vat_amount = models.DecimalField(max_digits=12, decimal_places=2, default=0, blank=True, null=True)
-    item_discount = models.DecimalField(max_digits=12, decimal_places=2, default=0, blank=True, null=True)
-    total_amount = models.DecimalField(max_digits=12, decimal_places=2, default=0, blank=True, null=True)
-
-    def get_units(self):
-        return tblProduct_unit.objects.filter(product=self.product)
-
-class tblPayment(models.Model):
-    id = models.BigAutoField(primary_key=True)
-    payment_no = models.IntegerField(default=0, null=True, blank=True)
-    payment_date = models.DateField(default=now())
-    vendor = models.ForeignKey(tblVendor, on_delete=models.DO_NOTHING, blank=True, null=True)
-    amount = models.DecimalField(max_digits=12, decimal_places=2, default=0, blank=True, null=True)
-    discount = models.DecimalField(max_digits=12, decimal_places=2, default=0, blank=True, null=True)
-    payment_method = models.CharField(max_length=15, default='cash')
-    
-class tblReceipt(models.Model):
-    id = models.BigAutoField(primary_key=True)
-    receipt_no = models.IntegerField(default=0, null=True, blank=True)
-    receipt_date = models.DateField(default=now())
-    customer = models.ForeignKey(tblCustomer, on_delete=models.DO_NOTHING, blank=True, null=True)
-    amount = models.DecimalField(max_digits=12, decimal_places=2, default=0, blank=True, null=True)
-    discount = models.DecimalField(max_digits=12, decimal_places=2, default=0, blank=True, null=True)
-    payment_method = models.CharField(max_length=15, default='cash')
-
-class tblExpense(models.Model):
-    id = models.BigAutoField(primary_key=True)
-    expense_no = models.IntegerField(default=0, null=True, blank=True)
-    expense_date = models.DateField(default=now())
-    expense = models.CharField(max_length=15, default='', blank=True, null=True)
-    amount = models.DecimalField(max_digits=12, decimal_places=2, default=0, blank=True, null=True)
-    payment_method = models.CharField(max_length=15, default='cash')

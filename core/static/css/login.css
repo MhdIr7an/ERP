@@ -1,16 +1,10 @@
-.login__content {
-    width: 600px;
-    min-height: 400px;
-    background: #FFF;
-    margin: 9rem auto;
-}
-
 .login__form {
     height: auto;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    margin: 9rem auto;
 }
 
 .login__form h1 {
@@ -24,7 +18,7 @@
 
 .login__form input {
     border: 1px solid #e2e8f0;
-    width: 300px;
+    width: 400px;
     margin-top: 1rem;
     margin-bottom: 12px;
     height: 40px;
@@ -35,15 +29,16 @@
 }
 
 .login__form input[type="submit"] {
-    color: #fff;
-    background-color: #6c757d;
+    background: #dad6d65f;  
     border-radius: 0.5rem;
     font-weight: 700;
-    width: 300px;
+    width: 400px;
     cursor: pointer;
     padding: 0.5rem;
 }
 
-.login__form input[type="submit"]:hover {
-    background-color: rgba(108, 117, 125, 0.8);
+.login__form input[type="submit"]:hover,
+.login__form input[type="submit"]:focus {
+    color: #fff;
+    background: #430fed5f;
 }

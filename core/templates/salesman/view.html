@@ -1,0 +1,80 @@
+{% extends 'main-template.html' %}
+{% load static %}
+{% load custom_filters %}
+
+{% block content %}
+<form method="POST" class="form__form" enctype="multipart/form-data">
+  {% csrf_token %}
+  <div class="form__content">
+    <h1>Salesman</h1>
+    <div class="form__btn-add-edit">
+      <button type="button" class="btn-add-edit" onclick="location.href='{% url 'salesman_add' %}'">Add</button>
+      <button type="button" class="btn-add-edit" onclick="location.href='{% url 'salesman_edit' values.id  %}'">Edit</button>
+      <button type="button" class="btn-add-edit" onclick="location.href='{% url 'salesman_delete' values.id %}'">Delete</button>
+      <button type="button" class="btn-add-edit" onclick="location.href='{% url 'salesman_print' values.id %}'">Print</button>
+    </div>
+    <div class="floating-input-group">
+      {{ form.salesman_code|add_class:form.disabled_class }}
+      <label class="floating-label">Salesman Code</label>
+    </div>
+    <div class="floating-input-group">
+      {{ form.salesman_name|add_class:form.disabled_class }}
+      <label class="floating-label">Salesman Name</label>
+    </div>
+    <div class="form__grp">
+      <div class="floating-input-group">
+        {{ form.passport_no|add_class:form.disabled_class }}
+        <label class="floating-label">Passport No</label>
+      </div>
+      <div class="floating-input-group">
+        {{ form.passport_expiry|add_class:form.disabled_class }}
+        <label class="floating-label">Passport Expiry</label>
+      </div>
+    </div>
+    <div class="form__grp">
+      <div class="floating-input-group">
+        {{ form.visa_no|add_class:form.disabled_class }}
+        <label class="floating-label">Visa No</label>
+      </div>
+      <div class="floating-input-group">
+        {{ form.visa_expiry|add_class:form.disabled_class }}
+        <label class="floating-label">Visa Expiry</label>
+      </div>
+    </div>
+    <div class="form__grp">
+      <div class="floating-input-group">
+        {{ form.health_insurance|add_class:form.disabled_class }}
+        <label class="floating-label">Health Insurance</label>
+      </div>
+      <div class="floating-input-group">
+        {{ form.health_insurance_expiry|add_class:form.disabled_class }}
+        <label class="floating-label">Health Insurance Expiry</label>
+      </div>
+    </div>
+    <div class="form__grp">
+      <div class="floating-input-group">
+        {{ form.salary|add_class:form.disabled_class }}
+        <label class="floating-label">Salary</label>
+      </div>
+      <div class="floating-input-group">
+        {{ form.mobile|add_class:form.disabled_class }}
+        <label class="floating-label">Mobile</label>
+      </div>
+    </div>
+    <div class="floating-input-group">
+      {{ form.address|add_class:form.disabled_class }}
+      <label class="floating-label">Address</label>
+    </div>
+    <div class="floating-input-group">
+      {{ form.email|add_class:form.disabled_class }}
+      <label class="floating-label">Email</label>
+    </div>
+    <div class="form__btn-move">
+      <button type="button" class="btn-move" onclick="location.href='{% url 'salesman_move_first' %}'"  {% if not values.prev %}disabled{% endif %}>First</button>
+      <button type="button" class="btn-move" onclick="location.href='{% url 'salesman_move_previous' values.id %}'"  {% if not values.prev %}disabled{% endif %}>Previous</button>
+      <button type="button" class="btn-move" onclick="location.href='{% url 'salesman_find' %}'"  {% if not values.find %}disabled{% endif %}>Find</button>
+      <button type="button" class="btn-move" onclick="location.href='{% url 'salesman_move_next' values.id %}'"  {% if not values.next %}disabled{% endif %}>Next</button>
+      <button type="button" class="btn-move" onclick="location.href='{% url 'salesman_move_last' %}'"  {% if not values.next %}disabled{% endif %}>Last</button>
+    </div>
+</form>
+{% endblock content %}

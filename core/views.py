@@ -12,17 +12,18 @@ from django.db.models import Q
 import json
 
 from . frm import model_mapping
-from . models import tblUsers, tblSales_Details, tblSales_Master, tblCustomer, tblPurchase_Master, tblPurchase_Details, tblVendor, tblProduct, tblProduct_unit, tblCategory, tblEmployee
+from . models import (tblUsers, tblSales_Details, tblSales_Master, tblCustomer, tblPurchase_Master, tblPurchase_Details, tblVendor, 
+tblProduct, tblProduct_unit, tblCategory, tblSalesman)
 from . rpt import invoice_print
 from . convertions import to_decimal
 
-
+@login_required(login_url='/login')
 def index(request):
     return redirect('home')
 
 def loginPage(request):
-    # if request.user.is_authenticated:
-    #     return redirect('index')
+    if request.user.is_authenticated:
+        return redirect('index')
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
@@ -53,8 +54,8 @@ def loginPage(request):
     return render(request, 'login.html', context)
 
 def registerPage(request):
-    # if request.user.is_authenticated:
-    #     return redirect('index')
+    if request.user.is_authenticated:
+        return redirect('index')
     if request.method == 'POST':
         username = request.POST.get('username')
         email = request.POST.get('email')
@@ -85,17 +86,7 @@ def registerPage(request):
             user_login = authenticate(request, username=username, password=password)
 
             if user_login is not None:
-                login(request, user_login)
-                # if user_login.user_type == 0:
-                #     return redirect('organiser_requests')
-                # elif user_login.user_type == 1:
-                #     return redirect('volunteer')
-                # elif user_login.user_type == 2:
-                #     return redirect('organise_event')
-                # elif user_login.user_type == 3:
-                #     return redirect('orders')
-                # elif user_login.user_type == 4:
-                #     return redirect('publish_paper')            
+                login(request, user_login)        
                 return redirect('home')
                 
     if request.session.get('data'):
@@ -106,277 +97,320 @@ def registerPage(request):
 
     return render(request, 'register.html', context)
 
+@login_required(login_url='/login')
 def logoutUser(request):
     logout(request)
+    return redirect('login')
 
 
 #home
+@login_required(login_url='/login')
 def homePage(request):
     return render(request, 'main/home.html')
-
-def companyPage(request):
-    return render(request, 'main/company.html')
-
-def employeesPage(request):
-    return render(request, 'main/employees.html')
-
-def bankingPage(request):
-    return render(request, 'main/banking.html')
-
-def reportsPage(request):
-    return render(request, 'main/reports.html')
     
 
 
 
 #product
+@login_required(login_url='/login')
 def product_view(request, frm_id=None):
     tbl = model_mapping(request, 'product', frm_id)
     result = tbl.frm_view()
     return result
 
+@login_required(login_url='/login')
 def product_add(request):
     tbl = model_mapping(request, 'product', None)
     result = tbl.frm_add()
     return result
 
+@login_required(login_url='/login')
 def product_edit(request, frm_id):
     tbl = model_mapping(request, 'product', frm_id)
     result = tbl.frm_edit()
     return result
 
+@login_required(login_url='/login')
 def product_delete(request, frm_id):
     tbl = model_mapping(request, 'product', frm_id)
     result = tbl.frm_delete()
     return result
 
+@login_required(login_url='/login')
 def product_move_first(request):
     tbl = model_mapping(request, 'product', None)
     result = tbl.frm_move_first()
     return result
 
+@login_required(login_url='/login')
 def product_move_previous(request, frm_id):
     tbl = model_mapping(request, 'product', frm_id)
     result = tbl.frm_move_previous()
     return result
 
+@login_required(login_url='/login')
 def product_move_next(request, frm_id):
     tbl = model_mapping(request, 'product', frm_id)
     result = tbl.frm_move_next()
     return result
 
+@login_required(login_url='/login')
 def product_move_last(request):
     return redirect('product')
 
+@login_required(login_url='/login')
 def product_find(request):
     tbl = model_mapping(request, 'product', None)
     result = tbl.frm_find()
     return result
 
+@login_required(login_url='/login')
 def product_print(request):
     pass
 
 #customer
+@login_required(login_url='/login')
 def customer_view(request, frm_id=None):
     tbl = model_mapping(request, 'customer', frm_id)
     result = tbl.frm_view()
     return result  # Return the rendered response
 
+@login_required(login_url='/login')
 def customer_add(request):
     tbl = model_mapping(request, 'customer', None)
     result = tbl.frm_add()
     return result
 
+@login_required(login_url='/login')
 def customer_edit(request, frm_id):
     tbl = model_mapping(request, 'customer', frm_id)
     result = tbl.frm_edit()
     return result
 
+@login_required(login_url='/login')
 def customer_delete(request, frm_id):
     tbl = model_mapping(request, 'customer', frm_id)
     result = tbl.frm_delete()
     return result
 
+@login_required(login_url='/login')
 def customer_move_first(request):
     tbl = model_mapping(request, 'customer', None)
     result = tbl.frm_move_first()
     return result
 
+@login_required(login_url='/login')
 def customer_move_previous(request, frm_id):
     tbl = model_mapping(request, 'customer', frm_id)
     result = tbl.frm_move_previous()
     return result
 
+@login_required(login_url='/login')
 def customer_move_next(request, frm_id):
     tbl = model_mapping(request, 'customer', frm_id)
     result = tbl.frm_move_next()
     return result
 
+@login_required(login_url='/login')
 def customer_move_last(request):
     return redirect('customer')
 
+@login_required(login_url='/login')
 def customer_find(request):
     tbl = model_mapping(request, 'customer', None)
     result = tbl.frm_find()
     return result
 
+@login_required(login_url='/login')
 def customer_print(request):
     pass
 
 #vendor
+@login_required(login_url='/login')
 def vendor_view(request, frm_id=None):
     tbl = model_mapping(request, 'vendor', frm_id)
     result = tbl.frm_view()
     return result  # Return the rendered response
 
+@login_required(login_url='/login')
 def vendor_add(request):
     tbl = model_mapping(request, 'vendor', None)
     result = tbl.frm_add()
     return result
 
+@login_required(login_url='/login')
 def vendor_edit(request, frm_id):
     tbl = model_mapping(request, 'vendor', frm_id)
     result = tbl.frm_edit()
     return result
 
+@login_required(login_url='/login')
 def vendor_delete(request, frm_id):
     tbl = model_mapping(request, 'vendor', frm_id)
     result = tbl.frm_delete()
     return result
 
+@login_required(login_url='/login')
 def vendor_move_first(request):
     tbl = model_mapping(request, 'vendor', None)
     result = tbl.frm_move_first()
     return result
 
+@login_required(login_url='/login')
 def vendor_move_previous(request, frm_id):
     tbl = model_mapping(request, 'vendor', frm_id)
     result = tbl.frm_move_previous()
     return result
 
+@login_required(login_url='/login')
 def vendor_move_next(request, frm_id):
     tbl = model_mapping(request, 'vendor', frm_id)
     result = tbl.frm_move_next()
     return result
 
+@login_required(login_url='/login')
 def vendor_move_last(request):
     return redirect('vendor')
 
+@login_required(login_url='/login')
 def vendor_find(request):
     tbl = model_mapping(request, 'vendor', None)
     result = tbl.frm_find()
     return result
 
+@login_required(login_url='/login')
 def vendor_print(request):
     pass
 
 
 #category
+@login_required(login_url='/login')
 def category_view(request, frm_id=None):
     tbl = model_mapping(request, 'category', frm_id)
     result = tbl.frm_view()
     return result  # Return the rendered response
 
+@login_required(login_url='/login')
 def category_add(request):
     tbl = model_mapping(request, 'category', None)
     result = tbl.frm_add()
     return result
 
+@login_required(login_url='/login')
 def category_edit(request, frm_id):
     tbl = model_mapping(request, 'category', frm_id)
     result = tbl.frm_edit()
     return result
 
+@login_required(login_url='/login')
 def category_delete(request, frm_id):
     tbl = model_mapping(request, 'category', frm_id)
     result = tbl.frm_delete()
     return result
 
+@login_required(login_url='/login')
 def category_move_first(request):
     tbl = model_mapping(request, 'category', None)
     result = tbl.frm_move_first()
     return result
 
+@login_required(login_url='/login')
 def category_move_previous(request, frm_id):
     tbl = model_mapping(request, 'category', frm_id)
     result = tbl.frm_move_previous()
     return result
 
+@login_required(login_url='/login')
 def category_move_next(request, frm_id):
     tbl = model_mapping(request, 'category', frm_id)
     result = tbl.frm_move_next()
     return result
 
+@login_required(login_url='/login')
 def category_move_last(request):
     return redirect('category')
 
+@login_required(login_url='/login')
 def category_find(request):
     tbl = model_mapping(request, 'category', None)
     result = tbl.frm_find()
     return result
 
+@login_required(login_url='/login')
 def category_print(request):
     pass
 
-
-#currency
-def currency_view(request, frm_id=None):
-    tbl = model_mapping(request, 'category', frm_id)
+#salesman
+@login_required(login_url='/login')
+def salesman_view(request, frm_id=None):
+    tbl = model_mapping(request, 'salesman', frm_id)
     result = tbl.frm_view()
     return result  # Return the rendered response
 
-def currency_add(request):
-    tbl = model_mapping(request, 'category', None)
+@login_required(login_url='/login')
+def salesman_add(request):
+    tbl = model_mapping(request, 'salesman', None)
     result = tbl.frm_add()
     return result
 
-def currency_edit(request, frm_id):
-    tbl = model_mapping(request, 'category', frm_id)
+@login_required(login_url='/login')
+def salesman_edit(request, frm_id):
+    tbl = model_mapping(request, 'salesman', frm_id)
     result = tbl.frm_edit()
     return result
 
-def currency_delete(request, frm_id):
-    tbl = model_mapping(request, 'category', frm_id)
+@login_required(login_url='/login')
+def salesman_delete(request, frm_id):
+    tbl = model_mapping(request, 'salesman', frm_id)
     result = tbl.frm_delete()
     return result
 
-def currency_move_first(request):
-    tbl = model_mapping(request, 'category', None)
+@login_required(login_url='/login')
+def salesman_move_first(request):
+    tbl = model_mapping(request, 'salesman', None)
     result = tbl.frm_move_first()
     return result
 
-def currency_move_previous(request, frm_id):
-    tbl = model_mapping(request, 'category', frm_id)
+@login_required(login_url='/login')
+def salesman_move_previous(request, frm_id):
+    tbl = model_mapping(request, 'salesman', frm_id)
     result = tbl.frm_move_previous()
     return result
 
-def currency_move_next(request, frm_id):
-    tbl = model_mapping(request, 'category', frm_id)
+@login_required(login_url='/login')
+def salesman_move_next(request, frm_id):
+    tbl = model_mapping(request, 'salesman', frm_id)
     result = tbl.frm_move_next()
     return result
 
-def currency_move_last(request):
-    return redirect('category')
+@login_required(login_url='/login')
+def salesman_move_last(request):
+    return redirect('salesman')
 
-def currency_find(request):
-    tbl = model_mapping(request, 'category', None)
+@login_required(login_url='/login')
+def salesman_find(request):
+    tbl = model_mapping(request, 'salesman', None)
     result = tbl.frm_find()
     return result
 
-def currency_print(request):
+@login_required(login_url='/login')
+def salesman_print(request):
     pass
 
 
+@login_required(login_url='/login')
 def sales_view(request, frm_id=None):
     tbl = model_mapping(request, 'sales', frm_id)
     result = tbl.frm_view()
     return result
     
+@login_required(login_url='/login')
 def sales_add(request):
     tbl = model_mapping(request, 'sales', None)
     result = tbl.frm_add()
     return result
 
+@login_required(login_url='/login')
 def sales_edit(request, frm_id):
     tbl = model_mapping(request, 'sales', frm_id)
     result = tbl.frm_edit()
@@ -384,47 +418,57 @@ def sales_edit(request, frm_id):
 
 
 @transaction.atomic
+@login_required(login_url='/login')
 def sales_delete(request, frm_id):
     tbl = model_mapping(request, 'sales', frm_id)
     result = tbl.frm_delete()
     return result
 
+@login_required(login_url='/login')
 def sales_move_first(request):
     tbl = model_mapping(request, 'sales', None)
     result = tbl.frm_move_first()
     return result
 
+@login_required(login_url='/login')
 def sales_move_previous(request, frm_id):
     tbl = model_mapping(request, 'sales', frm_id)
     result = tbl.frm_move_previous()
     return result
 
+@login_required(login_url='/login')
 def sales_move_next(request, frm_id):
     tbl = model_mapping(request, 'sales', frm_id)
     result = tbl.frm_move_next()
     return result
 
+@login_required(login_url='/login')
 def sales_move_last(request):
     return redirect('sales')
 
+@login_required(login_url='/login')
 def sales_find(request):
     tbl = model_mapping(request, 'sales', None)
     result = tbl.frm_find()
     return result
 
+@login_required(login_url='/login')
 def sales_print(request, frm_id):
     return invoice_print(request, frm_id, 'sales')
 
+@login_required(login_url='/login')
 def purchase_view(request, frm_id=None):
     tbl = model_mapping(request, 'purchase', frm_id)
     result = tbl.frm_view()
     return result
     
+@login_required(login_url='/login')
 def purchase_add(request):
     tbl = model_mapping(request, 'purchase', None)
     result = tbl.frm_add()
     return result
 
+@login_required(login_url='/login')
 def purchase_edit(request, frm_id):
     tbl = model_mapping(request, 'purchase', frm_id)
     result = tbl.frm_edit()
@@ -432,48 +476,58 @@ def purchase_edit(request, frm_id):
 
 
 @transaction.atomic
+@login_required(login_url='/login')
 def purchase_delete(request, frm_id):
     tbl = model_mapping(request, 'purchase', frm_id)
     result = tbl.frm_delete()
     return result
 
+@login_required(login_url='/login')
 def purchase_move_first(request):
     tbl = model_mapping(request, 'purchase', None)
     result = tbl.frm_move_first()
     return result
 
+@login_required(login_url='/login')
 def purchase_move_previous(request, frm_id):
     tbl = model_mapping(request, 'purchase', frm_id)
     result = tbl.frm_move_previous()
     return result
 
+@login_required(login_url='/login')
 def purchase_move_next(request, frm_id):
     tbl = model_mapping(request, 'purchase', frm_id)
     result = tbl.frm_move_next()
     return result
 
+@login_required(login_url='/login')
 def purchase_move_last(request):
     return redirect('purchase')
 
+@login_required(login_url='/login')
 def purchase_find(request):
     tbl = model_mapping(request, 'purchase', None)
     result = tbl.frm_find()
     return result
 
+@login_required(login_url='/login')
 def purchase_print(request, frm_id):
     return invoice_print(request, frm_id, 'purchase')
 
 
+@login_required(login_url='/login')
 def salesReturn_view(request, frm_id=None):
     tbl = model_mapping(request, 'salesReturn', frm_id, True)
     result = tbl.frm_view()
     return result
     
+@login_required(login_url='/login')
 def salesReturn_add(request):
     tbl = model_mapping(request, 'salesReturn', None, True)
     result = tbl.frm_add()
     return result
 
+@login_required(login_url='/login')
 def salesReturn_edit(request, frm_id):
     tbl = model_mapping(request, 'salesReturn', frm_id, True)
     result = tbl.frm_edit()
@@ -481,47 +535,57 @@ def salesReturn_edit(request, frm_id):
 
 
 @transaction.atomic
+@login_required(login_url='/login')
 def salesReturn_delete(request, frm_id):
     tbl = model_mapping(request, 'salesReturn', frm_id, True)
     result = tbl.frm_delete()
     return result
 
+@login_required(login_url='/login')
 def salesReturn_move_first(request):
     tbl = model_mapping(request, 'salesReturn', None, True)
     result = tbl.frm_move_first()
     return result
 
+@login_required(login_url='/login')
 def salesReturn_move_previous(request, frm_id):
     tbl = model_mapping(request, 'salesReturn', frm_id, True)
     result = tbl.frm_move_previous()
     return result
 
+@login_required(login_url='/login')
 def salesReturn_move_next(request, frm_id):
     tbl = model_mapping(request, 'salesReturn', frm_id, True)
     result = tbl.frm_move_next()
     return result
 
+@login_required(login_url='/login')
 def salesReturn_move_last(request):
     return redirect('salesReturn')
 
+@login_required(login_url='/login')
 def salesReturn_find(request):
     tbl = model_mapping(request, 'salesReturn', None, True)
     result = tbl.frm_find()
     return result
 
+@login_required(login_url='/login')
 def salesReturn_print(request, frm_id):
     return invoice_print(request, frm_id, 'salesReturn')
 
+@login_required(login_url='/login')
 def purchaseReturn_view(request, frm_id=None):
     tbl = model_mapping(request, 'purchaseReturn', frm_id, True)
     result = tbl.frm_view()
     return result
     
+@login_required(login_url='/login')
 def purchaseReturn_add(request):
     tbl = model_mapping(request, 'purchaseReturn', None, True)
     result = tbl.frm_add()
     return result
 
+@login_required(login_url='/login')
 def purchaseReturn_edit(request, frm_id):
     tbl = model_mapping(request, 'purchaseReturn', frm_id, True)
     result = tbl.frm_edit()
@@ -529,48 +593,58 @@ def purchaseReturn_edit(request, frm_id):
 
 
 @transaction.atomic
+@login_required(login_url='/login')
 def purchaseReturn_delete(request, frm_id):
     tbl = model_mapping(request, 'purchaseReturn', frm_id, True)
     result = tbl.frm_delete()
     return result
 
+@login_required(login_url='/login')
 def purchaseReturn_move_first(request):
     tbl = model_mapping(request, 'purchaseReturn', None, True)
     result = tbl.frm_move_first()
     return result
 
+@login_required(login_url='/login')
 def purchaseReturn_move_previous(request, frm_id):
     tbl = model_mapping(request, 'purchaseReturn', frm_id, True)
     result = tbl.frm_move_previous()
     return result
 
+@login_required(login_url='/login')
 def purchaseReturn_move_next(request, frm_id):
     tbl = model_mapping(request, 'purchaseReturn', frm_id, True)
     result = tbl.frm_move_next()
     return result
 
+@login_required(login_url='/login')
 def purchaseReturn_move_last(request):
     return redirect('purchaseReturn')
 
+@login_required(login_url='/login')
 def purchaseReturn_find(request):
     tbl = model_mapping(request, 'purchaseReturn', None, True)
     result = tbl.frm_find()
     return result
 
+@login_required(login_url='/login')
 def purchaseReturn_print(request, frm_id):
     return invoice_print(request, frm_id, 'purchaseReturn')
 
 
+@login_required(login_url='/login')
 def salesOrder_view(request, frm_id=None):
     tbl = model_mapping(request, 'salesOrder', frm_id)
     result = tbl.frm_view()
     return result
     
+@login_required(login_url='/login')
 def salesOrder_add(request):
     tbl = model_mapping(request, 'salesOrder', None)
     result = tbl.frm_add()
     return result
 
+@login_required(login_url='/login')
 def salesOrder_edit(request, frm_id):
     tbl = model_mapping(request, 'salesOrder', frm_id)
     result = tbl.frm_edit()
@@ -578,47 +652,57 @@ def salesOrder_edit(request, frm_id):
 
 
 @transaction.atomic
+@login_required(login_url='/login')
 def salesOrder_delete(request, frm_id):
     tbl = model_mapping(request, 'salesOrder', frm_id)
     result = tbl.frm_delete()
     return result
 
+@login_required(login_url='/login')
 def salesOrder_move_first(request):
     tbl = model_mapping(request, 'salesOrder', None)
     result = tbl.frm_move_first()
     return result
 
+@login_required(login_url='/login')
 def salesOrder_move_previous(request, frm_id):
     tbl = model_mapping(request, 'salesOrder', frm_id)
     result = tbl.frm_move_previous()
     return result
 
+@login_required(login_url='/login')
 def salesOrder_move_next(request, frm_id):
     tbl = model_mapping(request, 'salesOrder', frm_id)
     result = tbl.frm_move_next()
     return result
 
+@login_required(login_url='/login')
 def salesOrder_move_last(request):
     return redirect('salesOrder')
 
+@login_required(login_url='/login')
 def salesOrder_find(request):
     tbl = model_mapping(request, 'salesOrder', None)
     result = tbl.frm_find()
     return result
 
+@login_required(login_url='/login')
 def salesOrder_print(request, frm_id):
     return invoice_print(request, frm_id, 'salesOrder')
 
+@login_required(login_url='/login')
 def purchaseOrder_view(request, frm_id=None):
     tbl = model_mapping(request, 'purchaseOrder', frm_id)
     result = tbl.frm_view()
     return result
     
+@login_required(login_url='/login')
 def purchaseOrder_add(request):
     tbl = model_mapping(request, 'purchaseOrder', None)
     result = tbl.frm_add()
     return result
 
+@login_required(login_url='/login')
 def purchaseOrder_edit(request, frm_id):
     tbl = model_mapping(request, 'purchaseOrder', frm_id)
     result = tbl.frm_edit()
@@ -626,34 +710,41 @@ def purchaseOrder_edit(request, frm_id):
 
 
 @transaction.atomic
+@login_required(login_url='/login')
 def purchaseOrder_delete(request, frm_id):
     tbl = model_mapping(request, 'purchaseOrder', frm_id)
     result = tbl.frm_delete()
     return result
 
+@login_required(login_url='/login')
 def purchaseOrder_move_first(request):
     tbl = model_mapping(request, 'purchaseOrder', None)
     result = tbl.frm_move_first()
     return result
 
+@login_required(login_url='/login')
 def purchaseOrder_move_previous(request, frm_id):
     tbl = model_mapping(request, 'purchaseOrder', frm_id)
     result = tbl.frm_move_previous()
     return result
 
+@login_required(login_url='/login')
 def purchaseOrder_move_next(request, frm_id):
     tbl = model_mapping(request, 'purchaseOrder', frm_id)
     result = tbl.frm_move_next()
     return result
 
+@login_required(login_url='/login')
 def purchaseOrder_move_last(request):
     return redirect('purchaseOrder')
 
+@login_required(login_url='/login')
 def purchaseOrder_find(request):
     tbl = model_mapping(request, 'purchaseOrder', None)
     result = tbl.frm_find()
     return result
 
+@login_required(login_url='/login')
 def purchaseOrder_print(request, frm_id):
     return invoice_print(request, frm_id, 'purchaseOrder')
 
@@ -669,6 +760,7 @@ def purchaseOrder_print(request, frm_id):
 
 
 @transaction.atomic
+@login_required(login_url='/login')
 def save_sales(request, sales_id=None):
     if request.method == 'POST':
         try:
@@ -687,7 +779,7 @@ def save_sales(request, sales_id=None):
             amount_received = to_decimal(master_data[8])
             balance = to_decimal(master_data[9])
             customer = tblCustomer.objects.get(id=master_data[11])
-            salesman = tblEmployee.objects.get(id=master_data[12])
+            salesman = tblSalesman.objects.get(id=master_data[12])
             if sales_id:
                 sales = tblSales_Master.objects.get(id=sales_id)
                 if (master_data[1] == ''):
@@ -805,6 +897,7 @@ def save_sales(request, sales_id=None):
 
 
 @transaction.atomic
+@login_required(login_url='/login')
 def save_purchase(request, purchase_id=None):
     if request.method == 'POST':
         try:
@@ -822,7 +915,7 @@ def save_purchase(request, purchase_id=None):
             amount_payed = to_decimal(master_data[9])
             balance = to_decimal(master_data[10])
             vendor = tblVendor.objects.get(id=master_data[12])
-            salesman = tblEmployee.objects.get(id=master_data[13])
+            salesman = tblSalesman.objects.get(id=master_data[13])
             if purchase_id:
                 purchase = tblPurchase_Master.objects.get(id=purchase_id)
                 if (master_data[1] == ''):
@@ -933,85 +1026,6 @@ def save_purchase(request, purchase_id=None):
                     product.stock = to_decimal(product.stock) - (qty * multiple)
                 product.save()
 
-
-
-
-            return JsonResponse({'message': 'success'})
-        except json.JSONDecodeError:
-            return JsonResponse({'message': 'failed', 'error': 'Invalid JSON data'})
-    else:
-        return JsonResponse({'message': 'failed', 'error': 'Invalid request method'})
-
-
-
-@transaction.atomic
-def save_salesOrder(request, order_id=None):
-    if request.method == 'POST':
-        try:
-            # Get the data as a JSON string and parse it into a Python dictionary
-            data = json.loads(request.body.decode('utf-8'))
-
-            # Extract fieldValues and data from the dictionary
-            master_data = data['master_data']
-            details_data = data['details_data']
-            # print(master_data, details_data)
-            total = to_decimal(master_data[2])
-            vat = to_decimal(master_data[3])
-            discount = to_decimal(master_data[4])
-            roundoff = to_decimal(master_data[5])
-            net_amount = to_decimal(master_data[6])
-            customer = tblCustomer.objects.get(id=master_data[7])
-            salesman = tblEmployee.objects.get(id=master_data[8])
-            if order_id:
-                sales_order = tblSalesOrder_Master.objects.get(id=order_id)
-                sales_order.order_no = master_data[0]
-                sales_order.order_date = master_data[1]
-                sales_order.total = total
-                sales_order.vat = vat
-                sales_order.discount = discount
-                sales_order.roundoff = roundoff
-                sales_order.net_amount = net_amount
-                sales_order.customer = customer
-                sales_order.salesman = salesman
-                sales_order.save()
-                salesOrder_details = tblSalesOrder_Details.objects.filter(sales_order = order_id)
-                salesOrder_details.delete()
-            else:
-                sales_order = tblSalesOrder_Master.objects.create(
-                    order_no = master_data[0],
-                    order_date = master_data[1],
-                    total = total,
-                    vat = vat,
-                    discount = discount,
-                    roundoff = roundoff,
-                    net_amount = net_amount,
-                    customer = customer,
-                    salesman = salesman,
-                )
-
-            for details in details_data:
-                product = tblProduct.objects.get(id=details[2])
-                unit = details[3]
-                stock = to_decimal(details[4])
-                qty = to_decimal(details[5])
-                price = to_decimal(details[6])
-                vat_perc = to_decimal(details[7])
-                vat_amount = to_decimal(details[8])
-                item_discount = to_decimal(details[9])
-                total_amount = to_decimal(details[10])
-
-                tblSalesOrder_Details.objects.create(
-                    sales_order = sales_order,
-                    product = product,
-                    unit = unit,
-                    stock = stock,
-                    qty = qty,
-                    price = price,
-                    vat_perc = vat_perc,
-                    vat_amount = vat_amount,
-                    item_discount = item_discount,
-                    total_amount = total_amount,
-                )
 
 
 
@@ -1022,147 +1036,8 @@ def save_salesOrder(request, order_id=None):
         return JsonResponse({'message': 'failed', 'error': 'Invalid request method'})
     
 
-
 @transaction.atomic
-def save_purchaseOrder(request, purchase_id=None):
-    if request.method == 'POST':
-        try:
-            # Get the data as a JSON string and parse it into a Python dictionary
-            data = json.loads(request.body.decode('utf-8'))
-            # Extract fieldValues and data from the dictionary
-            master_data = data['master_data']
-            details_data = data['details_data']
-            # print(master_data, details_data)
-            total = to_decimal(master_data[4])
-            vat = to_decimal(master_data[5])
-            discount = to_decimal(master_data[6])
-            roundoff = to_decimal(master_data[7])
-            net_amount = to_decimal(master_data[8])
-            amount_payed = to_decimal(master_data[9])
-            balance = to_decimal(master_data[10])
-            vendor = tblVendor.objects.get(id=master_data[12])
-            salesman = tblEmployee.objects.get(id=master_data[13])
-            if purchase_id:
-                purchase = tblPurchase_Master.objects.get(id=purchase_id)
-                if (master_data[1] == ''):
-                    vendor.credit_balance = to_decimal(vendor.credit_balance) - to_decimal(purchase.balance)
-                else:
-                    vendor.credit_balance = to_decimal(vendor.credit_balance) + to_decimal(purchase.balance)
-                purchase.invoice_no = master_data[0]
-                purchase.return_no = master_data[1]
-                purchase.purchase_no = master_data[2]
-                purchase.invoice_date = master_data[3]
-                purchase.total = total
-                purchase.vat = vat
-                purchase.discount = discount
-                purchase.roundoff = roundoff
-                purchase.net_amount = net_amount
-                purchase.amount_payed = amount_payed
-                purchase.balance = balance
-                purchase.payment_method = master_data[11]
-                purchase.vendor = vendor
-                purchase.salesman = salesman
-                purchase.save()
-                purchase_details = tblPurchase_Details.objects.filter(purchase = purchase_id)
-                for details in purchase_details:
-                    product = tblProduct.objects.get(id = details.product.id)
-                    
-                    if product.main_unit == details.unit:
-                        multiple = 1
-                    else:
-                        prod_unit = tblProduct_unit.objects.get(product = product, unit = details.unit)
-                        if prod_unit.multiple == '*':
-                            multiple = 1/to_decimal(prod_unit.multiple_value)
-                        else:
-                            multiple = to_decimal(prod_unit.multiple_value)
-
-                    if (master_data[1] == ''):
-                        product.cost_price = ((to_decimal(product.cost_price)*to_decimal(product.stock))-(to_decimal(details.price)*to_decimal(details.qty)))/(to_decimal(product.stock) - (to_decimal(details.qty)*multiple))
-                        product.stock = to_decimal(product.stock) - (to_decimal(details.qty) * multiple)
-                        product.last_purch_price = to_decimal(details.previous_purchase_price)
-                    else:
-                        product.cost_price = ((to_decimal(product.cost_price)*to_decimal(product.stock))+(to_decimal(details.price)*to_decimal(details.qty)))/(to_decimal(product.stock) + (to_decimal(details.qty)*multiple))
-                        product.stock = to_decimal(product.stock) + (to_decimal(details.qty) * multiple)
-                    product.save()
-                purchase_details.delete()
-            else:
-                purchase = tblPurchase_Master.objects.create(
-                    invoice_no = master_data[0],
-                    return_no = master_data[1],
-                    purchase_no = master_data[2],
-                    invoice_date = master_data[3],
-                    total = total,
-                    vat = vat,
-                    discount = discount,
-                    net_amount = net_amount,
-                    amount_payed = amount_payed,
-                    balance = balance,
-                    roundoff = roundoff,
-                    payment_method = master_data[11],
-                    vendor = vendor,
-                    salesman = salesman,
-                    transaction_type = '' if master_data[1] == '' else 'return'
-                )
-            if (master_data[1] == ''):
-                vendor.credit_balance = to_decimal(vendor.credit_balance) + balance
-            else:
-                vendor.credit_balance = to_decimal(vendor.credit_balance) - balance
-            vendor.save()
-
-            for details in details_data:
-                product = tblProduct.objects.get(id=details[3])
-                unit = details[4]
-                qty = to_decimal(details[5])
-                price = to_decimal(details[6])
-                vat_perc = to_decimal(details[7])
-                vat_amount = to_decimal(details[8])
-                item_discount = to_decimal(details[9])
-                total_amount = to_decimal(details[10])
-
-                tblPurchase_Details.objects.create(
-                    purchase = purchase,
-                    product = product,
-                    unit = unit,
-                    qty = qty,
-                    price = price,
-                    vat_perc = vat_perc,
-                    vat_amount = vat_amount,
-                    item_discount = item_discount,
-                    total_amount = total_amount,
-                    previous_purchase_price = product.last_purch_price
-                )
-                
-                if product.main_unit == unit:
-                    multiple = 1
-                else:
-                    prod_unit = tblProduct_unit.objects.get(product = product, unit = unit)
-                    if prod_unit.multiple == '*':
-                        multiple = 1/to_decimal(prod_unit.multiple_value)
-                    else:
-                        multiple = to_decimal(prod_unit.multiple_value)
-                # print(multiple)
-                # print(product.cost_price, product.stock, price, qty)
-                # return
-                if (master_data[1] == ''):
-                    product.cost_price = ((to_decimal(product.cost_price)*to_decimal(product.stock))+(price * qty))/(to_decimal(product.stock) + (qty * multiple))
-                    product.stock = to_decimal(product.stock) + (qty * multiple)
-                    product.last_purch_price = price / multiple
-                else:
-                    product.cost_price = ((to_decimal(product.cost_price)*to_decimal(product.stock))-(price * qty))/(to_decimal(product.stock) - (qty * multiple))
-                    product.stock = to_decimal(product.stock) - (qty * multiple)
-                product.save()
-
-
-
-
-            return JsonResponse({'message': 'success'})
-        except json.JSONDecodeError:
-            return JsonResponse({'message': 'failed', 'error': 'Invalid JSON data'})
-    else:
-        return JsonResponse({'message': 'failed', 'error': 'Invalid request method'})
-
-
-@transaction.atomic
+@login_required(login_url='/login')
 def save_product(request, product_id=None):
     if request.method == 'POST':
         try:
@@ -1219,6 +1094,7 @@ def save_product(request, product_id=None):
 
 
 
+@login_required(login_url='/login')
 def formSearch(request, tbl_name, tbl_field=None, field_code=None, tbl_field_2=None):
     try:
         model = apps.get_model(app_label='core', model_name=tbl_name)
@@ -1238,6 +1114,8 @@ def formSearch(request, tbl_name, tbl_field=None, field_code=None, tbl_field_2=N
                 results = model.objects.filter(Q(customer_code__icontains=field_code) | Q(customer_name__icontains=field_code) | Q(email__icontains=field_code) | Q(mobile__icontains=field_code)).values()
             elif tbl_name == 'tblVendor':
                 results = model.objects.filter(Q(vendor_code__icontains=field_code) | Q(vendor_name__icontains=field_code) | Q(email__icontains=field_code) | Q(mobile__icontains=field_code)).values()
+            elif tbl_name == 'tblSalesman':
+                results = model.objects.filter(Q(salesman_code__icontains=field_code) | Q(salesman_name__icontains=field_code) | Q(email__icontains=field_code) | Q(mobile__icontains=field_code)).values()
         else:
             results = model.objects.all().values()
         # Create a list to store the modified data
@@ -1263,6 +1141,7 @@ def formSearch(request, tbl_name, tbl_field=None, field_code=None, tbl_field_2=N
         return JsonResponse({})
 
 
+@login_required(login_url='/login')
 def get_field_details(request, tbl_name, tbl_field, field_code, tbl_field_2=None):
     try:
         model = apps.get_model(app_label='core', model_name=tbl_name)
@@ -1281,6 +1160,7 @@ def get_field_details(request, tbl_name, tbl_field, field_code, tbl_field_2=None
         return JsonResponse({})
 
 
+@login_required(login_url='/login')
 def does_field_exist(request, tbl_name, tbl_field, field_code):
     try:
         model = apps.get_model(app_label='core', model_name=tbl_name)

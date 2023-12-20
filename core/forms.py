@@ -3,7 +3,7 @@ from django.db.models import Max, Min
 
 from core.convertions import to_integer
 
-from . models import tblProduct, tblCustomer, tblVendor, tblCategory, tblSales_Master, tblPurchase_Master, tblPurchaseOrder_Master, tblSalesOrder_Master, tblPayment, tblReceipt, tblExpense
+from . models import tblProduct, tblCustomer, tblVendor, tblCategory, tblSales_Master, tblPurchase_Master, tblSalesman
 
 form_l = { 'class': 'form__size-l floating-input', 'placeholder': ' ' }
 form_s = { 'class': 'form__size-s floating-input', 'placeholder': ' ' }
@@ -127,6 +127,33 @@ class VendorForm(forms.ModelForm):
         self.fields['credit_alert'].initial = None
         self.fields['credit_days'].initial = None
 
+class SalesmanForm(forms.ModelForm):
+    disabled_class = 'disabled-input'
+
+    class Meta:
+        model = tblSalesman
+        fields = '__all__'
+        widgets = {
+            'salesman_code': forms.TextInput(attrs={**form_s_uppercase, **autocomplete_off}),
+            'salesman_name': forms.TextInput(attrs={**form_l_uppercase, **autocomplete_off}),
+            'passport_no': forms.TextInput(attrs={**form_s, **autocomplete_off}),
+            'passport_expiry' : forms.DateInput(attrs={**form_s, 'type': 'date'}),
+            'visa_no': forms.TextInput(attrs={**form_s, **autocomplete_off}),
+            'visa_expiry' : forms.DateInput(attrs={**form_s, 'type': 'date'}),
+            'health_insurance': forms.TextInput(attrs={**form_s, **autocomplete_off}),
+            'health_insurance_expiry' : forms.DateInput(attrs={**form_s, 'type': 'date'}),
+            'salary': forms.NumberInput(attrs={**form_s, **autocomplete_off}),
+            'address': forms.Textarea(attrs={**form_l, **autocomplete_off}),
+            'mobile': forms.NumberInput(attrs={**form_s, **autocomplete_off}),
+            'email': forms.TextInput(attrs={**form_l, **autocomplete_off}),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        self.fields['mobile'].initial = None
+        self.fields['salary'].initial = None
+        
 
 class SalesForm(forms.ModelForm):
     disabled_class = 'disabled-input'
@@ -209,131 +236,3 @@ class PurchaseForm(forms.ModelForm):
         self.fields['vendor'].initial = None
         self.fields['salesman'].initial = None
         self.fields['roundoff'].initial = None
-
-
-class SalesOrderForm(forms.ModelForm):
-    disabled_class = 'disabled-input'
-    
-    class Meta:
-        model = tblSalesOrder_Master
-        fields = '__all__'
-        widgets = {
-            'order_no': forms.TextInput(attrs={**form_s, 'id': 'master_order_no', **autocomplete_off}),
-            'order_date': forms.DateInput(attrs={**form_s, 'type': 'date', 'id': 'master_order_date'}),
-            'total': forms.NumberInput(attrs={**form_s_disabled, **autocomplete_off, **readOnly, 'id': 'master_total'}),
-            'vat': forms.NumberInput(attrs={**form_s_disabled, **autocomplete_off, **readOnly, 'id': 'master_vat'}),
-            'discount': forms.NumberInput(attrs={**form_s_disabled, **autocomplete_off, **readOnly, 'id': 'master_discount'}),
-            'roundoff': forms.NumberInput(attrs={**form_s, **autocomplete_off, 'id': 'master_roundoff'}),
-            'net_amount': forms.NumberInput(attrs={**form_s_disabled, **autocomplete_off, **readOnly, 'id': 'master_net_amount'}),
-            'customer': forms.HiddenInput(attrs={**form_s, **autocomplete_off, 'id': 'master_customer_id'}),
-            'salesman': forms.HiddenInput(attrs={**form_s, **autocomplete_off, 'id': 'master_salesman_id'}),
-        }
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        highest_order_no = tblSalesOrder_Master.objects.aggregate(max_order_no=Max('order_no'))['max_order_no']
-        self.fields['order_no'].initial = to_integer(highest_order_no) + 1 if highest_order_no is not None else 1
-
-        self.fields['total'].initial = None
-        self.fields['vat'].initial = None
-        self.fields['discount'].initial = None
-        self.fields['net_amount'].initial = None
-        self.fields['customer'].initial = None
-        self.fields['salesman'].initial = None
-        self.fields['roundoff'].initial = None
-
-
-class PurchaseOrderForm(forms.ModelForm):
-    disabled_class = 'disabled-input'
-    
-    class Meta:
-        model = tblPurchaseOrder_Master
-        fields = '__all__'
-        widgets = {
-            'order_no': forms.TextInput(attrs={**form_s, 'id': 'master_order_no', **autocomplete_off}),
-            'order_date': forms.DateInput(attrs={**form_s, 'type': 'date', 'id': 'master_order_date'}),
-            'total': forms.NumberInput(attrs={**form_s_disabled, **autocomplete_off, **readOnly, 'id': 'master_total'}),
-            'vat': forms.NumberInput(attrs={**form_s_disabled, **autocomplete_off, **readOnly, 'id': 'master_vat'}),
-            'discount': forms.NumberInput(attrs={**form_s_disabled, **autocomplete_off, **readOnly, 'id': 'master_discount'}),
-            'roundoff': forms.NumberInput(attrs={**form_s, **autocomplete_off, 'id': 'master_roundoff'}),
-            'net_amount': forms.NumberInput(attrs={**form_s_disabled, **autocomplete_off, **readOnly, 'id': 'master_net_amount'}),
-            'vendor': forms.HiddenInput(attrs={**form_s, **autocomplete_off, 'id': 'master_vendor_id'}),
-            'salesman': forms.HiddenInput(attrs={**form_s, **autocomplete_off, 'id': 'master_salesman_id'}),
-        }
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        highest_order_no = tblPurchaseOrder_Master.objects.aggregate(max_order_no=Max('order_no'))['max_order_no']
-        self.fields['order_no'].initial = to_integer(highest_order_no) + 1 if highest_order_no is not None else 1
-
-        self.fields['total'].initial = None
-        self.fields['vat'].initial = None
-        self.fields['discount'].initial = None
-        self.fields['net_amount'].initial = None
-        self.fields['vendor'].initial = None
-        self.fields['salesman'].initial = None
-        self.fields['roundoff'].initial = None
-
-
-class PaymentForm(forms.ModelForm):
-    disabled_class = 'disabled-input'
-    
-    class Meta:
-        model = tblPayment
-        fields = '__all__'
-        widgets = {
-            'payment_no': forms.TextInput(attrs={**form_s, 'id': 'payment_no', **autocomplete_off}),
-            'payment_date': forms.DateInput(attrs={**form_s, 'type': 'date', 'id': 'payment_date'}),
-            'vendor': forms.HiddenInput(attrs={**form_s, **autocomplete_off, 'id': 'vendor_id'}),
-            'amount': forms.NumberInput(attrs={**form_s, **autocomplete_off, **readOnly, 'id': 'amount'}),
-            'discount': forms.NumberInput(attrs={**form_s, **autocomplete_off, **readOnly, 'id': 'discount'}),
-            'payment_method': forms.Select(attrs={**form_s_select, 'id': 'payment_method'}, choices=payment_method),
-        }
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        
-        self.fields['amount'].initial = None
-        self.fields['discount'].initial = None
-
-
-class ReceiptForm(forms.ModelForm):
-    disabled_class = 'disabled-input'
-    
-    class Meta:
-        model = tblReceipt
-        fields = '__all__'
-        widgets = {
-            'receipt_no': forms.TextInput(attrs={**form_s, 'id': 'receipt_no', **autocomplete_off}),
-            'receipt_date': forms.DateInput(attrs={**form_s, 'type': 'date', 'id': 'receipt_date'}),
-            'customer': forms.HiddenInput(attrs={**form_s, **autocomplete_off, 'id': 'customer_id'}),
-            'amount': forms.NumberInput(attrs={**form_s, **autocomplete_off, **readOnly, 'id': 'amount'}),
-            'discount': forms.NumberInput(attrs={**form_s, **autocomplete_off, **readOnly, 'id': 'discount'}),
-            'payment_method': forms.Select(attrs={**form_s_select, 'id': 'payment_method'}, choices=payment_method),
-        }
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        
-        self.fields['amount'].initial = None
-        self.fields['discount'].initial = None
-
-
-class ExpenseForm(forms.ModelForm):
-    disabled_class = 'disabled-input'
-    
-    class Meta:
-        model = tblExpense
-        fields = '__all__'
-        widgets = {
-            'expense_no': forms.TextInput(attrs={**form_s, 'id': 'expense_no', **autocomplete_off}),
-            'expense_date': forms.DateInput(attrs={**form_s, 'type': 'date', 'id': 'expense_date'}),
-            'expense': forms.TextInput(attrs={**form_l, **autocomplete_off, 'id': 'expense'}),
-            'amount': forms.NumberInput(attrs={**form_s, **autocomplete_off, **readOnly, 'id': 'amount'}),
-            'payment_method': forms.Select(attrs={**form_s_select, 'id': 'payment_method'}, choices=payment_method),
-        }
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        
-        self.fields['amount'].initial = None

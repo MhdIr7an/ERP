@@ -12,6 +12,9 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 from pathlib import Path
 
+from dotenv import load_dotenv
+import os
+load_dotenv()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -20,7 +23,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-mr4jq%sf$4175#e*@uma(&w9y^5ar8a0dro__@(v6s#c_iw!6)'
+SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -134,7 +137,7 @@ MEDIA_ROOT = BASE_DIR/ 'media'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
-WKHTMLTOPDF_BIN_PATH = r'C:\Program Files\wkhtmltopdf\bin\wkhtmltopdf.exe'  # Update with the actual path to wkhtmltopdf
+WKHTMLTOPDF_BIN_PATH = os.getenv('WKHTMLTOPDF_BIN_PATH')  # Update with the actual path to wkhtmltopdf
 PDFKIT_OPTIONS = {
     'quiet': '',
 }
