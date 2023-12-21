@@ -1,3 +1,11 @@
+.login__content {
+    width: 600px;
+    min-height: 400px;
+    background: #FFF;
+    margin: 9rem auto;
+    border-radius: 15px;
+}
+
 .login__form {
     height: auto;
     display: flex;

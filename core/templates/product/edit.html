@@ -35,7 +35,9 @@
         <td class="py-2 tbl_sl" id="tbl_sl_{{forloop.counter}}">{{forloop.counter}}</td>
         <td class="py-2 tbl_unit">
           <select id="tbl_unit_{{forloop.counter}}">
+            <option value="pcs" {% if unit.unit == 'pcs' %}selected{% endif %}>Pcs</option>
             <option value="box" {% if unit.unit == 'box' %}selected{% endif %}>Box</option>
+            <option value="kg" {% if unit.unit == 'kg' %}selected{% endif %}>Kg</option>
             <option value="num" {% if unit.unit == 'num' %}selected{% endif %}>Num</option>
             <option value="ctn" {% if unit.unit == 'ctn' %}selected{% endif %}>Ctn</option>
           </select>

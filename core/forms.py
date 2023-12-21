@@ -16,7 +16,7 @@ uppercase = { 'class': 'uppercase-only' }
 autocomplete_off = { 'autocomplete': 'off' }
 readOnly = { 'readonly': 'readonly' }
 
-units = [('', ''), ('box', 'Box'), ('num', 'Num'), ('ctn', 'Ctn')]
+units = [('', ''), ('pcs', 'Pcs'), ('box', 'Box'), ('kg', 'Kg'), ('num', 'Num'), ('ctn', 'Ctn')]
 payment_method = [('cash', 'Cash'), ('card', 'Card'), ('bank transfer', 'Bank Transfer'), ('cheque', 'Cheque')]
 categories = [('stock', 'Stock'), ('non stock', 'Non Stock'), ('service', 'Service')]
 

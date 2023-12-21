@@ -11,8 +11,9 @@ def add_class(value, arg):
 
 
 @register.filter(name='new_id')
-def new_id(field, id):
-    return field.as_widget(attrs={'id': f'{field.id} {id}'})
+def new_id(value, arg):
+    value.field.widget.attrs['id'] = arg
+    return value
 
 @register.filter(name='readonly')
 def readonly(field):

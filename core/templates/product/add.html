@@ -1,5 +1,6 @@
 {% extends 'main-template.html' %}
 {% load static %}
+{% load custom_filters %}
 
 {% block content %}
 <form method="POST" class="form__form" enctype="multipart/form-data">
@@ -34,7 +35,9 @@
         <td class="py-2 tbl_sl" id="tbl_sl_1">1</td>
         <td class="py-2 tbl_unit">
           <select id="tbl_unit_1">
+            <option value="pcs">Pcs</option>
             <option value="box">Box</option>
+            <option value="Kg">Kg</option>
             <option value="num">Num</option>
             <option value="ctn">Ctn</option>
           </select>
