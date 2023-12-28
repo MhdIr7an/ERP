@@ -55,6 +55,45 @@
       </li>
       
     </ul>
+    
+    
+    
+    <ul class="sidebar__group">
+
+      <li class="sidebar__item">
+        <a class="sidebar__link" href="{% url 'quotation' %}" aria-expanded="false">
+          <span style="margin-top: 3.5px">
+            <img src="{% static 'img/quotation.svg'%}" alt="Icon description" width="18" height="18">
+          </span>
+          <span class="sidebar__title">Quotation</span>
+        </a>
+      </li>
+      <li class="sidebar__item">
+        <a class="sidebar__link" href="{% url 'salesOrder' %}" aria-expanded="false">
+          <span style="margin-top: 3.5px">
+            <img src="{% static 'img/salesOrder.svg'%}" alt="Icon description" width="18" height="18">
+          </span>
+          <span class="sidebar__title">salesOrder</span>
+        </a>
+      </li>
+      <li class="sidebar__item">
+        <a class="sidebar__link" href="{% url 'deliveryNote' %}" aria-expanded="false">
+          <span style="margin-top: 3.5px">
+            <img src="{% static 'img/deliveryNote.svg'%}" alt="Icon description" width="18" height="18">
+          </span>
+          <span class="sidebar__title">Delivery Note</span>
+        </a>
+      </li>
+      <li class="sidebar__item">
+        <a class="sidebar__link" href="{% url 'purchaseOrder' %}" aria-expanded="false">
+          <span style="margin-top: 3.5px">
+            <img src="{% static 'img/purchaseOrder.svg'%}" alt="Icon description" width="18" height="18">
+          </span>
+          <span class="sidebar__title">Purchase Order</span>
+        </a>
+      </li>
+
+    </ul>
 
 
 
@@ -95,6 +134,31 @@
           <span class="sidebar__title">Purchase Return</span>
         </a>
       </li>
+
+    </ul>
+
+
+
+    <ul class="sidebar__group">
+
+      <li class="sidebar__item">
+        <a class="sidebar__link" href="{% url 'payment' %}" aria-expanded="false">
+          <span style="margin-top: 3.5px">
+            <img src="{% static 'img/payment.svg'%}" alt="Icon description" width="20" height="20">
+          </span>
+          <span class="sidebar__title">Payment</span>
+        </a>
+      </li>
+
+      <li class="sidebar__item">
+        <a class="sidebar__link" href="{% url 'receipt' %}" aria-expanded="false">
+          <span style="margin-top: 1.5px">
+            <img src="{% static 'img/receipt.svg'%}" alt="Icon description" width="20" height="20">
+          </span>
+          <span class="sidebar__title">Receipt</span>
+        </a>
+      </li>
+
 
     </ul>
   <!-- End Sidebar navigation -->

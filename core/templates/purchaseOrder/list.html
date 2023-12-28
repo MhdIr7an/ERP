@@ -1,0 +1,40 @@
+{% extends 'main-template.html' %}
+{% load static %}
+
+{% block content %}
+<div class="form-list__main">
+  <input type="text" name="formSearch" oninput="searchOrder()" id="formSearch" placeholder="Search" autocomplete="off"/>
+  <select class="form__size-s cmbFormSearch" id="cmbFormSearch">
+    <option value=""></option>
+    <option value="order_no">Order No</option>
+    <option value="vendor_name">vendor Name</option>
+    <option value="order_date">Order Date</option>
+  </select>
+  <table class="form-list__table">
+    <thead class="table-head bg-amber-500 h-10">
+      <tr class="bg-gray-400">
+        <th class="w-1/25">#</th>
+        <th class="w-1/7">Order No</th>
+        <th class="w-1/7">Order Date</th>
+        <th class="w-1/3">vendor Name</th>
+        <th class="w-1/7">Net Amount</th>
+      </tr>
+    </thead>
+    <tbody id="tbl__body">
+      {% for value in values %}
+      <tr class="form-list__contents">
+        <td class="py-2"><p class="text-black font-semibold text-base">{{ forloop.counter }}</p></td>
+        <td class="py-2"><a href="{% url 'purchase_with_id' value.id %}"><p class="text-black font-semibold text-base">{{ value.order_no }}</p></a></td>
+        <td class="py-2"><p class="text-black font-semibold text-base">{{ value.order_date }}</p></td>
+        <td class="py-2"><a href="{% url 'purchase_with_id' value.id %}"><p class="text-black font-semibold text-base">{{ value.vendor.vendor_name }}</p></a></td>
+        <td class="py-2"><p class="text-black font-semibold text-base">{{ value.net_amount }}</p></td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+      
+
+
+<script type="text/javascript" src="{% static 'js/purchase.js' %}"></script>
+{% endblock content %}

@@ -1,0 +1,63 @@
+{% extends 'main-template.html' %}
+{% load static %}
+{% load custom_filters %}
+
+{% block content %}
+<form method="POST" class="form__form" enctype="multipart/form-data">
+  {% csrf_token %}
+  <div class="form__content">
+    <h1>Receipt</h1>
+    <div class="form__btn-add-edit">
+      <button type="button" class="btn-add-edit" onclick="location.href='{% url 'receipt_add' %}'">Add</button>
+      <button type="button" class="btn-add-edit" onclick="location.href='{% url 'receipt_edit' values.id  %}'">Edit</button>
+      <button type="button" class="btn-add-edit" onclick="message_box('Are you sure you want to delete this receipt?', 'receipt_delete', {{values.id}})">Delete</button>
+    </div>
+    <div class="form__grp">
+      <div class="floating-input-group">
+        {{ form.receipt_no|add_class:form.disabled_class }}
+        <label class="floating-label">Receipt No</label>
+      </div>
+        <div class="floating-input-group">
+          {{ form.receipt_date|add_class:form.disabled_class }}
+          <label class="floating-label">Date</label>
+        </div>
+      </div>
+      {% if customer %}
+    <div class="floating-input-group">
+      {{ form.customer }}
+      <input id="master_customer" class="form__size-l floating-input uppercase-only disabled-input" placeholder=" " autocomplete="off" value="{{customer.customer_name}}"></input>
+      <label class="floating-label">Customer</label>
+    </div>
+    {% else %}
+    <div class="floating-input-group">
+      {{ form.receipt_from|add_class:form.disabled_class }}
+      <label class="floating-label">Receipt From</label>
+    </div>
+    {% endif %}
+    <div class="form__grp">
+    <div class="floating-input-group">
+      {{ form.amount|add_class:form.disabled_class }}
+      <label class="floating-label">Amount</label>
+    </div>
+    {% if customer %}
+      <div class="floating-input-group">
+        {{ form.discount|add_class:form.disabled_class }}
+        <label class="floating-label">Discount</label>
+      </div>
+      {% endif %}
+      <div class="floating-input-group">
+        {{ form.payment_method|add_class:form.disabled_class }}
+        <label class="floating-label">Payment Method</label>
+      </div>
+    </div>
+
+    <div class="form__btn-move">
+      <button type="button" class="btn-move" onclick="location.href='{% url 'receipt_move_first' %}'"  {% if not values.prev %}disabled{% endif %}>First</button>
+      <button type="button" class="btn-move" onclick="location.href='{% url 'receipt_move_previous' values.id %}'"  {% if not values.prev %}disabled{% endif %}>Previous</button>
+      <button type="button" class="btn-move" onclick="location.href='{% url 'receipt_find' %}'"  {% if not values.find %}disabled{% endif %}>Find</button>
+      <button type="button" class="btn-move" onclick="location.href='{% url 'receipt_move_next' values.id %}'"  {% if not values.next %}disabled{% endif %}>Next</button>
+      <button type="button" class="btn-move" onclick="location.href='{% url 'receipt_move_last' %}'"  {% if not values.next %}disabled{% endif %}>Last</button>
+    </div>
+  </div>
+</form>
+{% endblock content %}

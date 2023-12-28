@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">   
-    <title>Invoice|{{master.id}}</title>
+    <title>Invoice|{{master.invoice_no}}</title>
   <style>
     body {
       {% comment %} padding: 1.5rem; {% endcomment %}
@@ -41,7 +41,7 @@
   </style>
 </head>
 <body>
-    <p>Invoice no: {{master.id}}</p>
+    <p>Invoice no: {{master.invoice_no}}</p>
     <p style="float: right; margin-top: -2rem;">Invoice Date: {{master.invoice_date}}</p>
     {% if module_name == 'purchase' %}
       <p>Purchase no: {{purchase.purchase_no}}</p>

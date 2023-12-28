@@ -3,7 +3,8 @@ from django.db.models import Max, Min
 
 from core.convertions import to_integer
 
-from . models import tblProduct, tblCustomer, tblVendor, tblCategory, tblSales_Master, tblPurchase_Master, tblSalesman
+from . models import (tblProduct, tblCustomer, tblVendor, tblCategory, tblSales_Master, tblPurchase_Master, tblSalesman, tblPurchaseOrder_Master, tblDeliveryNote_Master, tblQuotation_Master,
+                    tblPayment, tblReceipt, tblSalesOrder_Master)
 
 form_l = { 'class': 'form__size-l floating-input', 'placeholder': ' ' }
 form_s = { 'class': 'form__size-s floating-input', 'placeholder': ' ' }
@@ -236,3 +237,183 @@ class PurchaseForm(forms.ModelForm):
         self.fields['vendor'].initial = None
         self.fields['salesman'].initial = None
         self.fields['roundoff'].initial = None
+
+
+class SalesOrderForm(forms.ModelForm):
+    disabled_class = 'disabled-input'
+    
+    class Meta:
+        model = tblSalesOrder_Master
+        fields = '__all__'
+        widgets = {
+            'order_no': forms.TextInput(attrs={**form_s_disabled, 'id': 'master_order_no', **autocomplete_off}),
+            'order_date': forms.DateInput(attrs={**form_s, 'type': 'date', 'id': 'master_order_date'}),
+            'total': forms.NumberInput(attrs={**form_s_disabled, **autocomplete_off, **readOnly, 'id': 'master_total'}),
+            'vat': forms.NumberInput(attrs={**form_s_disabled, **autocomplete_off, **readOnly, 'id': 'master_vat'}),
+            'discount': forms.NumberInput(attrs={**form_s_disabled, **autocomplete_off, **readOnly, 'id': 'master_discount'}),
+            'roundoff': forms.NumberInput(attrs={**form_s, **autocomplete_off, 'id': 'master_roundoff'}),
+            'net_amount': forms.NumberInput(attrs={**form_s_disabled, **autocomplete_off, **readOnly, 'id': 'master_net_amount'}),
+            'customer': forms.HiddenInput(attrs={**form_s, **autocomplete_off, 'id': 'master_customer_id'}),
+            'salesman': forms.HiddenInput(attrs={**form_s, **autocomplete_off, 'id': 'master_salesman_id'}),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        highest_order_no = tblSalesOrder_Master.objects.aggregate(max_order_no=Max('order_no'))['max_order_no']
+        self.fields['order_no'].initial = to_integer(highest_order_no) + 1 if highest_order_no is not None else 1
+
+        self.fields['total'].initial = None
+        self.fields['vat'].initial = None
+        self.fields['discount'].initial = None
+        self.fields['net_amount'].initial = None
+        self.fields['customer'].initial = None
+        self.fields['salesman'].initial = None
+        self.fields['roundoff'].initial = None
+
+
+class PurchaseOrderForm(forms.ModelForm):
+    disabled_class = 'disabled-input'
+    
+    class Meta:
+        model = tblPurchaseOrder_Master
+        fields = '__all__'
+        widgets = {
+            'order_no': forms.TextInput(attrs={**form_s_disabled, 'id': 'master_order_no', **autocomplete_off}),
+            'order_date': forms.DateInput(attrs={**form_s, 'type': 'date', 'id': 'master_order_date'}),
+            'total': forms.NumberInput(attrs={**form_s_disabled, **autocomplete_off, **readOnly, 'id': 'master_total'}),
+            'vat': forms.NumberInput(attrs={**form_s_disabled, **autocomplete_off, **readOnly, 'id': 'master_vat'}),
+            'discount': forms.NumberInput(attrs={**form_s_disabled, **autocomplete_off, **readOnly, 'id': 'master_discount'}),
+            'roundoff': forms.NumberInput(attrs={**form_s, **autocomplete_off, 'id': 'master_roundoff'}),
+            'net_amount': forms.NumberInput(attrs={**form_s_disabled, **autocomplete_off, **readOnly, 'id': 'master_net_amount'}),
+            'vendor': forms.HiddenInput(attrs={**form_s, **autocomplete_off, 'id': 'master_vendor_id'}),
+            'salesman': forms.HiddenInput(attrs={**form_s, **autocomplete_off, 'id': 'master_salesman_id'}),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        highest_order_no = tblPurchaseOrder_Master.objects.aggregate(max_order_no=Max('order_no'))['max_order_no']
+        self.fields['order_no'].initial = to_integer(highest_order_no) + 1 if highest_order_no is not None else 1
+
+        self.fields['total'].initial = None
+        self.fields['vat'].initial = None
+        self.fields['discount'].initial = None
+        self.fields['net_amount'].initial = None
+        self.fields['vendor'].initial = None
+        self.fields['salesman'].initial = None
+        self.fields['roundoff'].initial = None
+
+
+
+class QuotationForm(forms.ModelForm):
+    disabled_class = 'disabled-input'
+    
+    class Meta:
+        model = tblQuotation_Master
+        fields = '__all__'
+        widgets = {
+            'quotation_no': forms.TextInput(attrs={**form_s_disabled, 'id': 'master_quotation_no', **autocomplete_off}),
+            'quotation_date': forms.DateInput(attrs={**form_s, 'type': 'date', 'id': 'master_quotation_date'}),
+            'total': forms.NumberInput(attrs={**form_s_disabled, **autocomplete_off, **readOnly, 'id': 'master_total'}),
+            'vat': forms.NumberInput(attrs={**form_s_disabled, **autocomplete_off, **readOnly, 'id': 'master_vat'}),
+            'discount': forms.NumberInput(attrs={**form_s_disabled, **autocomplete_off, **readOnly, 'id': 'master_discount'}),
+            'roundoff': forms.NumberInput(attrs={**form_s, **autocomplete_off, 'id': 'master_roundoff'}),
+            'net_amount': forms.NumberInput(attrs={**form_s_disabled, **autocomplete_off, **readOnly, 'id': 'master_net_amount'}),
+            'customer': forms.HiddenInput(attrs={**form_s, **autocomplete_off, 'id': 'master_customer_id'}),
+            'salesman': forms.HiddenInput(attrs={**form_s, **autocomplete_off, 'id': 'master_salesman_id'}),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        highest_quotation_no = tblQuotation_Master.objects.aggregate(max_quotation_no=Max('quotation_no'))['max_quotation_no']
+        self.fields['quotation_no'].initial = to_integer(highest_quotation_no) + 1 if highest_quotation_no is not None else 1
+
+        self.fields['total'].initial = None
+        self.fields['vat'].initial = None
+        self.fields['discount'].initial = None
+        self.fields['net_amount'].initial = None
+        self.fields['customer'].initial = None
+        self.fields['salesman'].initial = None
+        self.fields['roundoff'].initial = None
+
+
+class DeliveryNoteForm(forms.ModelForm):
+    disabled_class = 'disabled-input'
+    
+    class Meta:
+        model = tblDeliveryNote_Master
+        fields = '__all__'
+        widgets = {
+            'delivery_note_no': forms.TextInput(attrs={**form_s_disabled, 'id': 'master_delivery_note_no', **autocomplete_off}),
+            'delivery_note_date': forms.DateInput(attrs={**form_s, 'type': 'date', 'id': 'master_delivery_note_date'}),
+            'total': forms.NumberInput(attrs={**form_s_disabled, **autocomplete_off, **readOnly, 'id': 'master_total'}),
+            'vat': forms.NumberInput(attrs={**form_s_disabled, **autocomplete_off, **readOnly, 'id': 'master_vat'}),
+            'discount': forms.NumberInput(attrs={**form_s_disabled, **autocomplete_off, **readOnly, 'id': 'master_discount'}),
+            'roundoff': forms.NumberInput(attrs={**form_s, **autocomplete_off, 'id': 'master_roundoff'}),
+            'net_amount': forms.NumberInput(attrs={**form_s_disabled, **autocomplete_off, **readOnly, 'id': 'master_net_amount'}),
+            'customer': forms.HiddenInput(attrs={**form_s, **autocomplete_off, 'id': 'master_customer_id'}),
+            'salesman': forms.HiddenInput(attrs={**form_s, **autocomplete_off, 'id': 'master_salesman_id'}),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        highest_delivery_note_no = tblDeliveryNote_Master.objects.aggregate(max_delivery_note_no=Max('delivery_note_no'))['max_delivery_note_no']
+        self.fields['delivery_note_no'].initial = to_integer(highest_delivery_note_no) + 1 if highest_delivery_note_no is not None else 1
+
+        self.fields['total'].initial = None
+        self.fields['vat'].initial = None
+        self.fields['discount'].initial = None
+        self.fields['net_amount'].initial = None
+        self.fields['customer'].initial = None
+        self.fields['salesman'].initial = None
+        self.fields['roundoff'].initial = None
+
+
+class PaymentForm(forms.ModelForm):
+    disabled_class = 'disabled-input'
+    
+    class Meta:
+        model = tblPayment
+        fields = '__all__'
+        widgets = {
+            'payment_no': forms.TextInput(attrs={**form_s_disabled, 'id': 'payment_no', **autocomplete_off}),
+            'payment_date': forms.DateInput(attrs={**form_s, 'type': 'date', 'id': 'payment_date'}),
+            'vendor': forms.HiddenInput(attrs={**form_s, **autocomplete_off, 'id': 'vendor_id'}),
+            'payment_to': forms.TextInput(attrs={**form_l, **autocomplete_off, 'id': 'payment_to'}),
+            'amount': forms.NumberInput(attrs={**form_s, **autocomplete_off, 'id': 'amount'}),
+            'discount': forms.NumberInput(attrs={**form_s, **autocomplete_off, 'id': 'discount'}),
+            'payment_method': forms.Select(attrs={**form_s_select, 'id': 'payment_method'}, choices=payment_method),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        highest_payment_no = tblPayment.objects.aggregate(max_payment_no=Max('payment_no'))['max_payment_no']
+        self.fields['payment_no'].initial = to_integer(highest_payment_no) + 1 if highest_payment_no is not None else 1
+
+        
+        self.fields['amount'].initial = None
+        self.fields['discount'].initial = None
+
+
+class ReceiptForm(forms.ModelForm):
+    disabled_class = 'disabled-input'
+    
+    class Meta:
+        model = tblReceipt
+        fields = '__all__'
+        widgets = {
+            'receipt_no': forms.TextInput(attrs={**form_s_disabled, 'id': 'receipt_no', **autocomplete_off}),
+            'receipt_date': forms.DateInput(attrs={**form_s, 'type': 'date', 'id': 'receipt_date'}),
+            'receipt_from': forms.TextInput(attrs={**form_l, **autocomplete_off, 'id': 'receipt_from'}),
+            'customer': forms.HiddenInput(attrs={**form_s, **autocomplete_off, 'id': 'customer_id'}),
+            'amount': forms.NumberInput(attrs={**form_s, **autocomplete_off, 'id': 'amount'}),
+            'discount': forms.NumberInput(attrs={**form_s, **autocomplete_off, 'id': 'discount'}),
+            'payment_method': forms.Select(attrs={**form_s_select, 'id': 'payment_method'}, choices=payment_method),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        highest_receipt_no = tblReceipt.objects.aggregate(max_receipt_no=Max('receipt_no'))['max_receipt_no']
+        self.fields['receipt_no'].initial = to_integer(highest_receipt_no) + 1 if highest_receipt_no is not None else 1
+
+        self.fields['amount'].initial = None
+        self.fields['discount'].initial = None

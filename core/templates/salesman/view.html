@@ -10,8 +10,7 @@
     <div class="form__btn-add-edit">
       <button type="button" class="btn-add-edit" onclick="location.href='{% url 'salesman_add' %}'">Add</button>
       <button type="button" class="btn-add-edit" onclick="location.href='{% url 'salesman_edit' values.id  %}'">Edit</button>
-      <button type="button" class="btn-add-edit" onclick="location.href='{% url 'salesman_delete' values.id %}'">Delete</button>
-      <button type="button" class="btn-add-edit" onclick="location.href='{% url 'salesman_print' values.id %}'">Print</button>
+      <button type="button" class="btn-add-edit" onclick="message_box('Are you sure you want to delete this salesman?', 'salesman_delete', {{values.id}})">Delete</button>
     </div>
     <div class="floating-input-group">
       {{ form.salesman_code|add_class:form.disabled_class }}

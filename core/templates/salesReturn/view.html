@@ -72,14 +72,13 @@
   </div>
   <div class="floating-input-group">
     {{ form.salesman|add_class:form.disabled_class }}
-    <input id="master_salesman" class="form__size-l floating-input disabled-input" placeholder=" " value="{{salesman.salesman_name}}"></input>
+    <input id="master_salesman" class="form__size-l floating-input disabled-input uppercase-only" placeholder=" " value="{{salesman.salesman_name}}"></input>
     <label class="floating-label">Salesman</label>
   </div>
   <div class="form__btn-move">
     <button type="button" class="btn-move" onclick="location.href='{% url 'salesReturn_move_first' %}'"  {% if not values.prev %}disabled{% endif %}>First</button>
     <button type="button" class="btn-move" onclick="location.href='{% url 'salesReturn_move_previous' values.id %}'"  {% if not values.prev %}disabled{% endif %}>Previous</button>
-    <button type="button" class="btn-move" onclick="location.href='{% url 'salesReturn_find' %}'">Find</button>
-    {% comment %} <button type="button" class="btn-move" onclick="location.href='{% url 'salesReturn_find' %}'"  {% if not values.find %}disabled{% endif %}>Find</button> {% endcomment %}
+    <button type="button" class="btn-move" onclick="location.href='{% url 'salesReturn_find' %}'"  {% if not values.find %}disabled{% endif %}>Find</button>
     <button type="button" class="btn-move" onclick="location.href='{% url 'salesReturn_move_next' values.id %}'"  {% if not values.next %}disabled{% endif %}>Next</button>
     <button type="button" class="btn-move" onclick="location.href='{% url 'salesReturn_move_last' %}'"  {% if not values.next %}disabled{% endif %}>Last</button>
   </div>

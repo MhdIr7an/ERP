@@ -1,2 +1,88 @@
-# Basic-ERP
-A basic ERP web based application using django that has the functionalities to deal with all Sales and Purchases. 
+# 🏪 ERP
+<details>
+  <summary>Table of Contents</summary>
+  <ol>
+    <li>
+      <a href="#-about-the-project">About The Project</a>
+      <ul>
+        <li><a href="#-modules">Modules</a></li>
+        <li><a href="#home-page">Home Page</a></li>
+        <li><a href="#product-page">Product Page</a></li>
+        <li><a href="#sales-page">Sales Page</a></li>
+      </ul>
+    </li>
+    <li>
+      <a href="#-built-with">Built With</a>
+    </li>
+    <li>
+      <a href="#-getting-started">Getting Started</a>
+    </li>
+  </ol>
+</details>
+
+
+
+<!-- ABOUT THE PROJECT -->
+## 🚀 About The Project
+A web based ERP software that has the functionalities to deal with Sales, Purchases, orders and returns. It also includes the functionalities to genereate pdf invoices for them. 
+
+### 📁 Modules
+  <ul>
+    <li>category</li>
+    <li>salesman</li> 
+    <li>product</li> 
+    <li>customer</li>
+    <li>vendor</li>
+    <li>sales</li>
+    <li>purchase</li>
+    <li>sales return</li>
+    <li>purchase return</li>
+    <li>sales Order</li>
+    <li>purchase Order</li>
+    <li>Delivery Note</li>
+    <li>Quotation</li>
+    <li>Payment</li>
+    <li>Receipt</li>
+  </ul>
+
+<h3>Home Page</h3>
+<img src="https://github.com/MhdIr7an/ERP/assets/93046265/181cb972-b961-4be6-87d1-6f776769726e" width="800" height="400" />
+
+<h3>Product Page</h3>
+<img src="https://github.com/MhdIr7an/Basic-ERP/assets/93046265/7c1a87c9-25d8-4f90-90c6-5b989bf4b2ea" width="800" height="400" />
+
+<h3>Sales Page</h3>
+<img src="https://github.com/MhdIr7an/Basic-ERP/assets/93046265/ca47c496-76f9-445b-8c8d-74f1af9bfb8c" width="800" height="400" />
+
+
+
+## 🧰 Built With
+<div>
+<img alt="Django Icon" width="120" height="90" src="https://cdn.iconscout.com/icon/free/png-256/free-django-13-1175187.png?f=webp&amp;w=256">
+<img alt="Jquery Icon" width="120" height="80" src="https://cdn.iconscout.com/icon/free/png-256/free-jquery-8-1175153.png?f=webp&amp;w=256">
+<img alt="Javascript Icon" width="100" height="80" src="https://cdn.iconscout.com/icon/free/png-256/free-javascript-2038874-1720087.png?f=webp&amp;w=256">
+<img alt="Css Icon" width="100" height="80" src="https://cdn.iconscout.com/icon/free/png-256/free-css-38-226095.png?f=webp&amp;w=256">
+<img alt="Html Icon" width="100" height="80" src="https://cdn.iconscout.com/icon/free/png-256/free-html-59-225995.png?f=webp&amp;w=256">
+</div>
+
+<!-- GETTING STARTED -->
+## 🚪 Getting Started
+
+To get a local copy up and running follow these simple example steps.
+
+1. Clone the repo
+   ```sh
+   git clone https://github.com/MhdIr7an/Basic-ERP.git
+   ```
+2. Install requirements
+   ```sh
+   pip install -r requirements.txt
+   ```
+3. Download and install WKHTMLTOPDF(required to generate pdf) to C:\Program Files\ from <a href="https://wkhtmltopdf.org/downloads.html">here</a>
+4. create a .env file in the root and add SECRET_KEY(Your django secret key)
+5. run server
+   ```sh
+   pip manage.py runserver
+   ```
+
+<p align="right">(<a href="#-erp">back to top</a>)<p>

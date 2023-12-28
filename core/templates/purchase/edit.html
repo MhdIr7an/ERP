@@ -1,5 +1,6 @@
 {% extends 'main-template.html' %}
 {% load static %}
+{% load custom_filters %}
 
 {% block content %}
 <form method="POST" class="form__form" enctype="multipart/form-data">
@@ -8,7 +9,7 @@
   <h1>Purchase</h1>
   <div class="form__grp">
     <div class="floating-input-group">
-      {{ form.invoice_no }}
+      {{ form.invoice_no|add_class:form.disabled_class }}
       <label class="floating-label">Invoice No</label>
     </div>
     <div class="floating-input-group">
@@ -61,12 +62,12 @@
   </div>
   <div class="floating-input-group">
     {{ form.vendor }}
-    <input id="master_vendor" class="form__size-l floating-input uppercase-only" placeholder=" " autocomplete="off"></input>
+    <input id="master_vendor" class="form__size-l floating-input uppercase-only" placeholder=" " autocomplete="off" value="{{vendor.vendor_name}}"></input>
     <label class="floating-label">Vendor</label>
   </div>
   <div class="floating-input-group">
     {{ form.salesman }}
-    <input id="master_salesman" class="form__size-l floating-input  uppercase-only" placeholder=" " autocomplete="off"></input>
+    <input id="master_salesman" class="form__size-l floating-input  uppercase-only" placeholder=" " autocomplete="off" value="{{salesman.salesman_name}}"></input>
     <label class="floating-label">Salesman</label>
   </div>
   <div class="form__btn-sub-cancel">
@@ -98,7 +99,7 @@
     {% for detail in details %}
     <tr class="form__details-contents" id="row{{ forloop.counter }}">
       <td class="py-2 tbl_sl" id="tbl_sl_{{ forloop.counter }}">{{ forloop.counter }}</td>
-      <td class="py-2 tbl_product" contenteditable="true" id="tbl_product_{{ forloop.counter }}">{{ detail.product.product_name }}</td>
+      <td class="py-2 tbl_product uppercase-only" contenteditable="true" id="tbl_product_{{ forloop.counter }}">{{ detail.product.product_name }}</td>
       <td class="py-2 tbl_product_id" id="tbl_product_id_{{ forloop.counter }}" hidden>{{ detail.product.id }}</td>
       <td class="py-2 tbl_unit">
         <select id="tbl_unit_{{forloop.counter}}">

@@ -11,7 +11,7 @@
   <div class="form__btn-add-edit">
     <button type="button" class="btn-add-edit" onclick="location.href='{% url 'purchaseReturn_add' %}'">Add</button>
     <button type="button" class="btn-add-edit" onclick="location.href='{% url 'purchaseReturn_edit' values.id  %}'">Edit</button>
-    <button type="button" class="btn-add-edit" onclick="message_box('Are you sure you want to delete this purchase?', 'purchaseReturn_delete', {{values.id}})">Delete</button>
+    <button type="button" class="btn-add-edit" onclick="message_box('Are you sure you want to delete this return?', 'purchaseReturn_delete', {{values.id}})">Delete</button>
     <button type="button" class="btn-add-edit" onclick="location.href='{% url 'purchaseReturn_print' values.id %}'">Print</button>
   </div>
       <div class="form__grp">

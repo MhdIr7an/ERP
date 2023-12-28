@@ -10,8 +10,7 @@
   <div class="form__btn-add-edit">
       <button type="button" class="btn-add-edit" onclick="location.href='{% url 'product_add' %}'">Add</button>
       <button type="button" class="btn-add-edit" onclick="location.href='{% url 'product_edit' values.id  %}'">Edit</button>
-      <button type="button" class="btn-add-edit" onclick="location.href='{% url 'product_delete' values.id %}'">Delete</button>
-      <button type="button" class="btn-add-edit" onclick="location.href='{% url 'product_print' values.id %}'">Print</button>
+      <button type="button" class="btn-add-edit" onclick="message_box('Are you sure you want to delete this product?', 'product_delete', {{values.id}})">Delete</button>
   </div>
   <div class="form__grp">
     <div class="floating-input-group">
@@ -27,6 +26,7 @@
       <input class="disabled-input" type="checkbox" id="sub_unit" name="sub-unit" value="1" {% if units %} checked {% endif %} />
     </div>
   </div>
+  {% if units %}
   <table class="form__tbl" id="form__tbl" style="width: 41.5rem;">
     <thead class="table-head bg-amber-500 h-10">
       <tr class="bg-gray-400">
@@ -46,6 +46,7 @@
       {% endfor %}
     </tbody>
   </table>
+  {% endif %}
   <div class="floating-input-group">
     {{ form.product_name|add_class:form.disabled_class }}
     <label class="floating-label">Product Name</label>
@@ -90,40 +91,8 @@
       </div>
       </form>
 
-      {% comment %} <script>
-        const formElements = document.querySelectorAll("input, select, textarea");
-        document.addEventListener('keydown', function (e) {
-          if (e.key === 'Tab') {
-            const focusedElement = document.activeElement;
-        
-        if (!Array.from(formElements).includes(focusedElement)) {
-            // The currently focused element is not in the formElements set
-            e.preventDefault();
-            
-            // Find and set focus to the first element in the formElements set
-            formElements[0].focus();
-        }
-          }
-        });
-      </script> {% endcomment %}
 
       <style>
-        {% comment %} .tbl_unit,
-        .tbl_multiple {
-          padding: 0;
-        }
-        
-        .tbl_unit select,
-        .tbl_multiple select {
-          height: 3vh;
-          width: 100%;
-          margin-top: -1rem;
-          font-weight: 800; 
-      
-          outline: none;
-          border: none; 
-        } {% endcomment %}
-    
         .grp-sub_unit {
           margin-right: 1.5rem;
         }

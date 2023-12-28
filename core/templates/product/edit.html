@@ -17,9 +17,10 @@
     </div>
     <div class="grp-sub_unit">
       <label for="sub_unit">Sub-unit</label>
-      <input type="checkbox" id="sub_unit" name="sub-unit" {% if units %} value="1" checked {% else %} value="0" {% endif %} />
+      <input type="checkbox" id="sub_unit" name="sub-unit" value="1" checked />
     </div>
   </div>
+  {% if units %}
   <table class="form__tbl" id="form__tbl" style="width: 41.5rem;">
     <thead class="table-head bg-amber-500 h-10">
       <tr class="bg-gray-400">
@@ -52,6 +53,37 @@
       {% endfor %}
     </tbody>
   </table>
+  {% else %}
+  <table class="form__tbl" id="form__tbl" style="width: 41.5rem;">
+    <thead class="table-head bg-amber-500 h-10">
+      <tr class="bg-gray-400">
+        <th class="w-1/25">#</th>
+        <th class="w-1/7">Unit</th>
+        <th class="w-1/7">Multiple</th>
+        <th class="w-1/7">Multiple Value</th>
+      </tr>
+    </thead>
+    <tbody id="tbl__body">
+      <td class="py-2 tbl_sl" id="tbl_sl_1">1</td>
+        <td class="py-2 tbl_unit">
+          <select id="tbl_unit_1">
+            <option value="pcs">Pcs</option>
+            <option value="box">Box</option>
+            <option value="kg">Kg</option>
+            <option value="num">Num</option>
+            <option value="ctn">Ctn</option>
+          </select>
+        </td>
+        <td class="py-2 tbl_multiple">
+          <select id="tbl_multiple_1">
+            <option value="*">*</option>
+            <option value="/">/</option>
+          </select>
+        </td>
+        <td class="py-2 tbl_multiple_value num-only" contenteditable="true" id="tbl_multiple_value_1">{{unit.multiple_value}}</td>
+    </tbody>
+  </table>
+  {% endif %}
   <div class="floating-input-group">
     {{ form.product_name }}
     <label class="floating-label">Product Name</label>

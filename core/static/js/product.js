@@ -30,8 +30,8 @@ function saveProduct(event, product_id) {
         var product_data = [];
             
         // Retrieve and store the values of each field
-        product_data.push($('#product_code').val());
-        product_data.push($('#product_name').val());
+        product_data.push($('#product_code').val().toUpperCase());
+        product_data.push($('#product_name').val().toUpperCase());
         // product_data.push(date_to_yyyymmdd('#master_invoice_date'));
         product_data.push($('#product_main_unit').val());
         product_data.push($('#product_description').val());
@@ -51,7 +51,7 @@ function product_sub_unit(url_link, product_data) {
     var table = $('#tbl__body');
     var rows = table.find('tr');
     var unit_data = [];
-    
+    if ($('#sub-unit').val() === 1)
     rows.each(function() {
         var row = $(this);
         var unit = row.find('.tbl_unit select').val();
@@ -106,7 +106,7 @@ function formSearch() {
             break;
         default:
             findRow(`form_search/tblProduct/` + search_val, row);
-  }
+    }
 }
 
 function findRow(url_link, row) {
@@ -131,30 +131,13 @@ function findRow(url_link, row) {
     .catch(error => {
         console.error('Error in Axios request:', error);
     });
-  }
+}
 
 
 $(document).ready(function() {
     $('#tbl__body').on('keypress', '.num-only', function(e) {
         acceptNum(this, e); 
         
-    });
-
-    $('#tbl__body').on('blur', '.tbl_unit', function() {
-        // const row = $(this).closest('tr');
-        // const rowCounter = parseInt(row.attr('id').replace('row', ''), 10);
-        // const totalRows = $('#tbl__body tr').length;
-        // if (!$(this).val()) {
-        //     if(totalRows > 1) {
-        //         row.remove();
-        //         // rearrange(row.attr('id'))
-        //     } else if (totalRows == 1) {
-        //         $('#sub_unit').prop('checked', false);
-        //         $('#sub_unit').val(0);
-        //         $('#form__tbl').hide();
-        //     }
-        //     $('#product_name').focus();
-        // }
     });
 
     $('#tbl__body').on('blur', '.tbl_multiple_value', function() {
@@ -218,8 +201,8 @@ $(document).ready(function() {
         vendor = $(this).val();
         axios.get('/get_field_details/tblVendor/vendor_code/vendor_name/' + vendor)
         .then(response => {
-            value = response.data;
-            if (vendor == value.vendor_code) {
+            value = response.data.results[0];
+            if (value.id) {
                 $(this).val(value.vendor_name);
                 $('#product_vendor').val(value.id)
             }
@@ -236,8 +219,8 @@ $(document).ready(function() {
         category = $(this).val();
         axios.get('/get_field_details/tblCategory/category_code/category_name/' + category)
         .then(response => {
-            value = response.data;
-            if (category == value.category_code) {
+            value = response.data.results[0];
+            if (value.id) {
                 $(this).val(value.category_name);
                 $('#product_category').val(value.id)
             }

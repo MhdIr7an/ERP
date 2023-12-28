@@ -1,0 +1,97 @@
+{% extends 'main-template.html' %}
+{% load static %}
+
+{% block content %}
+<form method="POST" class="form__form" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="form__content">
+      <h1>Receipt</h1>
+      <div class="form__grp">
+        <div class="floating-input-group">
+          {{ form.receipt_no }}
+          <label class="floating-label">Receipt No</label>
+        </div>
+          <div class="floating-input-group">
+            {{ form.receipt_date }}
+            <label class="floating-label">Date</label>
+          </div>
+        </div>
+        <div class="form__grp">
+          <div class="floating-input-group">
+            {{ form.payment_method }}
+            <label class="floating-label">Payment Method</label>
+          </div>
+          <div class="grp-customer">
+            <label for="customer">customer</label>
+            <input onchange="customer_fromChange()" type="checkbox" id="customer_from" name="customer" {% if customer == None %} value="0" {% else %}value="1" checked {% endif %} />
+          </div>
+        </div>
+      <div class="floating-input-group customer-field" style="{% if customer == None %}display: none{% endif %}">
+        {{ form.customer }}
+        <input id="customer" class="form__size-l floating-input uppercase-only" placeholder=" " autocomplete="off" onblur="customer_leave()" value="{{customer.customer_name}}"></input>
+        <label class="floating-label">Customer</label>
+      </div>
+      <div class="floating-input-group from-field" style="{% if customer != None %}display: none{% endif %}">
+        {{ form.receipt_from }}
+        <label class="floating-label">Receipt From</label>
+      </div>
+      <div class="form__grp">
+      <div class="floating-input-group">
+        {{ form.amount }}
+        <label class="floating-label">Amount</label>
+      </div>
+        <div class="floating-input-group" id="discount-grp" style="{% if customer == None %}display: none{% endif %}">
+          {{ form.discount }}
+          <label class="floating-label">Discount</label>
+        </div>
+        <div class="floating-input-group" id="credit_balance-grp" style="{% if customer == None %}display: none{% endif %}">
+          <input id="credit_balance" class="form__size-s floating-input uppercase-only disabled-input" placeholder=" " autocomplete="off" value="{{customer.credit_balance}}"></input>
+          <label class="floating-label">credit balance</label>
+        </div>
+      </div>
+      <div class="form__btn-sub-cancel">
+        <input id="form__btn-submit" type="submit" value="Save" class="form__btn-submit" onclick="savePaymentOrReceipt(event, 'receipt', {{ id }})">
+        <button id="form__btn-cancel" type="button" class="form__btn-cancel" onclick="location.href='{% if id %}{% url 'receipt_with_id' id %}{% else %}{% url 'receipt' %}{% endif %}'">Cancel</button>
+      </div><br>
+      {% for message in messages %}
+        <p class="form__error">{{ message }}</p>
+      {% endfor %}
+    </div>
+</form>
+
+<script type="text/javascript" src="{% static 'js/payment.js' %}"></script>
+<style>
+.grp-customer {
+  margin-right: 1.5rem;
+}
+
+.grp-customer label {
+  margin-top: 1rem;
+}
+
+.grp-customer input[type="checkbox"] {
+  appearance: none;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  cursor: pointer;
+  height: 20px;
+  width: 20px;
+  transition: background-color 0.3s;
+}
+
+.grp-customer input[type="checkbox"]:checked {
+  background-color: #007bff;
+}
+
+.grp-customer input[type="checkbox"]:checked::after {
+  content: "";
+  display: block;
+  width: 6px;
+  height: 12px;
+  border: solid #fff;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg) translateY(50%);
+}
+</style>
+{% endblock content %}

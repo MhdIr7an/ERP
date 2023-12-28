@@ -104,7 +104,7 @@
     {% for detail in details %}
     <tr class="form__details-contents" id="row{{ forloop.counter }}">
       <td class="py-2 tbl_sl" id="tbl_sl_{{ forloop.counter }}">{{ forloop.counter }}</td>
-      <td class="py-2 tbl_product" contenteditable="true" id="tbl_product_{{ forloop.counter }}">{{ detail.product.product_name }}</td>
+      <td class="py-2 tbl_product uppercase-only" contenteditable="true" id="tbl_product_{{ forloop.counter }}">{{ detail.product.product_name }}</td>
       <td class="py-2 tbl_product_id" id="tbl_product_id_{{ forloop.counter }}" hidden>{{ detail.product.id }}</td>
       <td class="py-2 tbl_unit">
         <select id="tbl_unit_{{forloop.counter}}">

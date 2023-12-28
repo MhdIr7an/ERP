@@ -72,7 +72,7 @@
       </div>
       <div class="form__btn-sub-cancel">
         <input id="form__btn-submit" type="submit" value="Save" class="form__btn-submit">
-        <button id="form__btn-cancel" type="button" class="form__btn-cancel" onclick="location.href='{% url 'customer' %}'">Cancel</button>
+        <button id="form__btn-cancel" type="button" class="form__btn-cancel" onclick="location.href='{% if id %}{% url 'customer_with_id' id %}{% else %}{% url 'customer' %}{% endif %}'">Cancel</button>
       </div><br>
       {% for message in messages %}
         <p class="form__error">{{ message }}</p>

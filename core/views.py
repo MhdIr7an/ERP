@@ -12,8 +12,10 @@ from django.db.models import Q
 import json
 
 from . frm import model_mapping
-from . models import (tblUsers, tblSales_Details, tblSales_Master, tblCustomer, tblPurchase_Master, tblPurchase_Details, tblVendor, 
-tblProduct, tblProduct_unit, tblCategory, tblSalesman)
+from . models import (tblUsers, tblSales_Details, tblSales_Master, tblCustomer, tblPurchase_Master, tblPurchase_Details, tblVendor, tblSalesman, 
+tblProduct, tblProduct_unit, tblCategory, tblSalesOrder_Master, tblSalesOrder_Details, tblPurchaseOrder_Master, tblPurchaseOrder_Details,
+tblQuotation_Master, tblQuotation_Details, tblDeliveryNote_Master, 
+tblDeliveryNote_Details, tblPayment, tblReceipt)
 from . rpt import invoice_print
 from . convertions import to_decimal
 
@@ -156,17 +158,15 @@ def product_move_next(request, frm_id):
 
 @login_required(login_url='/login')
 def product_move_last(request):
-    return redirect('product')
+    tbl = model_mapping(request, 'product', None)
+    result = tbl.frm_move_last()
+    return result
 
 @login_required(login_url='/login')
 def product_find(request):
     tbl = model_mapping(request, 'product', None)
     result = tbl.frm_find()
     return result
-
-@login_required(login_url='/login')
-def product_print(request):
-    pass
 
 #customer
 @login_required(login_url='/login')
@@ -213,17 +213,15 @@ def customer_move_next(request, frm_id):
 
 @login_required(login_url='/login')
 def customer_move_last(request):
-    return redirect('customer')
+    tbl = model_mapping(request, 'customer', None)
+    result = tbl.frm_move_last()
+    return result
 
 @login_required(login_url='/login')
 def customer_find(request):
     tbl = model_mapping(request, 'customer', None)
     result = tbl.frm_find()
     return result
-
-@login_required(login_url='/login')
-def customer_print(request):
-    pass
 
 #vendor
 @login_required(login_url='/login')
@@ -270,17 +268,15 @@ def vendor_move_next(request, frm_id):
 
 @login_required(login_url='/login')
 def vendor_move_last(request):
-    return redirect('vendor')
+    tbl = model_mapping(request, 'vendor', None)
+    result = tbl.frm_move_last()
+    return result
 
 @login_required(login_url='/login')
 def vendor_find(request):
     tbl = model_mapping(request, 'vendor', None)
     result = tbl.frm_find()
     return result
-
-@login_required(login_url='/login')
-def vendor_print(request):
-    pass
 
 
 #category
@@ -328,17 +324,15 @@ def category_move_next(request, frm_id):
 
 @login_required(login_url='/login')
 def category_move_last(request):
-    return redirect('category')
+    tbl = model_mapping(request, 'category', None)
+    result = tbl.frm_move_last()
+    return result
 
 @login_required(login_url='/login')
 def category_find(request):
     tbl = model_mapping(request, 'category', None)
     result = tbl.frm_find()
     return result
-
-@login_required(login_url='/login')
-def category_print(request):
-    pass
 
 #salesman
 @login_required(login_url='/login')
@@ -385,17 +379,15 @@ def salesman_move_next(request, frm_id):
 
 @login_required(login_url='/login')
 def salesman_move_last(request):
-    return redirect('salesman')
+    tbl = model_mapping(request, 'salesman', None)
+    result = tbl.frm_move_last()
+    return result
 
 @login_required(login_url='/login')
 def salesman_find(request):
     tbl = model_mapping(request, 'salesman', None)
     result = tbl.frm_find()
     return result
-
-@login_required(login_url='/login')
-def salesman_print(request):
-    pass
 
 
 @login_required(login_url='/login')
@@ -444,7 +436,9 @@ def sales_move_next(request, frm_id):
 
 @login_required(login_url='/login')
 def sales_move_last(request):
-    return redirect('sales')
+    tbl = model_mapping(request, 'sales', None)
+    result = tbl.frm_move_last()
+    return result
 
 @login_required(login_url='/login')
 def sales_find(request):
@@ -502,7 +496,9 @@ def purchase_move_next(request, frm_id):
 
 @login_required(login_url='/login')
 def purchase_move_last(request):
-    return redirect('purchase')
+    tbl = model_mapping(request, 'purchase', None)
+    result = tbl.frm_move_last()
+    return result
 
 @login_required(login_url='/login')
 def purchase_find(request):
@@ -517,19 +513,19 @@ def purchase_print(request, frm_id):
 
 @login_required(login_url='/login')
 def salesReturn_view(request, frm_id=None):
-    tbl = model_mapping(request, 'salesReturn', frm_id, True)
+    tbl = model_mapping(request, 'salesReturn', frm_id)
     result = tbl.frm_view()
     return result
     
 @login_required(login_url='/login')
 def salesReturn_add(request):
-    tbl = model_mapping(request, 'salesReturn', None, True)
+    tbl = model_mapping(request, 'salesReturn', None)
     result = tbl.frm_add()
     return result
 
 @login_required(login_url='/login')
 def salesReturn_edit(request, frm_id):
-    tbl = model_mapping(request, 'salesReturn', frm_id, True)
+    tbl = model_mapping(request, 'salesReturn', frm_id)
     result = tbl.frm_edit()
     return result
 
@@ -537,35 +533,37 @@ def salesReturn_edit(request, frm_id):
 @transaction.atomic
 @login_required(login_url='/login')
 def salesReturn_delete(request, frm_id):
-    tbl = model_mapping(request, 'salesReturn', frm_id, True)
+    tbl = model_mapping(request, 'salesReturn', frm_id)
     result = tbl.frm_delete()
     return result
 
 @login_required(login_url='/login')
 def salesReturn_move_first(request):
-    tbl = model_mapping(request, 'salesReturn', None, True)
+    tbl = model_mapping(request, 'salesReturn', None)
     result = tbl.frm_move_first()
     return result
 
 @login_required(login_url='/login')
 def salesReturn_move_previous(request, frm_id):
-    tbl = model_mapping(request, 'salesReturn', frm_id, True)
+    tbl = model_mapping(request, 'salesReturn', frm_id)
     result = tbl.frm_move_previous()
     return result
 
 @login_required(login_url='/login')
 def salesReturn_move_next(request, frm_id):
-    tbl = model_mapping(request, 'salesReturn', frm_id, True)
+    tbl = model_mapping(request, 'salesReturn', frm_id)
     result = tbl.frm_move_next()
     return result
 
 @login_required(login_url='/login')
 def salesReturn_move_last(request):
-    return redirect('salesReturn')
+    tbl = model_mapping(request, 'salesReturn', None)
+    result = tbl.frm_move_last()
+    return result
 
 @login_required(login_url='/login')
 def salesReturn_find(request):
-    tbl = model_mapping(request, 'salesReturn', None, True)
+    tbl = model_mapping(request, 'salesReturn', None)
     result = tbl.frm_find()
     return result
 
@@ -575,19 +573,19 @@ def salesReturn_print(request, frm_id):
 
 @login_required(login_url='/login')
 def purchaseReturn_view(request, frm_id=None):
-    tbl = model_mapping(request, 'purchaseReturn', frm_id, True)
+    tbl = model_mapping(request, 'purchaseReturn', frm_id)
     result = tbl.frm_view()
     return result
     
 @login_required(login_url='/login')
 def purchaseReturn_add(request):
-    tbl = model_mapping(request, 'purchaseReturn', None, True)
+    tbl = model_mapping(request, 'purchaseReturn', None)
     result = tbl.frm_add()
     return result
 
 @login_required(login_url='/login')
 def purchaseReturn_edit(request, frm_id):
-    tbl = model_mapping(request, 'purchaseReturn', frm_id, True)
+    tbl = model_mapping(request, 'purchaseReturn', frm_id)
     result = tbl.frm_edit()
     return result
 
@@ -595,35 +593,37 @@ def purchaseReturn_edit(request, frm_id):
 @transaction.atomic
 @login_required(login_url='/login')
 def purchaseReturn_delete(request, frm_id):
-    tbl = model_mapping(request, 'purchaseReturn', frm_id, True)
+    tbl = model_mapping(request, 'purchaseReturn', frm_id)
     result = tbl.frm_delete()
     return result
 
 @login_required(login_url='/login')
 def purchaseReturn_move_first(request):
-    tbl = model_mapping(request, 'purchaseReturn', None, True)
+    tbl = model_mapping(request, 'purchaseReturn', None)
     result = tbl.frm_move_first()
     return result
 
 @login_required(login_url='/login')
 def purchaseReturn_move_previous(request, frm_id):
-    tbl = model_mapping(request, 'purchaseReturn', frm_id, True)
+    tbl = model_mapping(request, 'purchaseReturn', frm_id)
     result = tbl.frm_move_previous()
     return result
 
 @login_required(login_url='/login')
 def purchaseReturn_move_next(request, frm_id):
-    tbl = model_mapping(request, 'purchaseReturn', frm_id, True)
+    tbl = model_mapping(request, 'purchaseReturn', frm_id)
     result = tbl.frm_move_next()
     return result
 
 @login_required(login_url='/login')
 def purchaseReturn_move_last(request):
-    return redirect('purchaseReturn')
+    tbl = model_mapping(request, 'purchaseReturn', None)
+    result = tbl.frm_move_last()
+    return result
 
 @login_required(login_url='/login')
 def purchaseReturn_find(request):
-    tbl = model_mapping(request, 'purchaseReturn', None, True)
+    tbl = model_mapping(request, 'purchaseReturn', None)
     result = tbl.frm_find()
     return result
 
@@ -678,7 +678,9 @@ def salesOrder_move_next(request, frm_id):
 
 @login_required(login_url='/login')
 def salesOrder_move_last(request):
-    return redirect('salesOrder')
+    tbl = model_mapping(request, 'salesOrder', None)
+    result = tbl.frm_move_last()
+    return result
 
 @login_required(login_url='/login')
 def salesOrder_find(request):
@@ -689,6 +691,7 @@ def salesOrder_find(request):
 @login_required(login_url='/login')
 def salesOrder_print(request, frm_id):
     return invoice_print(request, frm_id, 'salesOrder')
+
 
 @login_required(login_url='/login')
 def purchaseOrder_view(request, frm_id=None):
@@ -736,7 +739,9 @@ def purchaseOrder_move_next(request, frm_id):
 
 @login_required(login_url='/login')
 def purchaseOrder_move_last(request):
-    return redirect('purchaseOrder')
+    tbl = model_mapping(request, 'purchaseOrder', None)
+    result = tbl.frm_move_last()
+    return result
 
 @login_required(login_url='/login')
 def purchaseOrder_find(request):
@@ -748,6 +753,242 @@ def purchaseOrder_find(request):
 def purchaseOrder_print(request, frm_id):
     return invoice_print(request, frm_id, 'purchaseOrder')
 
+
+@login_required(login_url='/login')
+def deliveryNote_view(request, frm_id=None):
+    tbl = model_mapping(request, 'deliveryNote', frm_id)
+    result = tbl.frm_view()
+    return result
+    
+@login_required(login_url='/login')
+def deliveryNote_add(request):
+    tbl = model_mapping(request, 'deliveryNote', None)
+    result = tbl.frm_add()
+    return result
+
+@login_required(login_url='/login')
+def deliveryNote_edit(request, frm_id):
+    tbl = model_mapping(request, 'deliveryNote', frm_id)
+    result = tbl.frm_edit()
+    return result
+
+
+@transaction.atomic
+@login_required(login_url='/login')
+def deliveryNote_delete(request, frm_id):
+    tbl = model_mapping(request, 'deliveryNote', frm_id)
+    result = tbl.frm_delete()
+    return result
+
+@login_required(login_url='/login')
+def deliveryNote_move_first(request):
+    tbl = model_mapping(request, 'deliveryNote', None)
+    result = tbl.frm_move_first()
+    return result
+
+@login_required(login_url='/login')
+def deliveryNote_move_previous(request, frm_id):
+    tbl = model_mapping(request, 'deliveryNote', frm_id)
+    result = tbl.frm_move_previous()
+    return result
+
+@login_required(login_url='/login')
+def deliveryNote_move_next(request, frm_id):
+    tbl = model_mapping(request, 'deliveryNote', frm_id)
+    result = tbl.frm_move_next()
+    return result
+
+@login_required(login_url='/login')
+def deliveryNote_move_last(request):
+    tbl = model_mapping(request, 'deliveryNote', None)
+    result = tbl.frm_move_last()
+    return result
+
+@login_required(login_url='/login')
+def deliveryNote_find(request):
+    tbl = model_mapping(request, 'deliveryNote', None)
+    result = tbl.frm_find()
+    return result
+
+@login_required(login_url='/login')
+def deliveryNote_print(request, frm_id):
+    return invoice_print(request, frm_id, 'deliveryNote')
+
+
+@login_required(login_url='/login')
+def quotation_view(request, frm_id=None):
+    tbl = model_mapping(request, 'quotation', frm_id)
+    result = tbl.frm_view()
+    return result
+    
+@login_required(login_url='/login')
+def quotation_add(request):
+    tbl = model_mapping(request, 'quotation', None)
+    result = tbl.frm_add()
+    return result
+
+@login_required(login_url='/login')
+def quotation_edit(request, frm_id):
+    tbl = model_mapping(request, 'quotation', frm_id)
+    result = tbl.frm_edit()
+    return result
+
+
+@transaction.atomic
+@login_required(login_url='/login')
+def quotation_delete(request, frm_id):
+    tbl = model_mapping(request, 'quotation', frm_id)
+    result = tbl.frm_delete()
+    return result
+
+@login_required(login_url='/login')
+def quotation_move_first(request):
+    tbl = model_mapping(request, 'quotation', None)
+    result = tbl.frm_move_first()
+    return result
+
+@login_required(login_url='/login')
+def quotation_move_previous(request, frm_id):
+    tbl = model_mapping(request, 'quotation', frm_id)
+    result = tbl.frm_move_previous()
+    return result
+
+@login_required(login_url='/login')
+def quotation_move_next(request, frm_id):
+    tbl = model_mapping(request, 'quotation', frm_id)
+    result = tbl.frm_move_next()
+    return result
+
+@login_required(login_url='/login')
+def quotation_move_last(request):
+    tbl = model_mapping(request, 'quotation', None)
+    result = tbl.frm_move_last()
+    return result
+
+
+@login_required(login_url='/login')
+def quotation_find(request):
+    tbl = model_mapping(request, 'quotation', None)
+    result = tbl.frm_find()
+    return result
+
+@login_required(login_url='/login')
+def quotation_print(request, frm_id):
+    return invoice_print(request, frm_id, 'quotation')
+
+
+@login_required(login_url='/login')
+def payment_view(request, frm_id=None):
+    tbl = model_mapping(request, 'payment', frm_id)
+    result = tbl.frm_view()
+    return result
+    
+@login_required(login_url='/login')
+def payment_add(request):
+    tbl = model_mapping(request, 'payment', None)
+    result = tbl.frm_add()
+    return result
+
+@login_required(login_url='/login')
+def payment_edit(request, frm_id):
+    tbl = model_mapping(request, 'payment', frm_id)
+    result = tbl.frm_edit()
+    return result
+
+
+@transaction.atomic
+@login_required(login_url='/login')
+def payment_delete(request, frm_id):
+    tbl = model_mapping(request, 'payment', frm_id)
+    result = tbl.frm_delete()
+    return result
+
+@login_required(login_url='/login')
+def payment_move_first(request):
+    tbl = model_mapping(request, 'payment', None)
+    result = tbl.frm_move_first()
+    return result
+
+@login_required(login_url='/login')
+def payment_move_previous(request, frm_id):
+    tbl = model_mapping(request, 'payment', frm_id)
+    result = tbl.frm_move_previous()
+    return result
+
+@login_required(login_url='/login')
+def payment_move_next(request, frm_id):
+    tbl = model_mapping(request, 'payment', frm_id)
+    result = tbl.frm_move_next()
+    return result
+
+@login_required(login_url='/login')
+def payment_move_last(request):
+    tbl = model_mapping(request, 'payment', None)
+    result = tbl.frm_move_last()
+    return result
+
+@login_required(login_url='/login')
+def payment_find(request):
+    tbl = model_mapping(request, 'payment', None)
+    result = tbl.frm_find()
+    return result
+
+
+@login_required(login_url='/login')
+def receipt_view(request, frm_id=None):
+    tbl = model_mapping(request, 'receipt', frm_id)
+    result = tbl.frm_view()
+    return result
+    
+@login_required(login_url='/login')
+def receipt_add(request):
+    tbl = model_mapping(request, 'receipt', None)
+    result = tbl.frm_add()
+    return result
+
+@login_required(login_url='/login')
+def receipt_edit(request, frm_id):
+    tbl = model_mapping(request, 'receipt', frm_id)
+    result = tbl.frm_edit()
+    return result
+
+
+@transaction.atomic
+@login_required(login_url='/login')
+def receipt_delete(request, frm_id):
+    tbl = model_mapping(request, 'receipt', frm_id)
+    result = tbl.frm_delete()
+    return result
+
+@login_required(login_url='/login')
+def receipt_move_first(request):
+    tbl = model_mapping(request, 'receipt', None)
+    result = tbl.frm_move_first()
+    return result
+
+@login_required(login_url='/login')
+def receipt_move_previous(request, frm_id):
+    tbl = model_mapping(request, 'receipt', frm_id)
+    result = tbl.frm_move_previous()
+    return result
+
+@login_required(login_url='/login')
+def receipt_move_next(request, frm_id):
+    tbl = model_mapping(request, 'receipt', frm_id)
+    result = tbl.frm_move_next()
+    return result
+
+@login_required(login_url='/login')
+def receipt_move_last(request):
+    tbl = model_mapping(request, 'receipt', None)
+    result = tbl.frm_move_last()
+    return result
+
+@login_required(login_url='/login')
+def receipt_find(request):
+    tbl = model_mapping(request, 'receipt', None)
+    result = tbl.frm_find()
+    return result
 
 
 
@@ -984,14 +1225,14 @@ def save_purchase(request, purchase_id=None):
             vendor.save()
 
             for details in details_data:
-                product = tblProduct.objects.get(id=details[3])
-                unit = details[4]
-                qty = to_decimal(details[5])
-                price = to_decimal(details[6])
-                vat_perc = to_decimal(details[7])
-                vat_amount = to_decimal(details[8])
-                item_discount = to_decimal(details[9])
-                total_amount = to_decimal(details[10])
+                product = tblProduct.objects.get(id=details[2])
+                unit = details[3]
+                qty = to_decimal(details[4])
+                price = to_decimal(details[5])
+                vat_perc = to_decimal(details[6])
+                vat_amount = to_decimal(details[7])
+                item_discount = to_decimal(details[8])
+                total_amount = to_decimal(details[9])
 
                 tblPurchase_Details.objects.create(
                     purchase = purchase,
@@ -1093,6 +1334,403 @@ def save_product(request, product_id=None):
         return JsonResponse({'message': 'failed', 'error': 'Invalid request method'})
 
 
+@transaction.atomic
+@login_required(login_url='/login')
+def save_salesOrder(request, order_id=None):
+    if request.method == 'POST':
+        try:
+            # Get the data as a JSON string and parse it into a Python dictionary
+            data = json.loads(request.body.decode('utf-8'))
+
+            # Extract fieldValues and data from the dictionary
+            master_data = data['master_data']
+            details_data = data['details_data']
+            print(master_data, details_data)
+            total = to_decimal(master_data[2])
+            vat = to_decimal(master_data[3])
+            discount = to_decimal(master_data[4])
+            roundoff = to_decimal(master_data[5])
+            net_amount = to_decimal(master_data[6])
+            customer = tblCustomer.objects.get(id=master_data[7])
+            salesman = tblSalesman.objects.get(id=master_data[8])
+            if order_id:
+                sales_order = tblSalesOrder_Master.objects.get(id=order_id)
+                sales_order.order_no = master_data[0]
+                sales_order.order_date = master_data[1]
+                sales_order.total = total
+                sales_order.vat = vat
+                sales_order.discount = discount
+                sales_order.roundoff = roundoff
+                sales_order.net_amount = net_amount
+                sales_order.customer = customer
+                sales_order.salesman = salesman
+                sales_order.save()
+                salesOrder_details = tblSalesOrder_Details.objects.filter(sales_order = order_id)
+                salesOrder_details.delete()
+            else:
+                sales_order = tblSalesOrder_Master.objects.create(
+                    order_no = master_data[0],
+                    order_date = master_data[1],
+                    total = total,
+                    vat = vat,
+                    discount = discount,
+                    roundoff = roundoff,
+                    net_amount = net_amount,
+                    customer = customer,
+                    salesman = salesman,
+                )
+
+            for details in details_data:
+                product = tblProduct.objects.get(id=details[2])
+                unit = details[3]
+                stock = to_decimal(details[4])
+                qty = to_decimal(details[5])
+                price = to_decimal(details[6])
+                vat_perc = to_decimal(details[7])
+                vat_amount = to_decimal(details[8])
+                item_discount = to_decimal(details[9])
+                total_amount = to_decimal(details[10])
+
+                tblSalesOrder_Details.objects.create(
+                    sales_order = sales_order,
+                    product = product,
+                    unit = unit,
+                    stock = stock,
+                    qty = qty,
+                    price = price,
+                    vat_perc = vat_perc,
+                    vat_amount = vat_amount,
+                    item_discount = item_discount,
+                    total_amount = total_amount,
+                )
+
+
+
+            return JsonResponse({'message': 'success'})
+        except json.JSONDecodeError:
+            return JsonResponse({'message': 'failed', 'error': 'Invalid JSON data'})
+    else:
+        return JsonResponse({'message': 'failed', 'error': 'Invalid request method'})
+    
+
+
+@transaction.atomic
+@login_required(login_url='/login')
+def save_purchaseOrder(request, order_id=None):
+    if request.method == 'POST':
+        try:
+            # Get the data as a JSON string and parse it into a Python dictionary
+            data = json.loads(request.body.decode('utf-8'))
+            # Extract fieldValues and data from the dictionary
+            master_data = data['master_data']
+            details_data = data['details_data']
+            # print(master_data, details_data)
+            total = to_decimal(master_data[2])
+            vat = to_decimal(master_data[3])
+            discount = to_decimal(master_data[4])
+            roundoff = to_decimal(master_data[5])
+            net_amount = to_decimal(master_data[6])
+            vendor = tblVendor.objects.get(id=master_data[7])
+            salesman = tblSalesman.objects.get(id=master_data[8])
+            if order_id:
+                purchase_order = tblPurchaseOrder_Master.objects.get(id=order_id)
+                purchase_order.order_no = master_data[0]
+                purchase_order.order_date = master_data[1]
+                purchase_order.total = total
+                purchase_order.vat = vat
+                purchase_order.discount = discount
+                purchase_order.roundoff = roundoff
+                purchase_order.net_amount = net_amount
+                purchase_order.vendor = vendor
+                purchase_order.salesman = salesman
+                purchase_order.save()
+                purchase_order_details = tblPurchaseOrder_Details.objects.filter(purchase_order = order_id)
+                purchase_order_details.delete()
+            else:
+                purchase_order = tblPurchaseOrder_Master.objects.create(
+                    order_no = master_data[0],
+                    order_date = master_data[1],
+                    total = total,
+                    vat = vat,
+                    discount = discount,
+                    roundoff = roundoff,
+                    net_amount = net_amount,
+                    vendor = vendor,
+                    salesman = salesman,
+                )
+
+            for details in details_data:
+                product = tblProduct.objects.get(id=details[2])
+                unit = details[3]
+                qty = to_decimal(details[4])
+                price = to_decimal(details[5])
+                vat_perc = to_decimal(details[6])
+                vat_amount = to_decimal(details[7])
+                item_discount = to_decimal(details[8])
+                total_amount = to_decimal(details[9])
+
+                tblPurchaseOrder_Details.objects.create(
+                    purchase_order = purchase_order,
+                    product = product,
+                    unit = unit,
+                    qty = qty,
+                    price = price,
+                    vat_perc = vat_perc,
+                    vat_amount = vat_amount,
+                    item_discount = item_discount,
+                    total_amount = total_amount,
+                )
+
+
+
+
+            return JsonResponse({'message': 'success'})
+        except json.JSONDecodeError:
+            return JsonResponse({'message': 'failed', 'error': 'Invalid JSON data'})
+    else:
+        return JsonResponse({'message': 'failed', 'error': 'Invalid request method'})
+    
+
+
+@transaction.atomic
+@login_required(login_url='/login')
+def save_quotation(request, quotation_id=None):
+    if request.method == 'POST':
+        try:
+            # Get the data as a JSON string and parse it into a Python dictionary
+            data = json.loads(request.body.decode('utf-8'))
+            # Extract fieldValues and data from the dictionary
+            master_data = data['master_data']
+            details_data = data['details_data']
+            # print(master_data, details_data)
+            total = to_decimal(master_data[2])
+            discount = to_decimal(master_data[3])
+            vat = to_decimal(master_data[4])
+            roundoff = to_decimal(master_data[5])
+            net_amount = to_decimal(master_data[6])
+            customer = tblCustomer.objects.get(id=master_data[7])
+            salesman = tblSalesman.objects.get(id=master_data[8])
+            if quotation_id:
+                quotation = tblQuotation_Master.objects.get(id=quotation_id)
+                quotation.quotation_no = master_data[0]
+                quotation.quotation_date = master_data[1]
+                quotation.total = total
+                quotation.discount = discount
+                quotation.vat = vat
+                quotation.roundoff = roundoff
+                quotation.net_amount = net_amount
+                quotation.customer = customer
+                quotation.salesman = salesman
+                quotation.save()
+                quotation_details = tblQuotation_Details.objects.filter(quotation = quotation_id)
+                quotation_details.delete()
+            else:
+                quotation = tblQuotation_Master.objects.create(
+                    quotation_no = master_data[0],
+                    quotation_date = master_data[1],
+                    total = total,
+                    discount = discount,
+                    vat = vat,
+                    roundoff = roundoff,
+                    net_amount = net_amount,
+                    customer = customer,
+                    salesman = salesman,
+                )
+
+            for details in details_data:
+                product = tblProduct.objects.get(id=details[0])
+                unit = details[1]
+                qty = to_decimal(details[2])
+                price = to_decimal(details[3])
+                vat_perc = to_decimal(details[4])
+                vat_amount = to_decimal(details[5])
+                item_discount = to_decimal(details[6])
+                total_amount = to_decimal(details[7])
+
+                tblQuotation_Details.objects.create(
+                    quotation = quotation,
+                    product = product,
+                    unit = unit,
+                    qty = qty,
+                    price = price,
+                    vat_perc = vat_perc,
+                    vat_amount = vat_amount,
+                    item_discount = item_discount,
+                    total_amount = total_amount,
+                )
+
+
+
+
+            return JsonResponse({'message': 'success'})
+        except json.JSONDecodeError:
+            return JsonResponse({'message': 'failed', 'error': 'Invalid JSON data'})
+    else:
+        return JsonResponse({'message': 'failed', 'error': 'Invalid request method'})
+
+
+@transaction.atomic
+@login_required(login_url='/login')
+def save_deliveryNote(request, deliveryNote_id=None):
+    if request.method == 'POST':
+        try:
+            # Get the data as a JSON string and parse it into a Python dictionary
+            data = json.loads(request.body.decode('utf-8'))
+            # Extract fieldValues and data from the dictionary
+            master_data = data['master_data']
+            details_data = data['details_data']
+            # print(master_data, details_data)
+            total = to_decimal(master_data[2])
+            discount = to_decimal(master_data[3])
+            vat = to_decimal(master_data[4])
+            roundoff = to_decimal(master_data[5])
+            net_amount = to_decimal(master_data[6])
+            customer = tblCustomer.objects.get(id=master_data[7])
+            salesman = tblSalesman.objects.get(id=master_data[8])
+            if deliveryNote_id:
+                deliveryNote = tblDeliveryNote_Master.objects.get(id=deliveryNote_id)
+                deliveryNote.delivery_note_no = master_data[0]
+                deliveryNote.delivery_note_date = master_data[1]
+                deliveryNote.total = total
+                deliveryNote.discount = discount
+                deliveryNote.vat = vat
+                deliveryNote.roundoff = roundoff
+                deliveryNote.net_amount = net_amount
+                deliveryNote.customer = customer
+                deliveryNote.salesman = salesman
+                deliveryNote.save()
+                deliveryNote_details = tblDeliveryNote_Details.objects.filter(delivery_note = deliveryNote_id)
+                deliveryNote_details.delete()
+            else:
+                deliveryNote = tblDeliveryNote_Master.objects.create(
+                    delivery_note_no = master_data[0],
+                    delivery_note_date = master_data[1],
+                    total = total,
+                    discount = discount,
+                    vat = vat,
+                    roundoff = roundoff,
+                    net_amount = net_amount,
+                    customer = customer,
+                    salesman = salesman,
+                )
+
+            for details in details_data:
+                product = tblProduct.objects.get(id=details[2])
+                unit = details[3]
+                stock = to_decimal(details[4])
+                qty = to_decimal(details[5])
+                price = to_decimal(details[6])
+                vat_perc = to_decimal(details[7])
+                vat_amount = to_decimal(details[8])
+                item_discount = to_decimal(details[9])
+                total_amount = to_decimal(details[10])
+
+                tblDeliveryNote_Details.objects.create(
+                    delivery_note = deliveryNote,
+                    product = product,
+                    unit = unit,
+                    qty = qty,
+                    price = price,
+                    vat_perc = vat_perc,
+                    vat_amount = vat_amount,
+                    item_discount = item_discount,
+                    total_amount = total_amount,
+                )
+
+
+
+
+            return JsonResponse({'message': 'success'})
+        except json.JSONDecodeError:
+            return JsonResponse({'message': 'failed', 'error': 'Invalid JSON data'})
+    else:
+        return JsonResponse({'message': 'failed', 'error': 'Invalid request method'})
+
+
+
+@transaction.atomic
+@login_required(login_url='/login')
+def save_payment(request, payment_id=None):
+    if request.method == 'POST':
+        try:
+            # Get the data as a JSON string and parse it into a Python dictionary
+            data = json.loads(request.body.decode('utf-8'))
+            vendor = tblVendor.objects.get(id = data[2]) if data[2] is not '' else None
+            if payment_id:
+                payment = tblPayment.objects.get(id=payment_id)
+                if vendor:
+                    vendor.credit_balance = to_decimal(vendor.credit_balance) + to_decimal(payment.amount) + to_decimal(payment.discount)
+                payment.payment_no = data[0]
+                payment.payment_date = data[1]
+                payment.vendor = vendor
+                payment.payment_to = data[3]
+                payment.amount = to_decimal(data[4])
+                payment.discount = to_decimal(data[5])
+                payment.payment_method = data[6]
+                payment.save()
+            else:
+                payment = tblPayment.objects.create(
+                    payment_no = data[0],
+                    payment_date = data[1],
+                    vendor = vendor,
+                    payment_to = data[3],
+                    amount = to_decimal(data[4]),
+                    discount = to_decimal(data[5]),
+                    payment_method = data[6],
+                )
+            if vendor:
+                vendor.credit_balance = to_decimal(vendor.credit_balance) - to_decimal(data[3]) - to_decimal(data[4])
+                vendor.save()
+
+            return JsonResponse({'message': 'success'})
+        except json.JSONDecodeError:
+            return JsonResponse({'message': 'failed', 'error': 'Invalid JSON data'})
+    else:
+        return JsonResponse({'message': 'failed', 'error': 'Invalid request method'})
+
+
+
+@transaction.atomic
+@login_required(login_url='/login')
+def save_receipt(request, receipt_id=None):
+    if request.method == 'POST':
+        try:
+            # Get the data as a JSON string and parse it into a Python dictionary
+            data = json.loads(request.body.decode('utf-8'))
+
+            customer = tblCustomer.objects.get(id = data[2]) if data[2] is not '' else None
+            if receipt_id:
+                receipt = tblReceipt.objects.get(id=receipt_id)
+                if customer:
+                    customer.credit_balance = to_decimal(customer.credit_balance) + to_decimal(receipt.amount) + to_decimal(receipt.discount)
+                receipt.receipt_no = data[0]
+                receipt.receipt_date = data[1]
+                receipt.customer = customer
+                receipt.receipt_from = data[3]
+                receipt.amount = to_decimal(data[4])
+                receipt.discount = to_decimal(data[5])
+                receipt.receipt_method = data[6]
+                receipt.save()
+            else:
+                receipt = tblReceipt.objects.create(
+                    receipt_no = data[0],
+                    receipt_date = data[1],
+                    customer = customer,
+                    receipt_from = data[3],
+                    amount = to_decimal(data[4]),
+                    discount = to_decimal(data[5]),
+                    payment_method = data[6],
+                )
+            if customer:
+                customer.credit_balance = to_decimal(customer.credit_balance) - to_decimal(data[3]) - to_decimal(data[4])
+                customer.save()
+
+            return JsonResponse({'message': 'success'})
+        except json.JSONDecodeError:
+            return JsonResponse({'message': 'failed', 'error': 'Invalid JSON data'})
+    else:
+        return JsonResponse({'message': 'failed', 'error': 'Invalid request method'})
+
 
 @login_required(login_url='/login')
 def formSearch(request, tbl_name, tbl_field=None, field_code=None, tbl_field_2=None):
@@ -1108,6 +1746,8 @@ def formSearch(request, tbl_name, tbl_field=None, field_code=None, tbl_field_2=N
                 results = model.objects.filter(Q(vendor__vendor_name__icontains=field_code) | Q(invoice_no__icontains=field_code) | Q(purchase_no__icontains = field_code) | Q(return_no__icontains=field_code)).values()
             elif tbl_name == 'tblSales_Master':
                 results = model.objects.filter(Q(customer__customer_name__icontains=field_code) | Q(invoice_no__icontains=field_code) | Q(return_no__icontains=field_code)).values()
+            elif tbl_name == 'tblCategory':
+                results = model.objects.filter(Q(category_code__icontains=field_code) | Q(category_name__icontains=field_code) | Q(vat_rate__icontains=field_code) | Q(type__icontains=field_code)).values()
             elif tbl_name == 'tblProduct':
                 results = model.objects.filter(Q(vendor__vendor_name__icontains=field_code) | Q(category__category_name__icontains=field_code) | Q(product_name__icontains=field_code) | Q(product_code__icontains=field_code)).values()
             elif tbl_name == 'tblCustomer':
@@ -1116,6 +1756,18 @@ def formSearch(request, tbl_name, tbl_field=None, field_code=None, tbl_field_2=N
                 results = model.objects.filter(Q(vendor_code__icontains=field_code) | Q(vendor_name__icontains=field_code) | Q(email__icontains=field_code) | Q(mobile__icontains=field_code)).values()
             elif tbl_name == 'tblSalesman':
                 results = model.objects.filter(Q(salesman_code__icontains=field_code) | Q(salesman_name__icontains=field_code) | Q(email__icontains=field_code) | Q(mobile__icontains=field_code)).values()
+            elif tbl_name == 'tblPurchaseOrder_Master':
+                results = model.objects.filter(Q(vendor__vendor_name__icontains=field_code) | Q(order_no__icontains=field_code)).values()
+            elif tbl_name == 'tblSalesOrder_Master':
+                results = model.objects.filter(Q(customer__customer_name__icontains=field_code) | Q(order_no__icontains=field_code)).values()
+            elif tbl_name == 'tblDeliveryNote_Master':
+                results = model.objects.filter(Q(customer__customer_name__icontains=field_code) | Q(delivery_note_no__icontains=field_code)).values()
+            elif tbl_name == 'tblQuotation_Master':
+                results = model.objects.filter(Q(customer__customer_name__icontains=field_code) | Q(quotation_no__icontains=field_code)).values()
+            elif tbl_name == 'tblPayment':
+                results = model.objects.filter(Q(payment_no__icontains=field_code) | Q(payment_to__icontains=field_code) | Q(customer__customer_name__icontains=field_code))
+            elif tbl_name == 'tblReceipt':
+                results = model.objects.filter(Q(receipt_no__icontains=field_code) | Q(receipt_from__icontains=field_code) | Q(vendor__vendor_name__icontains=field_code))
         else:
             results = model.objects.all().values()
         # Create a list to store the modified data
@@ -1123,9 +1775,9 @@ def formSearch(request, tbl_name, tbl_field=None, field_code=None, tbl_field_2=N
 
         # Extract the 'fields' from each entry and add the 'id' field
         for result in results:
-            if tbl_name == 'tblPurchase_Master':
+            if tbl_name == 'tblPurchase_Master' or tbl_name == 'tblPurchaseOrder_Master' or tbl_name == 'tblPayment':
                 result['vendor_name'] = tblVendor.objects.get(id=result['vendor_id']).vendor_name
-            elif tbl_name == 'tblSales_Master':
+            elif tbl_name == 'tblSales_Master' or tbl_name == 'tblSalesOrder_Master' or tbl_name == 'tblQuotation_Master' or tbl_name == 'tblDeliveryNotes_Master' or tbl_name == 'tblReceipt':
                 result['customer_name'] = tblCustomer.objects.get(id=result['customer_id']).customer_name
             elif tbl_name == 'tblProduct':
                 result['vendor_name'] = tblVendor.objects.get(id=result['vendor_id']).vendor_name
@@ -1154,8 +1806,6 @@ def get_field_details(request, tbl_name, tbl_field, field_code, tbl_field_2=None
         results_list = list(results)
 
         return JsonResponse({'results': results_list} or {})
-    except model.DoesNotExist:
-        return JsonResponse({})
     except Exception as e:
         return JsonResponse({})
 

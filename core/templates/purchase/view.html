@@ -16,7 +16,7 @@
   </div>
       <div class="form__grp">
         <div class="floating-input-group">
-          {{ form.invoice_no }}
+          {{ form.invoice_no|add_class:form.disabled_class }}
           <label class="floating-label">Invoice No</label>
         </div>
         <div class="floating-input-group">

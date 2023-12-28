@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+{% load static %}
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">   
+    <title>Return|{{master.return_no}}</title>
+  <style>
+    body {
+      {% comment %} padding: 1.5rem; {% endcomment %}
+      font-family: Arial, sans-serif;
+      font-size: 16px;
+    }
+
+    .report__center {
+      text-align: center;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 1.5rem;
+    }
+
+    th, td {
+        padding: 5px;
+    }
+    
+    th {
+        border: 1px solid #000;
+    }
+
+    .report__total {
+      border-top: 1px solid #000;
+      border-bottom: 1px solid #000;
+    }
+
+    .report__num {
+        text-align: right;
+    }
+  </style>
+</head>
+<body>
+    <p>Return no: {{master.return_no}}</p>
+    <p style="float: right; margin-top: -2rem;">Return Date: {{master.invoice_date}}</p>
+    <p>Invoice no: {{master.invoice_no}}</p>
+    {% if module_name == 'purchaseReturn' %}
+      <p>Purchase no: {{purchase.purchase_no}}</p>
+    {% endif %}
+  <h2 class="report__center">{% if module_name == 'salesReturn' %}Sales Return{% elif module_name == 'purchaseReturn' %}Purchase Return{% endif %}</h2>
+  {% if module_name == 'salesReturn' %}
+  <p class="report__center">Customer: {{ master.customer.customer_name }}</p>
+  <p class="report__center" style="margin-top: -1rem;">{{ master.customer.address }}</p>
+  <p class="report__center" style="margin-top: -1rem;">{% if master.customer.phone %}{{ master.customer.phone }},{% endif %} {{ master.customer.mobile }}</p>
+    {% elif module_name == 'purchaseReturn' %}
+    <p class="report__center">Vendor: {{ master.vendor.vendor_name }}</p>
+      <p class="report__center" style="margin-top: -1rem;">{{ master.vendor.address }}</p>
+      <p class="report__center" style="margin-top: -1rem;">{% if master.vendor.phone %}{{ master.vendor.phone }},{% endif %} {{ master.vendor.mobile }}</p>
+    {% endif %}
+  <table>
+    <thead>
+      <tr>
+        <th>Sl No.</th>
+        <th>Product</th>
+        <th>Unit</th>
+        <th>Qty</th>
+        <th>Price</th>
+        <th>Disc.</th>
+        <th>VAT</th>
+        <th>Total</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for detail in details %}
+      <tr>
+        <td style="width: 7%;text-align: center;">{{ forloop.counter }}</td>
+        <td style="width: 40%;">{{ detail.product.product_name }}</td>
+        <td style="width: 6%;text-align: center;">{{ detail.unit }}</td>
+        <td style="width: 8%;" class="report__num">{{ detail.qty }}</td>
+        <td style="width: 8%;" class="report__num">{{ detail.price }}</td>
+        <td style="width: 8%;" class="report__num">{{ detail.item_discount }}</td>
+        <td style="width: 8%;" class="report__num">{{ detail.vat_amount }}</td>
+        <td style="width: 15%;" class="report__num">{{ detail.total_amount }}</td>
+      </tr>
+      {% endfor %}
+      <tr class="report__total">
+        <td />
+        <td />
+        <td />
+        <td />
+        <td />
+        <td class="report__num">{{ master.discount }}</td>
+        <td class="report__num">{{ master.vat }}</td>
+        <td class="report__net_amount report__num">{{ total_amt }}</td>
+      </tr>
+    </tbody>
+</table>
+<table>
+    <tbody>
+        <tr>
+            <td style="width: 7%;" />
+            <td style="width: 38%;" />
+            <td style="width: 6%;" />
+            <td style="width: 8%;" />
+            <td style="width: 8%;" />
+            <td style="width: 8%;" />
+            <td style="width: 10%;">Amount:</td>
+            <td style="width: 15%;" class="report__num">{{ master.total }}</td>
+        </tr>
+        <tr>
+            <td style="width: 7%;" />
+            <td style="width: 38%;" />
+            <td style="width: 6%;" />
+            <td style="width: 8%;" />
+            <td style="width: 8%;" />
+            <td style="width: 8%;" />
+            <td style="width: 10%;">Discount:</td>
+            <td style="width: 15%;" class="report__num">{{ master.discount }}</td>
+        </tr>
+        <tr>
+            <td style="width: 7%;" />
+            <td style="width: 38%;" />
+            <td style="width: 6%;" />
+            <td style="width: 8%;" />
+            <td style="width: 8%;" />
+            <td style="width: 8%;" />
+            <td style="width: 10%;">VAT:</td>
+            <td style="width: 15%;" class="report__num">{{ master.vat }}</td>
+        </tr>
+        <tr>
+            <td style="width: 7%;" />
+            <td style="width: 38%;">Total in words:</td>
+            <td style="width: 6%;" />
+            <td style="width: 8%;" />
+            <td style="width: 8%;" />
+            <td style="width: 8%;" />
+            <td style="width: 10%;border-bottom: 1px #000 dashed">Round Off:</td>
+            <td style="width: 15%;border-bottom: 1px #000 dashed" class="report__num">{{ master.roundoff }}</td>
+        </tr>
+        <tr>
+            <td style="width: 7%;" />
+            <td style="width: 38%;font-weight: bold;">{{ total_in_words }}</td>
+            <td style="width: 6%;" />
+            <td style="width: 8%;" />
+            <td style="width: 8%;" />
+            <td style="width: 8%;" />
+            <td style="width: 10%;">Total:</td>
+            <td style="width: 15%;" class="report__num">{{ master.net_amount }}</td>
+        </tr>
+        <tr>
+            <td style="width: 7%;" />
+            <td style="width: 38%;" />
+            <td style="width: 6%;" />
+            <td style="width: 8%;" />
+            <td style="width: 8%;" />
+            <td style="width: 8%;" />
+            <td style="width: 10%;border-bottom: 1px #000 dashed">Payed:</td>
+            <td style="width: 15%;border-bottom: 1px #000 dashed" class="report__num">{{ master.amount_payed }}</td>
+        </tr>
+        <tr>
+            <td style="width: 7%;" />
+            <td style="width: 38%;" />
+            <td style="width: 6%;" />
+            <td style="width: 8%;" />
+            <td style="width: 8%;" />
+            <td style="width: 8%;" />
+            <td style="width: 10%;">Balance:</td>
+            <td style="width: 15%;" class="report__num">{{ master.balance }}</td>
+        </tr>
+    </tbody>
+</table>
+</body>
+</html>

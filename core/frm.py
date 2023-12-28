@@ -6,57 +6,55 @@ from django.db import transaction
 from core.convertions import to_decimal
 
 
-from .models import tblProduct, tblCustomer, tblProduct_unit, tblSales_Details, tblVendor, tblCategory, tblSales_Master, tblPurchase_Master, tblPurchase_Details, tblSalesman
-from .forms import ProductForm, CustomerForm, VendorForm, CategoryForm, SalesForm, PurchaseForm, SalesmanForm
+from .models import (tblProduct, tblCustomer, tblProduct_unit, tblSales_Details, tblVendor, tblCategory, tblSales_Master, tblPurchase_Master, tblPurchase_Details, tblSalesman, tblSalesOrder_Master,
+                    tblSalesOrder_Details, tblDeliveryNote_Details, tblDeliveryNote_Master, tblPayment, tblPurchaseOrder_Details, tblPurchaseOrder_Master, tblQuotation_Details, tblQuotation_Master,
+                    tblReceipt)
+from .forms import (ProductForm, CustomerForm, VendorForm, CategoryForm, SalesForm, PurchaseForm, SalesOrderForm, PurchaseOrderForm, SalesmanForm,
+                    QuotationForm, DeliveryNoteForm, ReceiptForm, PaymentForm)
 
 
 class idExists:
     """
     Checks if next or previous id exists using current id
     """
-    def __init__(self, tbl, frm_id, module_name, to_return=False):
+    def __init__(self, tbl, frm_id, module_name):
         self.tbl = tbl
         self.frm_id = frm_id
-        self.to_return = to_return
         self.module_name = module_name
     def nextId(self):
         filter_condition = {'id__gt': self.frm_id}
-        if self.module_name == 'sales' or self.module_name == 'purchase' or self.module_name == 'salesReturn' or self.module_name == 'purchaseReturn':
-            if self.to_return:
-                filter_condition['transaction_type'] = 'return'
-            else: 
-                filter_condition['return_no'] = 0        
+        if self.module_name == 'salesReturn' or self.module_name == 'purchaseReturn':
+            filter_condition['transaction_type'] = 'return'
+        elif self.module_name == 'sales' or self.module_name == 'purchase': 
+            filter_condition['transaction_type'] = ''        
         nxt = self.tbl.objects.filter(**filter_condition).order_by('id').first()
         return bool(nxt)
 
     def prevId(self):
         filter_condition = {'id__lt': self.frm_id}
-        if self.module_name == 'sales' or self.module_name == 'purchase' or self.module_name == 'salesReturn' or self.module_name == 'purchaseReturn':
-            if self.to_return:
-                filter_condition['transaction_type'] = 'return'
-            else: 
-                filter_condition['return_no'] = 0        
+        if self.module_name == 'salesReturn' or self.module_name == 'purchaseReturn':
+            filter_condition['transaction_type'] = 'return'
+        elif self.module_name == 'sales' or self.module_name == 'purchase': 
+            filter_condition['transaction_type'] = ''   
         prev = self.tbl.objects.filter(**filter_condition).order_by('-id').first()
         return bool(prev)
 
     
     def getNextID(self):
         filter_condition = {'id__gt': self.frm_id}
-        if self.module_name == 'sales' or self.module_name == 'purchase' or self.module_name == 'salesReturn' or self.module_name == 'purchaseReturn':
-            if self.to_return:
-                filter_condition['transaction_type'] = 'return'
-            else: 
-                filter_condition['return_no'] = 0
+        if self.module_name == 'salesReturn' or self.module_name == 'purchaseReturn':
+            filter_condition['transaction_type'] = 'return'
+        elif self.module_name == 'sales' or self.module_name == 'purchase': 
+            filter_condition['transaction_type'] = ''
         nxt = self.tbl.objects.filter(**filter_condition).order_by('id').first()
         return model_to_dict(nxt)['id']
 
     def getPrevID(self):
         filter_condition = {'id__lt': self.frm_id}
-        if self.module_name == 'sales' or self.module_name == 'purchase' or self.module_name == 'salesReturn' or self.module_name == 'purchaseReturn':
-            if self.to_return:
-                filter_condition['transaction_type'] = 'return'
-            else: 
-                filter_condition['return_no'] = 0
+        if self.module_name == 'salesReturn' or self.module_name == 'purchaseReturn':
+            filter_condition['transaction_type'] = 'return'
+        elif self.module_name == 'sales' or self.module_name == 'purchase': 
+            filter_condition['transaction_type'] = ''
 
         prev = self.tbl.objects.filter(**filter_condition).order_by('-id').first()
         return model_to_dict(prev)['id']
@@ -73,22 +71,27 @@ class model_mapping:
 
     To perform form actions like add, edit, delete, move.
     """
-    def __init__(self, request, module_name: str, frm_id=None, to_return=False):
+    def __init__(self, request, module_name: str, frm_id=None):
         models = {
             "product": (tblProduct, ProductForm, 'product/view.html', 'product/add.html', 'product/edit.html', 'product/list.html'),
-            "customer": (tblCustomer, CustomerForm, 'customer/view.html', 'customer/add.html', 'customer/edit.html', 'customer/list.html'),
-            "vendor": (tblVendor, VendorForm, 'vendor/view.html', 'vendor/add.html', 'vendor/edit.html', 'vendor/list.html'),
-            "category": (tblCategory, CategoryForm, 'category/view.html', 'category/add.html', 'category/edit.html', 'category/list.html'),
-            "salesman": (tblSalesman, SalesmanForm, 'salesman/view.html', 'salesman/add.html', 'salesman/edit.html', 'salesman/list.html'),
+            "customer": (tblCustomer, CustomerForm, 'customer/view.html', 'customer/add.html', 'customer/add.html', 'customer/list.html'),
+            "vendor": (tblVendor, VendorForm, 'vendor/view.html', 'vendor/add.html', 'vendor/add.html', 'vendor/list.html'),
+            "category": (tblCategory, CategoryForm, 'category/view.html', 'category/add.html', 'category/add.html', 'category/list.html'),
+            "salesman": (tblSalesman, SalesmanForm, 'salesman/view.html', 'salesman/add.html', 'salesman/add.html', 'salesman/list.html'),
             "sales": (tblSales_Master, SalesForm, 'sales/view.html', 'sales/add.html', 'sales/edit.html', 'sales/list.html'),
             "purchase": (tblPurchase_Master, PurchaseForm, 'purchase/view.html', 'purchase/add.html', 'purchase/edit.html', 'purchase/list.html'),
             "salesReturn": (tblSales_Master, SalesForm, 'salesReturn/view.html', 'salesReturn/add.html', 'salesReturn/edit.html', 'salesReturn/list.html'),
             "purchaseReturn": (tblPurchase_Master, PurchaseForm, 'purchaseReturn/view.html', 'purchaseReturn/add.html', 'purchaseReturn/edit.html', 'purchaseReturn/list.html'),
+            "purchaseOrder": (tblPurchaseOrder_Master, PurchaseOrderForm, 'purchaseOrder/view.html', 'purchaseOrder/add.html', 'purchaseOrder/edit.html', 'purchaseOrder/list.html'),
+            "salesOrder": (tblSalesOrder_Master, SalesOrderForm, 'salesOrder/view.html', 'salesOrder/add.html', 'salesOrder/edit.html', 'salesOrder/list.html'),
+            "deliveryNote": (tblDeliveryNote_Master, DeliveryNoteForm, 'deliveryNote/view.html', 'deliveryNote/add.html', 'deliveryNote/edit.html', 'deliveryNote/list.html'),
+            "quotation": (tblQuotation_Master, QuotationForm, 'quotation/view.html', 'quotation/add.html', 'quotation/edit.html', 'quotation/list.html'),
+            "payment": (tblPayment, PaymentForm, 'payment/view.html', 'payment/add.html', 'payment/add.html', 'payment/list.html'),
+            "receipt": (tblReceipt, ReceiptForm, 'receipt/view.html', 'receipt/add.html', 'receipt/add.html', 'receipt/list.html'),
         }
         self.module_name = module_name
         self.frm_id = frm_id
         self.request = request
-        self.to_return = to_return
         if module_name in models:
             self.model, self.form_class, self.view_template, self.add_template, self.edit_template, self.list_template = models[module_name]
             # print(get_object_or_404(self.model, id=self.frm_id).id)
@@ -109,7 +112,7 @@ class model_mapping:
         if tbl is None:
             return redirect(f'{self.module_name}_add')
 
-        find_checker = idExists(self.model, tbl.id, self.module_name, self.to_return)
+        find_checker = idExists(self.model, tbl.id, self.module_name)
 
         nxt = find_checker.nextId()
         prev = find_checker.prevId()
@@ -134,6 +137,22 @@ class model_mapping:
         elif self.module_name == 'purchase' or self.module_name == 'purchaseReturn':
             details = tblPurchase_Details.objects.filter(purchase = tbl)
             context.update({'details': details, 'vendor': tbl.vendor, 'salesman': tbl.salesman})
+        elif self.module_name == 'salesOrder':
+            details = tblSalesOrder_Details.objects.filter(sales_order = tbl)
+            context.update({'details': details, 'customer': tbl.customer, 'salesman': tbl.salesman})
+        elif self.module_name == 'purchaseOrder':
+            details = tblPurchaseOrder_Details.objects.filter(purchase_order = tbl)
+            context.update({'details': details, 'vendor': tbl.vendor, 'salesman': tbl.salesman})
+        elif self.module_name == 'quotation':
+            details = tblQuotation_Details.objects.filter(quotation = tbl)
+            context.update({'details': details, 'customer': tbl.customer, 'salesman': tbl.salesman})
+        elif self.module_name == 'deliveryNote':
+            details = tblDeliveryNote_Details.objects.filter(delivery_note = tbl)
+            context.update({'details': details, 'customer': tbl.customer, 'salesman': tbl.salesman})
+        elif self.module_name == 'payment':
+            context.update({'vendor': tbl.vendor})
+        elif self.module_name == 'receipt':
+            context.update({'customer': tbl.customer})
         return render(self.request, self.view_template, context)
 
     @transaction.atomic
@@ -143,7 +162,9 @@ class model_mapping:
         """
 
         if self.request.method == 'POST':
-            if self.module_name == 'product' or self.module_name == 'sales' or self.module_name == 'purchase' or self.module_name == 'salesReturn' or self.module_name == 'purchaseReturn':
+            if (self.module_name == 'product' or self.module_name == 'sales' or self.module_name == 'purchase' or self.module_name == 'salesReturn' or 
+                self.module_name == 'purchaseReturn' or self.module_name == 'purchaseOrder' or self.module_name == 'salesOrder' or 
+                self.module_name == 'quotation' or self.module_name == 'deliveryNote' or self.module_name == 'payment' or self.module_name == 'receipt'):
                 return redirect(self.module_name)
             else:
                 form = self.form_class(self.request.POST)  # Create a form instance with POST data
@@ -173,7 +194,9 @@ class model_mapping:
 
         tbl = get_object_or_404(self.model, id=self.frm_id)
         if self.request.method == 'POST':
-            if self.module_name == 'product' or self.module_name == 'sales'  or self.module_name == 'purchase' or self.module_name == 'salesReturn' or self.module_name == 'purchaseReturn':
+            if self.module_name == ('product' or self.module_name == 'sales'  or self.module_name == 'purchase' or self.module_name == 'salesReturn' or 
+                                    self.module_name == 'purchaseReturn' or self.module_name == 'salesOrder' or self.module_name == 'purchaseOrder' or 
+                                    self.module_name == 'quotation' or self.module_name == 'deliveryNote' or self.module_name == 'payment' or self.module_name == 'receipt'):
                 return redirect(f'{self.module_name}_with_id', self.frm_id)
             else:
                 form = self.form_class(self.request.POST, instance=tbl)  # Create a form instance with POST data
@@ -199,8 +222,22 @@ class model_mapping:
         elif self.module_name == 'purchase' or self.module_name == 'purchaseReturn':
             details = tblPurchase_Details.objects.filter(purchase = tbl)
             context.update({'details': details, 'vendor': tbl.vendor, 'salesman': tbl.salesman})
-        else:
-            context.update({'id': self.frm_id})
+        elif self.module_name == 'salesOrder':
+            details = tblSalesOrder_Details.objects.filter(sales_order = tbl)
+            context.update({'details': details, 'customer': tbl.customer, 'salesman': tbl.salesman})
+        elif self.module_name == 'purchaseOrder':
+            details = tblPurchaseOrder_Details.objects.filter(purchase_order = tbl)
+            context.update({'details': details, 'vendor': tbl.vendor, 'salesman': tbl.salesman})
+        elif self.module_name == 'quotation':
+            details = tblQuotation_Details.objects.filter(quotation = tbl)
+            context.update({'details': details, 'customer': tbl.customer, 'salesman': tbl.salesman})
+        elif self.module_name == 'deliveryNote':
+            details = tblDeliveryNote_Details.objects.filter(delivery_note = tbl)
+            context.update({'details': details, 'customer': tbl.customer, 'salesman': tbl.salesman})
+        elif self.module_name == 'payment':
+            context.update({'vendor': tbl.vendor})
+        elif self.module_name == 'receipt':
+            context.update({'customer': tbl.customer})
         return render(self.request, self.edit_template, context)
 
 
@@ -231,6 +268,7 @@ class model_mapping:
                 product.cost_price = ((to_decimal(product.cost_price)*to_decimal(product.stock))+(to_decimal(details.price)*to_decimal(details.qty)))/(to_decimal(product.stock) + (to_decimal(details.qty)*multiple))
                 product.stock = to_decimal(product.stock) + (to_decimal(details.qty) * multiple)
                 product.save()
+
         elif self.module_name == 'purchase':
             vendor = tblVendor.objects.get(id = tbl.vendor.id)
             vendor.credit_balance = to_decimal(vendor.credit_balance) - to_decimal(tbl.balance)
@@ -252,6 +290,7 @@ class model_mapping:
                 product.stock = to_decimal(product.stock) - (to_decimal(details.qty) * multiple)
                 product.last_purch_price = to_decimal(details.previous_purchase_price)
                 product.save()
+
         elif self.module_name == 'salesReturn':
             customer = tblCustomer.objects.get(id = tbl.customer.id)
             customer.credit_balance = to_decimal(customer.credit_balance) + to_decimal(tbl.balance)
@@ -272,6 +311,7 @@ class model_mapping:
                 product.cost_price = ((to_decimal(product.cost_price)*to_decimal(product.stock))-(to_decimal(details.price)*to_decimal(details.qty)))/(to_decimal(product.stock) - (to_decimal(details.qty)*multiple))
                 product.stock = to_decimal(product.stock) - (to_decimal(details.qty) * multiple)
                 product.save()
+
         elif self.module_name == 'purchaseReturn':
             vendor = tblVendor.objects.get(id = tbl.vendor.id)
             vendor.credit_balance = to_decimal(vendor.credit_balance) + to_decimal(tbl.balance)
@@ -292,8 +332,20 @@ class model_mapping:
                 product.cost_price = ((to_decimal(product.cost_price)*to_decimal(product.stock))+(to_decimal(details.price)*to_decimal(details.qty)))/(to_decimal(product.stock) + (to_decimal(details.qty)*multiple))
                 product.stock = to_decimal(product.stock) + (to_decimal(details.qty) * multiple)
                 product.save()
+        
+        elif self.module_name == 'payment':
+            if tbl.vendor is not None:
+                vendor = tblVendor.objects.get(id = tbl.vendor.id)
+                vendor.credit_balance = to_decimal(vendor.credit_balance) + to_decimal(tbl.discount) + to_decimal(tbl.amount)
+                vendor.save()
+        
+        elif self.module_name == 'receipt':
+            if tbl.customer is not None:
+                customer = tblCustomer.objects.get(id = tbl.customer.id)
+                customer.credit_balance = to_decimal(customer.credit_balance) + to_decimal(tbl.discount) + to_decimal(tbl.amount)
+                customer.save()
         tbl.delete()
-        id_exists = idExists(self.model, self.frm_id, self.module_name, self.to_return)
+        id_exists = idExists(self.model, self.frm_id, self.module_name)
         if not id_exists.findId():
             return redirect(f'{self.module_name}_add')
         elif not id_exists.nextId():
@@ -302,16 +354,40 @@ class model_mapping:
             return redirect(f'{self.module_name}_with_id', id_exists.getNextID())
 
     def frm_move_first(self):
-        tbl = self.model.objects.first()
+        if self.module_name == 'purchase' or self.module_name == 'sales':
+            tbl = self.model.objects.filter(transaction_type = '').first()
+        elif self.module_name == 'purchaseReturn' or self.module_name == 'salesReturn':
+            tbl = self.model.objects.filter(transaction_type = 'return').first()
+        else:
+            tbl = self.model.objects.first()
         return redirect(f'{self.module_name}_with_id', tbl.id)
     
     
     def frm_move_previous(self):
-        tbl = self.model.objects.filter(id__lt=self.frm_id).order_by('-id').first()
+        if self.module_name == 'purchase' or self.module_name == 'sales':
+            tbl = self.model.objects.filter(transaction_type = '', id__lt=self.frm_id).order_by('-id').first()
+        elif self.module_name == 'purchaseReturn' or self.module_name == 'salesReturn':
+            tbl = self.model.objects.filter(transaction_type = 'return', id__lt=self.frm_id).order_by('-id').first()
+        else:
+            tbl = self.model.objects.filter(id__lt=self.frm_id).order_by('-id').first()
         return redirect(f'{self.module_name}_with_id', tbl.id)
 
     def frm_move_next(self):
-        tbl = self.model.objects.filter(id__gt=self.frm_id).order_by('id').first()
+        if self.module_name == 'purchase' or self.module_name == 'sales':
+            tbl = self.model.objects.filter(transaction_type = '', id__gt=self.frm_id).order_by('id').first()
+        elif self.module_name == 'purchaseReturn' or self.module_name == 'salesReturn':
+            tbl = self.model.objects.filter(transaction_type = 'return', id__gt=self.frm_id).order_by('id').first()
+        else:
+            tbl = self.model.objects.filter(id__gt=self.frm_id).order_by('id').first()
+        return redirect(f'{self.module_name}_with_id', tbl.id)
+
+    def frm_move_last(self):
+        if self.module_name == 'purchase' or self.module_name == 'sales':
+            tbl = self.model.objects.filter(transaction_type = '').last()
+        elif self.module_name == 'purchaseReturn' or self.module_name == 'salesReturn':
+            tbl = self.model.objects.filter(transaction_type = 'return').last()
+        else:
+            tbl = self.model.objects.last()
         return redirect(f'{self.module_name}_with_id', tbl.id)
     
     def frm_find(self):

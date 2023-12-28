@@ -77,12 +77,12 @@
 
   <div class="floating-input-group">
     {{ form.vendor }}
-    <input id="product_vendor_name" class="form__size-l floating-input" placeholder=" " oninput='this.value = this.value.toUpperCase()' autocomplete="off"></input>
+    <input id="product_vendor_name" class="form__size-l floating-input uppercase-only" placeholder=" " autocomplete="off"></input>
     <label class="floating-label">Vendor</label>
   </div>
   <div class="floating-input-group">
     {{ form.category }}
-    <input id="product_category_name" class="form__size-l floating-input" placeholder=" " oninput='this.value = this.value.toUpperCase()' autocomplete="off"></input>
+    <input id="product_category_name" class="form__size-l floating-input uppercase-only" placeholder=" " autocomplete="off"></input>
     <label class="floating-label">Category</label>
   </div>
   <div class="form__btn-sub-cancel">

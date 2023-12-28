@@ -81,7 +81,7 @@ function unit_stock_change(index) {
   }
 }
 
-function save_salesOrder(event, order_id) {
+function save_orderOrDelivery(event, orderOrDelivery, id) {
   event.preventDefault();
   
   if (is_field_empty('#master_customer', 'Invalid customer')) {
@@ -103,20 +103,23 @@ function save_salesOrder(event, order_id) {
         // Create an array to store the field values
         var master_data = [];
         // Retrieve and store the values of each field
-        master_data.push($('#master_order_no').val());
-        master_data.push($('#master_order_date').val());
+        if (orderOrDelivery == 'order') {
+          master_data.push($('#master_order_no').val());
+          master_data.push($('#master_order_date').val());
+        }
+        else {
+          master_data.push($('#master_delivery_note_no').val());
+          master_data.push($('#master_delivery_note_date').val());
+        }
         master_data.push($('#master_total').val());
         master_data.push($('#master_vat').val());
         master_data.push($('#master_discount').val());
         master_data.push($('#master_roundoff').val());
         master_data.push($('#master_net_amount').val());
-        master_data.push($('#master_amount_received').val());
-        master_data.push($('#master_balance').val());
-        master_data.push($('#master_payment_method').val());
         master_data.push($('#master_customer_id').val());
         master_data.push($('#master_salesman_id').val());
 
-        var url_link = (typeof order_id === 'undefined') ? '/save_salesOrder' : '/save_salesOrder/' + order_id;
+        var url_link = id? `/save_${(orderOrDelivery === 'order')?`salesOrder`:`deliveryNote`}/` + id : `/save_${(orderOrDelivery === 'order')?`salesOrder`:`deliveryNote`}`;
         sales_details(url_link, master_data, false)
       })
       .catch(error => {
@@ -291,12 +294,12 @@ $(document).ready(function() {
       
       $('#master_salesman').on('blur', function() {
         let salesmanCode = $(this).val().trim() || 0;
-        axios(`/get_field_details/tblEmployee/employee_code/employee_name/${salesmanCode}`)
+        axios(`/get_field_details/tblSalesman/salesman_code/salesman_name/${salesmanCode}`)
         .then(response => {
           value = response.data.results[0]
           if (value.id) {
             $(`#master_salesman_id`).val(value.id);
-            $(`#master_salesman`).val(value.employee_name);
+            $(`#master_salesman`).val(value.salesman_name);
           } else {
             $(`#master_salesman_id`).val('');
             toast_message('Invalid salesman');
@@ -318,46 +321,6 @@ $('#tbl__body').on('input', 'td[id^="tbl_"][contenteditable="true"]', function()
   // Check which column is being edited
   switch (columnName) {
       case 'product':
-          // let productCode = $(this).text().trim().toUpperCase() || '0';
-          // axios.get(`/get_field_details/tblProduct/product_code/${productCode}`)
-          // .then(response => {
-          //     value = response.data.results[0]
-          //         if (value.id) {
-          //             $(`#tbl_product_id_${rowCounter}`).text(value.id);
-          //             $(`#tbl_product_name_${rowCounter}`).text(value.product_name);
-          //             $(`#tbl_unit_${rowCounter}`).append((`<option value="${value.main_unit}">${value.main_unit}</option>`));
-          //             $(`#tbl_stock_${rowCounter}`).text(value.stock);
-          //             axios.get(`/get_field_details/tblCategory/id/${value.category_id}`)
-          //             .then(result => {
-          //                 $(`#tbl_vat_perc_${rowCounter}`).text(result.data.results[0].vat_rate);
-          //             })
-          //             .catch(error => {
-          //                 console.log(error)
-          //             })
-          //             axios.get(`/get_field_details/tblProduct_unit/product/${value.id}`)
-          //             .then(result => {
-          //                 result.data.results.forEach(item => {
-          //                     $(`#tbl_unit_${rowCounter}`).append((`<option value="${item.unit}">${item.unit}</option>`));
-          //                 });
-          //             })
-          //             .catch(error => {
-          //                 // console.log(error)
-          //             })
-          //         } else {
-          //             $(`#tbl_product_id_${rowCounter}`).text('');
-          //             $(`#tbl_product_name_${rowCounter}`).text('');
-          //             $(`#tbl_vat_perc_${rowCounter}`).text('');
-          //             $(`#tbl_unit_${rowCounter}`).empty();
-          //             $(`#tbl_stock_${rowCounter}`).text('');
-          //           }
-          //         })
-          //         .catch(error => {
-          //           $(`#tbl_product_id_${rowCounter}`).text('');
-          //           $(`#tbl_product_name_${rowCounter}`).text('');
-          //           $(`#tbl_vat_perc_${rowCounter}`).text('');
-          //           $(`#tbl_unit_${rowCounter}`).empty();
-          //           $(`#tbl_stock_${rowCounter}`).text('');
-          //     })
           break;
       case 'qty':
         break;
@@ -391,9 +354,10 @@ $('#tbl__body').on('blur', '.tbl_product', function() {
   }
   else {
     let productCode = $(this).text().trim().toUpperCase() || '0';
-  axios.get(`/get_field_details/tblProduct/product_code/product_name/${productCode}`)
-  .then(response => {
+    axios.get(`/get_field_details/tblProduct/product_code/product_name/${productCode}`)
+    .then(response => {
     value = response.data.results[0]
+    console.log(value);
     if (value.id) {
         $(`#tbl_product_id_${rowCounter}`).text(value.id);
         $(`#tbl_product_${rowCounter}`).text(value.product_name);
@@ -508,7 +472,7 @@ $('#tbl__body').on('keydown', 'td[id^="tbl_"][contenteditable="true"]', function
 
               const newRow = `<tr class="form__details-contents" id="row${rowNo}">
                   <td class="py-2 tbl_sl" id="tbl_sl_${rowNo}">${rowNo}</td>
-                  <td class="py-2 tbl_product" contenteditable="true" id="tbl_product_${rowNo}"></td>
+                  <td class="py-2 tbl_product uppercase-only" contenteditable="true" id="tbl_product_${rowNo}"></td>
                   <td class="py-2 tbl_product_id" id="tbl_product_id_${rowNo}" hidden></td>
                   <td class="py-2 tbl_unit">
                       <select id="tbl_unit_${rowNo}" onchange=(unit_stock_change(${rowNo}))>
