@@ -46,13 +46,14 @@ A web based ERP software that has the functionalities to deal with Sales, Purcha
   </ul>
 
 <h3>Home Page</h3>
-<img src="https://github.com/MhdIr7an/ERP/assets/93046265/181cb972-b961-4be6-87d1-6f776769726e" width="800" height="400" />
+<img src="https://github.com/MhdIr7an/ERP/assets/93046265/26e924f4-6686-457f-8170-a01b81a1ea41" width="800" height="400" />
+
 
 <h3>Product Page</h3>
-<img src="https://github.com/MhdIr7an/Basic-ERP/assets/93046265/7c1a87c9-25d8-4f90-90c6-5b989bf4b2ea" width="800" height="400" />
+<img src="https://github.com/MhdIr7an/ERP/assets/93046265/e49cf25b-6d1f-4c05-8b6a-5157ac05e4f2" width="800" height="400" />
 
 <h3>Sales Page</h3>
-<img src="https://github.com/MhdIr7an/Basic-ERP/assets/93046265/ca47c496-76f9-445b-8c8d-74f1af9bfb8c" width="800" height="400" />
+<img src="https://github.com/MhdIr7an/ERP/assets/93046265/f9843d32-78e9-4610-9c4b-d50d159270d8" width="800" height="400" />
 
 
 
@@ -72,7 +73,7 @@ To get a local copy up and running follow these simple example steps.
 
 1. Clone the repo
    ```sh
-   git clone https://github.com/MhdIr7an/Basic-ERP.git
+   git clone https://github.com/MhdIr7an/ERP.git
    ```
 2. Install requirements
    ```sh
