@@ -49,7 +49,7 @@ const Login = () => {
                     />
                     {errors.password && <span className='text-red-600'>{errors.password.message}</span>}
                     </div>
-                    <Button type="submit" value='Save' variant='primary' />
+                    <Button type="submit" value='Login' variant='primary' />
                     {errors.login && <span className='text-red-600'>{errors.login.message}</span>}
                 </form>
             </div>
